@@ -1,0 +1,8 @@
+run.config:
+  engine: elixir
+
+  engine.config:
+    runtime: elixir-1.5
+
+web.main:
+  start: mix run --no-halt
