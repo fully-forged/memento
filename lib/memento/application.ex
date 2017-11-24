@@ -7,7 +7,7 @@ defmodule Memento.Application do
 
   def start(_type, _args) do
     children = [
-      Plug.Adapters.Cowboy.child_spec(:http, Router, [], port: 4000)
+      Plug.Adapters.Cowboy.child_spec(:http, Router, [], port: 8080)
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
