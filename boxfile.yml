@@ -5,4 +5,10 @@ run.config:
     runtime: elixir-1.5
 
 web.main:
-  start: mix run --no-halt
+  start: node-start mix run --no-halt
+  network_dirs:
+    data.storage:
+      - data
+
+data.storage:
+  image: nanobox/unfs:0.9
