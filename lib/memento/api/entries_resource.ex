@@ -14,7 +14,6 @@ defmodule Memento.API.EntriesResource do
   end
 
   def to_json(conn, state) do
-    conn |> IO.inspect()
     {limit, offset} = Pagination.parse(conn.query_params)
 
     query =
