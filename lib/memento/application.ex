@@ -1,15 +1,13 @@
 defmodule Memento.Application do
-  # See https://hexdocs.pm/elixir/Application.html
-  # for more information on OTP Applications
   @moduledoc false
 
   use Application
 
+  alias Memento.API.Router
+
   def start(_type, _args) do
-    # List all child processes to be supervised
     children = [
-      # Starts a worker by calling: Memento.Worker.start_link(arg)
-      # {Memento.Worker, arg},
+      Plug.Adapters.Cowboy.child_spec(:http, Router, [], port: 4000)
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
