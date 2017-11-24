@@ -4,6 +4,11 @@ run.config:
   engine.config:
     runtime: elixir-1.5
 
+deploy.config:
+  before_live:
+    web.main:
+      - mix amnesia.create -d Memento.Store --disk
+
 web.main:
   start: node-start mix run --no-halt
   network_dirs:
