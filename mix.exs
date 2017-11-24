@@ -7,7 +7,8 @@ defmodule Memento.MixProject do
       version: "0.1.0",
       elixir: "~> 1.5",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      aliases: aliases()
     ]
   end
 
@@ -26,5 +27,9 @@ defmodule Memento.MixProject do
       {:plug_rest, "~> 0.13.0"},
       {:logster, "~> 0.4"}
     ]
+  end
+
+  defp aliases do
+    [test: ["amnesia.drop -d Memento.Store", "amnesia.create -d Memento.Store --memory", "test"]]
   end
 end
