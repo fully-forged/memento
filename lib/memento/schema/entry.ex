@@ -14,7 +14,7 @@ defmodule Memento.Schema.Entry do
   defimpl Poison.Encoder do
     def encode(entry, opts) do
       entry
-      |> Map.from_struct
+      |> Map.from_struct()
       |> Map.delete(:__meta__)
       |> Poison.encode!(opts)
     end

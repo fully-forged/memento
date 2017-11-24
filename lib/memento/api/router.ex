@@ -3,6 +3,12 @@ defmodule Memento.API.Router do
   use Plug.ErrorHandler
 
   plug Logster.Plugs.Logger
+
+  plug Plug.Parsers,
+    parsers: [:json],
+    pass: ["application/json"],
+    json_decoder: Poison
+
   plug :match
   plug :dispatch
 
