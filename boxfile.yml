@@ -12,6 +12,8 @@ deploy.config:
 
 web.main:
   start: node-start mix run --no-halt
+  writable_dirs:
+    - _build/prod/lib/memento
 
 data.db:
   image: nanobox/postgresql:9.6
