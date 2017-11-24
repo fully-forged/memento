@@ -2,6 +2,7 @@ defmodule Memento.API.Router do
   use PlugRest.Router
   use Plug.ErrorHandler
 
+  plug Logster.Plugs.Logger
   plug :match
   plug :dispatch
 

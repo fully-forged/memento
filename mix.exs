@@ -22,7 +22,8 @@ defmodule Memento.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:plug_rest, "~> 0.13.0"}
+      {:plug_rest, "~> 0.13.0"},
+      {:logster, "~> 0.4"}
     ]
   end
 end
