@@ -5,9 +5,10 @@ defmodule Memento.Application do
 
   alias Memento.API.Router
 
-  def start(_type, _args) do
+  def start(_type, env) do
     children = [
       {Memento.Repo, []},
+      {Memento.Capture.Supervisor, env},
       Plug.Adapters.Cowboy.child_spec(:http, Router, [], port: 8080)
     ]
 

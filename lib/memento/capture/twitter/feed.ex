@@ -3,7 +3,7 @@ defmodule Memento.Capture.Twitter.Feed do
 
   alias Memento.Capture.Twitter.Client
 
-  def start_link(consumer_key, consumer_secret, name) do
+  def start_link({consumer_key, consumer_secret, name}) do
     GenServer.start_link(__MODULE__, {consumer_key, consumer_secret}, name: name)
   end
 
