@@ -1,7 +1,7 @@
 defmodule Memento.API.EntriesResource do
   use PlugRest.Resource
 
-  alias Memento.{Pagination, Repo, Schema.Entry}
+  alias Memento.{API.Pagination, Repo, Schema.Entry}
 
   import Ecto.Query
 

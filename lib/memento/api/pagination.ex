@@ -1,4 +1,4 @@
-defmodule Memento.Pagination do
+defmodule Memento.API.Pagination do
   @default_per_page 20
 
   def parse(qs_params) do
