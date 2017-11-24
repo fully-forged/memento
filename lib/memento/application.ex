@@ -7,6 +7,7 @@ defmodule Memento.Application do
 
   def start(_type, _args) do
     children = [
+      {Memento.Repo, []},
       Plug.Adapters.Cowboy.child_spec(:http, Router, [], port: 8080)
     ]
 

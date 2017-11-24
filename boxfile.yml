@@ -7,13 +7,11 @@ run.config:
 deploy.config:
   before_live:
     web.main:
-      - mix amnesia.create -d Memento.Store --disk
+      - mix ecto.create --quiet
+      - mix ecto.migrate
 
 web.main:
   start: node-start mix run --no-halt
-  network_dirs:
-    data.storage:
-      - data
 
-data.storage:
-  image: nanobox/unfs:0.9
+data.db:
+  image: nanobox/postgresql:9.6

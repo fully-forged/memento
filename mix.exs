@@ -23,13 +23,18 @@ defmodule Memento.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:amnesia, "~> 0.2.7"},
+      {:postgrex, ">= 0.0.0"},
+      {:ecto, "~> 2.2"},
       {:plug_rest, "~> 0.13.0"},
       {:logster, "~> 0.4"}
     ]
   end
 
   defp aliases do
-    [test: ["amnesia.drop -d Memento.Store", "amnesia.create -d Memento.Store --memory", "test"]]
+    [
+      "ecto.setup": ["ecto.create", "ecto.migrate"],
+      "ecto.reset": ["ecto.drop", "ecto.setup"],
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
+    ]
   end
 end
