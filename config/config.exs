@@ -4,6 +4,14 @@ use Mix.Config
 
 config :memento, ecto_repos: [Memento.Repo]
 
+config :memento, Memento.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  username: System.get_env("DATA_DB_USER"),
+  password: System.get_env("DATA_DB_PASS"),
+  hostname: System.get_env("DATA_DB_HOST"),
+  database: "gonano",
+  pool_size: 10
+
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
 # file won't be loaded nor affect the parent project. For this reason,
