@@ -9,12 +9,16 @@ defmodule Memento.API.Router do
     pass: ["application/json"],
     json_decoder: Poison
 
+  plug Plug.Static,
+    from: {:memento, "priv/static/#{Mix.env()}"},
+    at: "/assets"
+
   plug :match
   plug :dispatch
 
   resource "/entries", Memento.API.EntriesResource
 
-  match "/match" do
-    send_resp(conn, 200, "Match")
+  match _ do
+    send_resp(conn, 404, "Not found")
   end
 end
