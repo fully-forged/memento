@@ -4,6 +4,22 @@ run.config:
   engine.config:
     runtime: elixir-1.5
 
+  dev_packages:
+    - nodejs
+    - inotify-tools
+
+  cache_dirs:
+    - frontend/node_modules
+    - frontend/elm-stuff
+
+  extra_path_dirs:
+    - node_modules/.bin
+
+  extra_steps:
+    - npm install -g elm
+
+  fs_watch: true
+
 deploy.config:
   before_live:
     web.main:
