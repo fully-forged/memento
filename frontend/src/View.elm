@@ -7,5 +7,5 @@ import Types exposing (..)
 
 root : Model -> Html Msg
 root model =
-    div [ class "foo" ]
+    div [ class "bar" ]
         [ model |> toString |> text ]

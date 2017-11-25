@@ -8,8 +8,8 @@ MODD_VERSION = 0.4
 ELM_TEST_VERSION = 0.18.2
 UGLIFY_JS_VERSION = 2.7.4
 OS := $(shell uname)
-BUILD_FOLDER = build
-DIST_FOLDER = ../priv/static
+BUILD_FOLDER = ../priv/static/dev
+DIST_FOLDER = ../priv/static/prod
 INSTALL_TARGETS = src bin \
 							Makefile \
 							elm-package.json \
@@ -171,7 +171,7 @@ $(BUILD_FOLDER)/boot.js: src/boot.js
 	cp $? $@
 
 $(BUILD_FOLDER)/index.html: index.html
-	main_css=/main.css main_js=/main.js boot_js=/boot.js bin/mo index.html > $@
+	main_css=/assets/main.css main_js=/assets/main.js boot_js=/assets/boot.js bin/mo index.html > $@
 
 $(BUILD_FOLDER)/images/%.jpg $(BUILD_FOLDER)/images/%.png $(BUILD_FOLDER)/images/%.svg $(BUILD_FOLDER)/images/%.ico:
 	@cp -r images/ $(BUILD_FOLDER)/images/
