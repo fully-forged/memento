@@ -1,6 +1,8 @@
 defmodule Memento.Capture.Twitter.Feed do
   use GenServer
 
+  require Logger
+
   alias Memento.Capture.Twitter.Client
 
   def start_link({consumer_key, consumer_secret, name}) do
@@ -12,13 +14,26 @@ defmodule Memento.Capture.Twitter.Feed do
   end
 
   def init({consumer_key, consumer_secret}) do
+    send(self(), {:get_token, consumer_key, consumer_secret})
+    {:ok, :no_token}
+  end
+
+  def handle_info({:get_token, consumer_key, consumer_secret}, _maybe_token) do
     case Client.get_token(consumer_key, consumer_secret) do
       {:ok, resp} ->
-        {:ok, Map.get(resp, "access_token")}
+        {:noreply, Map.get(resp, "access_token")}
 
-      error ->
-        error |> IO.inspect()
-        {:stop, :invalid_credentials}
+      _error ->
+        Logger.error(fn ->
+          """
+          Cannot fetch valid token with supplied Twitter credentials.
+
+          Retrying in 5 seconds...
+          """
+        end)
+
+        Process.send_after(self(), {:get_token, consumer_key, consumer_secret}, 5000)
+        {:noreply, :no_token}
     end
   end
 end
