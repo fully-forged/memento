@@ -8,6 +8,9 @@ run.config:
     - nodejs
     - inotify-tools
 
+  extra_packages:
+    - git
+
   cache_dirs:
     - frontend/node_modules
     - frontend/elm-stuff
