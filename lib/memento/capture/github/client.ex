@@ -1,7 +1,5 @@
 defmodule Memento.Capture.Github.Client do
-  alias Memento.{HTTPClient, Capture.Github.StarredRepo}
-
-  @link_matcher ~r/^<(?<url>.*)>; rel="(?<rel>.*)"$/
+  alias Memento.{HTTPClient, Capture.Github}
 
   @type username :: String.t()
   @type url :: String.t()
@@ -31,7 +29,7 @@ defmodule Memento.Capture.Github.Client do
            body: body
          } <- HTTPClient.get(url, headers),
          {:ok, data} <- Poison.decode(body),
-         links <- parse_links(resp_headers) do
+         links <- Github.Link.parse_headers(resp_headers) do
       {:ok, parse_starred_repos(data), links}
     else
       %HTTPClient.Response{status_code: status_code, body: body} ->
@@ -43,23 +41,6 @@ defmodule Memento.Capture.Github.Client do
   end
 
   def parse_starred_repos(data) do
-    Enum.map(data, &StarredRepo.content_from_api_result/1)
+    Enum.map(data, &Github.StarredRepo.content_from_api_result/1)
   end
-
-  def parse_links(headers) do
-    :proplists.get_value("link", headers)
-    |> String.split(", ", trim: true)
-    |> Enum.map(&parse_link/1)
-    |> Enum.into(%{})
-  end
-
-  defp parse_link(link) do
-    %{"rel" => rel, "url" => url} = Regex.named_captures(@link_matcher, link)
-    {parse_rel(rel), url}
-  end
-
-  defp parse_rel("next"), do: :next
-  defp parse_rel("first"), do: :first
-  defp parse_rel("last"), do: :last
-  defp parse_rel("prev"), do: :prev
 end
