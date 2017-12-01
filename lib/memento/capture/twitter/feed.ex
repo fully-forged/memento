@@ -99,6 +99,6 @@ defmodule Memento.Capture.Twitter.Feed do
         ]
       end)
 
-    Repo.insert_all(Entry, inserts)
+    Repo.insert_all(Entry, inserts, on_conflict: :nothing)
   end
 end
