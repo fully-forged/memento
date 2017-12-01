@@ -39,11 +39,44 @@ defmodule Memento.Capture.Twitter.Feed do
   end
 
   def handle_info(:get_favs, token) do
-    {:ok, resp} = Client.get_favs(token, "cloud8421", nil)
+    case Client.get_favs(token, "cloud8421", nil) do
+      {:ok, resp} ->
+        resp
+        |> Enum.map(&Fav.content_from_api_result/1)
+        |> insert_all()
 
-    Enum.map(resp, &Fav.content_from_api_result/1)
-    |> IO.inspect(limit: :infinity)
+        Process.send_after(self(), {:get_favs, token}, 1000 * 300)
+
+      error ->
+        Logger.error(fn ->
+          """
+          Cannot fetch favs.
+
+          Retrying in 5 seconds...
+          """
+        end)
+
+        Process.send_after(self(), {:get_favs, token}, 5000)
+    end
 
     {:noreply, token}
+  end
+
+  defp insert_all(favs) do
+    now = DateTime.utc_now()
+
+    inserts =
+      Enum.map(favs, fn fav ->
+        [
+          id: fav.id,
+          type: :twitter_fav,
+          content: fav,
+          saved_at: fav.created_at,
+          inserted_at: now,
+          updated_at: now
+        ]
+      end)
+
+    Memento.Repo.insert_all(Memento.Schema.Entry, inserts)
   end
 end
