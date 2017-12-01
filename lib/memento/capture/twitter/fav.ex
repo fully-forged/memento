@@ -1,6 +1,7 @@
 defmodule Memento.Capture.Twitter.Fav do
   def content_from_api_result(result) do
-    %{"id_str" => id_str, "text" => text, "created_at" => created_at_str} = result
+    %{"id_str" => id_str, "text" => text, "created_at" => created_at_str} =
+      result
 
     screen_name = get_in(result, ["user", "screen_name"])
 
@@ -8,7 +9,13 @@ defmodule Memento.Capture.Twitter.Fav do
 
     {:ok, created_at} = parse_created_at(created_at_str)
 
-    %{id: id_str, text: text, screen_name: screen_name, urls: urls, created_at: created_at}
+    %{
+      id: id_str,
+      text: text,
+      screen_name: screen_name,
+      urls: urls,
+      created_at: created_at
+    }
   end
 
   defp parse_created_at(created_at) do

@@ -6,7 +6,11 @@ defmodule Memento.Capture.Twitter.Feed do
   alias Memento.Capture.Twitter.{Client, Fav}
 
   def start_link({consumer_key, consumer_secret, name}) do
-    GenServer.start_link(__MODULE__, {consumer_key, consumer_secret}, name: name)
+    GenServer.start_link(
+      __MODULE__,
+      {consumer_key, consumer_secret},
+      name: name
+    )
   end
 
   def start_link(consumer_key, consumer_secret) do
@@ -33,7 +37,12 @@ defmodule Memento.Capture.Twitter.Feed do
           """
         end)
 
-        Process.send_after(self(), {:get_token, consumer_key, consumer_secret}, 5000)
+        Process.send_after(
+          self(),
+          {:get_token, consumer_key, consumer_secret},
+          5000
+        )
+
         {:noreply, :no_token}
     end
   end

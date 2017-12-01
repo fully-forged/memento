@@ -37,7 +37,8 @@ defmodule Memento.HTTPClient do
                             [{"User-Agent", "My App 2.1"}],
                             %{"page" => 1})
   """
-  @spec get(url, headers, qs_params) :: {:ok, Response.t()} | {:error, ErrorResponse.t()}
+  @spec get(url, headers, qs_params) ::
+          {:ok, Response.t()} | {:error, ErrorResponse.t()}
   def get(url, headers, qs_params) do
     headers =
       Enum.map(headers, fn {k, v} ->
