@@ -8,7 +8,8 @@ defmodule Memento.MixProject do
       elixir: "~> 1.5",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      aliases: aliases()
+      aliases: aliases(),
+      dialyzer_ignored_warnings: dialyzer_ignored_warnings()
     ]
   end
 
@@ -37,6 +38,16 @@ defmodule Memento.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate", "test"]
+    ]
+  end
+
+  defp dialyzer_ignored_warnings do
+    [
+      {
+        :warn_contract_supertype,
+        :_,
+        {:extra_range, [:_, :__protocol__, 1, :_, :_]}
+      }
     ]
   end
 end
