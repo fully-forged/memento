@@ -6,6 +6,9 @@ defmodule Memento.Capture.Twitter.Feed do
   alias Memento.{Entry.Query, Repo, Schema.Entry}
   alias Memento.Capture.Twitter.{Client, Fav}
 
+  @retry_interval 5000
+  @refresh_interval 1000 * 60 * 5
+
   def start_link({consumer_key, consumer_secret, name}) do
     GenServer.start_link(
       __MODULE__,
@@ -42,7 +45,7 @@ defmodule Memento.Capture.Twitter.Feed do
         Process.send_after(
           self(),
           {:get_token, consumer_key, consumer_secret},
-          5000
+          @retry_interval
         )
 
         {:noreply, :no_token}
@@ -58,18 +61,20 @@ defmodule Memento.Capture.Twitter.Feed do
 
         max_tweet_id = get_max_tweet_id()
 
-        Process.send_after(self(), {:get_favs, max_tweet_id}, 1000 * 300)
+        Process.send_after(self(), {:get_favs, max_tweet_id}, @refresh_interval)
 
       error ->
         Logger.error(fn ->
           """
-          Cannot fetch favs.
+          Cannot fetch favs. Reason:
+
+          #{inspect(error)}
 
           Retrying in 5 seconds...
           """
         end)
 
-        Process.send_after(self(), {:get_favs, max_tweet_id}, 5000)
+        Process.send_after(self(), {:get_favs, max_tweet_id}, @retry_interval)
     end
 
     {:noreply, token}
