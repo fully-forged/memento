@@ -6,6 +6,7 @@ defmodule Memento.MixProject do
       app: :memento,
       version: "0.1.0",
       elixir: "~> 1.5",
+      elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       aliases: aliases(),
@@ -13,7 +14,9 @@ defmodule Memento.MixProject do
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(_), do: ["lib"]
+
   def application do
     [
       extra_applications: [:logger, :inets, :ssl],
