@@ -7,7 +7,7 @@ defmodule Memento.Schema.EntryTest do
     attrs = %{type: :twitter_fav, content: %{id: "1"}}
     changeset = Entry.changeset(%Entry{}, attrs)
 
-    {:ok, entry} = Repo.insert(changeset)
+    {:ok, _} = Repo.insert(changeset)
 
     assert {:error, _} = Repo.insert(changeset)
   end
