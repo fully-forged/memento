@@ -3,6 +3,7 @@ defmodule Memento.Capture.Twitter.Feed do
 
   require Logger
 
+  alias Memento.{Entry.Query, Repo, Schema.Entry}
   alias Memento.Capture.Twitter.{Client, Fav}
 
   def start_link({consumer_key, consumer_secret, name}) do
@@ -25,7 +26,8 @@ defmodule Memento.Capture.Twitter.Feed do
   def handle_info({:get_token, consumer_key, consumer_secret}, _maybe_token) do
     case Client.get_token(consumer_key, consumer_secret) do
       {:ok, resp} ->
-        send(self(), :get_favs)
+        max_tweet_id = get_max_tweet_id()
+        send(self(), {:get_favs, max_tweet_id})
         {:noreply, Map.get(resp, "access_token")}
 
       _error ->
@@ -47,14 +49,16 @@ defmodule Memento.Capture.Twitter.Feed do
     end
   end
 
-  def handle_info(:get_favs, token) do
-    case Client.get_favs(token, "cloud8421", nil) do
+  def handle_info({:get_favs, max_tweet_id}, token) do
+    case Client.get_favs(token, "cloud8421", max_tweet_id) do
       {:ok, resp} ->
         resp
         |> Enum.map(&Fav.content_from_api_result/1)
         |> insert_all()
 
-        Process.send_after(self(), {:get_favs, token}, 1000 * 300)
+        max_tweet_id = get_max_tweet_id()
+
+        Process.send_after(self(), {:get_favs, max_tweet_id}, 1000 * 300)
 
       error ->
         Logger.error(fn ->
@@ -65,10 +69,15 @@ defmodule Memento.Capture.Twitter.Feed do
           """
         end)
 
-        Process.send_after(self(), {:get_favs, token}, 5000)
+        Process.send_after(self(), {:get_favs, max_tweet_id}, 5000)
     end
 
     {:noreply, token}
+  end
+
+  defp get_max_tweet_id do
+    Query.max_tweet_id()
+    |> Repo.one()
   end
 
   defp insert_all(favs) do
@@ -77,7 +86,6 @@ defmodule Memento.Capture.Twitter.Feed do
     inserts =
       Enum.map(favs, fn fav ->
         [
-          id: fav.id,
           type: :twitter_fav,
           content: fav,
           saved_at: fav.created_at,
@@ -86,6 +94,6 @@ defmodule Memento.Capture.Twitter.Feed do
         ]
       end)
 
-    Memento.Repo.insert_all(Memento.Schema.Entry, inserts)
+    Repo.insert_all(Entry, inserts)
   end
 end

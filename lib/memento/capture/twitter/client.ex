@@ -41,7 +41,7 @@ defmodule Memento.Capture.Twitter.Client do
   end
 
   defp qs_params(screen_name, since) do
-    %{"screen_name" => screen_name, "since" => since}
+    %{"screen_name" => screen_name, "since_id" => since}
   end
 
   defp basic_auth(consumer_key, consumer_secret) do
