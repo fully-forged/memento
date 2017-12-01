@@ -1,0 +1,27 @@
+image: elixir:1.5
+
+services:
+  - postgres:latest
+
+variables:
+  POSTGRES_DB: memento_test
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+
+stages:
+  - test
+
+before_script:
+  - mix local.hex --force
+  - mix local.rebar --force
+  - mix deps.get
+
+ex_unit:
+  stage: test
+  script:
+    - DATA_DB_HOST=postgres mix test
+
+dialyzer:
+  stage: test
+  script:
+    - mix dialyzer
