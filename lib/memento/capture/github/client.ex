@@ -1,5 +1,5 @@
 defmodule Memento.Capture.Github.Client do
-  alias Memento.HTTPClient
+  alias Memento.{HTTPClient, Capture.Github.StarredRepo}
 
   @link_matcher ~r/^<(?<url>.*)>; rel="(?<rel>.*)"$/
 
@@ -43,7 +43,7 @@ defmodule Memento.Capture.Github.Client do
   end
 
   def parse_starred_repos(data) do
-    Enum.map(data, &parse_starred_repo/1)
+    Enum.map(data, &StarredRepo.content_from_api_result/1)
   end
 
   def parse_links(headers) do
@@ -51,33 +51,6 @@ defmodule Memento.Capture.Github.Client do
     |> String.split(", ", trim: true)
     |> Enum.map(&parse_link/1)
     |> Enum.into(%{})
-  end
-
-  defp parse_starred_repo(starred_repo) do
-    starred_at =
-      starred_repo
-      |> Map.get("starred_at")
-      |> parse_datetime
-
-    created_at =
-      starred_repo
-      |> get_in(["repo", "created_at"])
-      |> parse_datetime
-
-    pushed_at =
-      starred_repo
-      |> get_in(["repo", "pushed_at"])
-      |> parse_datetime
-
-    %{
-      id: get_in(starred_repo, ["repo", "id"]),
-      owner: get_in(starred_repo, ["repo", "owner", "login"]),
-      name: get_in(starred_repo, ["repo", "name"]),
-      description: get_in(starred_repo, ["repo", "description"]),
-      created_at: created_at,
-      pushed_at: pushed_at,
-      starred_at: starred_at
-    }
   end
 
   defp parse_link(link) do
@@ -89,13 +62,4 @@ defmodule Memento.Capture.Github.Client do
   defp parse_rel("first"), do: :first
   defp parse_rel("last"), do: :last
   defp parse_rel("prev"), do: :prev
-
-  defp parse_datetime(nil), do: nil
-
-  defp parse_datetime(datetime_string) do
-    case DateTime.from_iso8601(datetime_string) do
-      {:ok, datetime, _} -> datetime
-      _error -> nil
-    end
-  end
 end
