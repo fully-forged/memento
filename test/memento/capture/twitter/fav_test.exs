@@ -102,7 +102,7 @@ defmodule Memento.Capture.Twitter.FavTest do
              text: "dialyzex - A Mix task for type-checking your Elixir project with dialyzer https://t.co/CLgZiRapp9",
              screen_name: "oss_elixir",
              urls: ["https://t.co/CLgZiRapp9"],
-             created_at: "Tue Nov 28 15:36:03 +0000 2017"
+             created_at: ~N[2017-11-28 15:36:03]
            } == Fav.content_from_api_result(@api_result)
   end
 end
