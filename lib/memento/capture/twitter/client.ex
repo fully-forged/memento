@@ -37,11 +37,11 @@ defmodule Memento.Capture.Twitter.Client do
   end
 
   defp qs_params(screen_name, nil) do
-    %{"screen_name" => screen_name}
+    %{"screen_name" => screen_name, "count" => 200}
   end
 
   defp qs_params(screen_name, since) do
-    %{"screen_name" => screen_name, "since_id" => since}
+    %{"screen_name" => screen_name, "since_id" => since, "count" => 200}
   end
 
   defp basic_auth(consumer_key, consumer_secret) do
