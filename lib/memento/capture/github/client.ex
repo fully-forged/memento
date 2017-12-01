@@ -30,7 +30,7 @@ defmodule Memento.Capture.Github.Client do
          } <- HTTPClient.get(url, headers),
          {:ok, data} <- Poison.decode(body),
          links <- Github.Link.parse_headers(resp_headers) do
-      {:ok, parse_starred_repos(data), links}
+      {:ok, data, links}
     else
       %HTTPClient.Response{status_code: status_code, body: body} ->
         {:error, {status_code, body}}
@@ -38,9 +38,5 @@ defmodule Memento.Capture.Github.Client do
       %HTTPClient.ErrorResponse{message: message} ->
         {:error, message}
     end
-  end
-
-  def parse_starred_repos(data) do
-    Enum.map(data, &Github.StarredRepo.content_from_api_result/1)
   end
 end

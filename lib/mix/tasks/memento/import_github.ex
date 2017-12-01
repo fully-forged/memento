@@ -10,15 +10,17 @@ defmodule Mix.Tasks.Memento.ImportGithub do
     |> Enum.chunk_every(50)
     |> Enum.each(fn chunk ->
          inserts =
-           Enum.map(chunk, fn sr ->
-             [
-               type: :github_star,
-               content: sr,
-               saved_at: sr.starred_at,
-               inserted_at: now,
-               updated_at: now
-             ]
-           end)
+           chunk
+           |> Enum.map(&Github.StarredRepo.content_from_api_result/1)
+           |> Enum.map(fn sr ->
+                [
+                  type: :github_star,
+                  content: sr,
+                  saved_at: sr.starred_at,
+                  inserted_at: now,
+                  updated_at: now
+                ]
+              end)
 
          Repo.insert_all(Entry, inserts, on_conflict: :nothing)
        end)
