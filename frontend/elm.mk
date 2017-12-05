@@ -174,7 +174,7 @@ $(BUILD_FOLDER)/index.html: index.html
 	main_css=/assets/main.css main_js=/assets/main.js boot_js=/assets/boot.js bin/mo index.html > $@
 
 $(BUILD_FOLDER)/images/%.jpg $(BUILD_FOLDER)/images/%.png $(BUILD_FOLDER)/images/%.svg $(BUILD_FOLDER)/images/%.ico:
-	@cp -r images/ $(BUILD_FOLDER)/images/
+	@cp -r images/ $(BUILD_FOLDER)/
 
 $(DIST_FOLDER)/main.min.css: styles/*.scss
 	bin/wt compile -s compressed -b $(DIST_FOLDER)/ styles/main.scss

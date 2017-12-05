@@ -2,8 +2,8 @@ module Main exposing (..)
 
 import Html
 import Platform.Sub as Sub
-import Types exposing (..)
 import State
+import Types exposing (..)
 import View
 
 

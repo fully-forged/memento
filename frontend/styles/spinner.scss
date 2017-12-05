@@ -1,0 +1,58 @@
+@import "colors";
+
+.spinner {
+  $spinner-color: $accent-color;
+  margin: 100px auto;
+  width: 60px;
+  height: 60px;
+  text-align: center;
+  font-size: 10px;
+  > div {
+    background-color: $spinner_color;
+    height: 100%;
+    width: 6px;
+    display: inline-block;
+    margin: 0 3px 0 0;
+    animation: sk-stretchdelay 1.2s infinite ease-in-out;
+  }
+  .rect2 {
+    animation-delay: -1.1s;
+  }
+  .rect3 {
+    animation-delay: -1.0s;
+  }
+  .rect4 {
+    animation-delay: -0.9s;
+  }
+  .rect5 {
+    animation-delay: -0.8s;
+  }
+}
+@-webkit-keyframes sk-stretchdelay {
+  0% {
+  }
+  40% {
+  }
+  100% {
+  }
+  20% {
+  }
+}
+@keyframes sk-stretchdelay {
+  0% {
+    //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+    transform: scaleY(0.4);
+  }
+  40% {
+    //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+    transform: scaleY(0.4);
+  }
+  100% {
+    //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+    transform: scaleY(0.4);
+  }
+  20% {
+    //Instead of the line below you could use @include transform($scale, $rotate, $transx, $transy, $skewx, $skewy, $originx, $originy)
+    transform: scaleY(1.0);
+  }
+}

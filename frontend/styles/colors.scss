@@ -1,0 +1,6 @@
+$accent-color: #1A9C9A;
+$bg-dark-color: #354572;
+$fg-light-color: #F5D9C0;
+
+$text-primary-color: $bg-dark-color;
+$text-secondary-color: lighten($bg-dark-color, 30%);
