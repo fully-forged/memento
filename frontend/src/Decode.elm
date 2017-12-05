@@ -59,10 +59,6 @@ entryTypeDecoder =
                     Ok Github
 
                 otherwise ->
-                    let
-                        dbg =
-                            Debug.log "error" otherwise
-                    in
                     Err "unsupported content type"
     in
     customDecoder JD.string decodeFun

@@ -4,11 +4,11 @@ import Date exposing (Date)
 import RemoteData exposing (..)
 
 
-type alias Limit =
+type alias PerPage =
     Int
 
 
-type alias Offset =
+type alias Page =
     Int
 
 
@@ -86,7 +86,7 @@ type alias Model =
     { filterBy : Maybe Source
     , entries : WebData (List Entry)
     , moreEntries : WebData (List Entry)
-    , limit : Limit
-    , offset : Offset
+    , page : Page
+    , perPage : PerPage
     , query : Maybe Query
     }

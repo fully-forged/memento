@@ -23,8 +23,8 @@ refresh =
         |> Cmd.map RefreshResponse
 
 
-getEntries : Limit -> Offset -> Maybe Source -> Cmd Msg
-getEntries limit offset maybeSource =
+getEntries : PerPage -> Page -> Maybe Source -> Cmd Msg
+getEntries perPage page maybeSource =
     let
         typeParams maybeSource =
             case maybeSource of
@@ -41,8 +41,8 @@ getEntries limit offset maybeSource =
                     []
 
         defaultParams =
-            [ ( "limit", toString limit )
-            , ( "offset", toString offset )
+            [ ( "per_page", toString perPage )
+            , ( "page", toString page )
             ]
 
         params =

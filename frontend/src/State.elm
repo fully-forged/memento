@@ -5,14 +5,14 @@ import RemoteData exposing (..)
 import Types exposing (..)
 
 
-initialLimit : Limit
-initialLimit =
+initialPage : Page
+initialPage =
+    1
+
+
+perPage : PerPage
+perPage =
     25
-
-
-initialOffset : Offset
-initialOffset =
-    0
 
 
 init : ( Model, Cmd Msg )
@@ -20,11 +20,11 @@ init =
     ( { filterBy = Nothing
       , entries = Loading
       , moreEntries = NotAsked
-      , limit = initialLimit
-      , offset = initialOffset
+      , page = initialPage
+      , perPage = perPage
       , query = Nothing
       }
-    , Api.getEntries initialLimit initialOffset Nothing
+    , Api.getEntries perPage initialPage Nothing
     )
 
 
@@ -64,27 +64,27 @@ update msg model =
             ( { model
                 | entries = Loading
                 , filterBy = Just source
-                , offset = initialOffset
+                , page = initialPage
               }
-            , Api.getEntries model.limit initialOffset (Just source)
+            , Api.getEntries model.perPage initialPage (Just source)
             )
 
         ClearFilter ->
             ( { model
                 | entries = Loading
                 , filterBy = Nothing
-                , offset = initialOffset
+                , page = initialPage
               }
-            , Api.getEntries model.limit initialOffset Nothing
+            , Api.getEntries model.perPage initialPage Nothing
             )
 
         LoadMore ->
             ( { model
                 | entries = combineEntries model.entries model.moreEntries
                 , moreEntries = Loading
-                , offset = model.offset + initialLimit
+                , page = model.page + 1
               }
-            , Api.getEntries model.limit (model.offset + initialLimit) model.filterBy
+            , Api.getEntries model.perPage (model.page + 1) model.filterBy
             )
 
         Refresh ->
@@ -97,7 +97,7 @@ update msg model =
                 newModel =
                     { model
                         | query = Just query
-                        , offset = 0
+                        , page = initialPage
                         , filterBy = Nothing
                         , entries = Loading
                         , moreEntries = NotAsked
@@ -105,7 +105,7 @@ update msg model =
             in
             if String.length query <= 2 then
                 ( newModel
-                , Api.getEntries newModel.limit newModel.offset newModel.filterBy
+                , Api.getEntries newModel.perPage newModel.page newModel.filterBy
                 )
             else
                 ( newModel
