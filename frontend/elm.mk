@@ -194,7 +194,7 @@ $(DIST_FOLDER)/index.html: index.html
 	main_css=/assets/main.min.css main_js=/assets/main.min.js boot_js=/assets/boot.min.js bin/mo index.html > $@
 
 $(DIST_FOLDER)/images/%.jpg $(DIST_FOLDER)/images/%.png $(DIST_FOLDER)/images/%.svg $(DIST_FOLDER)/images/%.ico:
-	@cp -r images/ $(DIST_FOLDER)/images/
+	@cp -r images/ $(DIST_FOLDER)/
 
 define Makefile
 
