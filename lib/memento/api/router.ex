@@ -6,7 +6,7 @@ defmodule Memento.API.Router do
 
   plug Plug.Parsers,
     parsers: [:json],
-    pass: ["application/json"],
+    pass: ["*/*"],
     json_decoder: Poison
 
   plug Plug.Static,
@@ -17,6 +17,10 @@ defmodule Memento.API.Router do
   plug :dispatch
 
   resource "/entries", Memento.API.EntriesResource
+
+  get "/" do
+    send_resp(conn, 200, Memento.Template.index())
+  end
 
   match _ do
     send_resp(conn, 404, "Not found")
