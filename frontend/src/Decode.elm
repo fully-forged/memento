@@ -70,7 +70,7 @@ entryDecoder =
         (JD.field "id" JD.string)
         (JD.field "type" entryTypeDecoder)
         (JD.field "content" contentDecoder)
-        (JD.field "inserted_at" decodeDate)
+        (JD.field "saved_at" decodeDate)
 
 
 entriesDecoder : JD.Decoder (List Entry)
