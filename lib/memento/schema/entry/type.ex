@@ -10,6 +10,11 @@ defmodule Memento.Schema.Entry.Type do
     [name: "entry_type"]
   end
 
+  @spec type_strings :: [String.t()]
+  def type_strings do
+    Enum.map(@valid_types, &Atom.to_string/1)
+  end
+
   @spec type :: :string
   def type, do: :string
 
