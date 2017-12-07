@@ -1,7 +1,7 @@
 defmodule Memento.API.EntriesResource do
   use PlugRest.Resource
 
-  alias Memento.{API.Pagination, Repo, Schema.Entry}
+  alias Memento.{API.QsParamsValidator, Repo, Schema.Entry}
 
   import Ecto.Query
 
@@ -14,13 +14,26 @@ defmodule Memento.API.EntriesResource do
   end
 
   def to_json(conn, state) do
-    {limit, offset} = Pagination.parse(conn.query_params)
+    {:ok, %{page: page, per_page: per_page, type: type}} =
+      QsParamsValidator.validate(conn.query_params)
+
+    limit = per_page
+    offset = (page - 1) * per_page
 
     query =
       from e in Entry,
         order_by: [desc: :saved_at],
         limit: ^limit,
         offset: ^offset
+
+    query =
+      case type do
+        :all ->
+          query
+
+        filtered_type ->
+          from e in query, where: e.type == ^filtered_type
+      end
 
     body =
       query
