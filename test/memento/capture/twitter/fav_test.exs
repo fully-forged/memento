@@ -36,8 +36,10 @@ defmodule Memento.Capture.Twitter.FavTest do
     "possibly_sensitive" => false,
     "retweet_count" => 0,
     "retweeted" => false,
-    "source" => "<a href=\"https://github.com/benbjohnson/scuttlebutt\" rel=\"nofollow\">Scuttlebuttd</a>",
-    "text" => "dialyzex - A Mix task for type-checking your Elixir project with dialyzer https://t.co/CLgZiRapp9",
+    "source" =>
+      "<a href=\"https://github.com/benbjohnson/scuttlebutt\" rel=\"nofollow\">Scuttlebuttd</a>",
+    "text" =>
+      "dialyzex - A Mix task for type-checking your Elixir project with dialyzer https://t.co/CLgZiRapp9",
     "truncated" => false,
     "user" => %{
       "protected" => false,
@@ -50,7 +52,8 @@ defmodule Memento.Capture.Twitter.FavTest do
       "translator_type" => "none",
       "profile_sidebar_fill_color" => "DDEEF6",
       "id" => 705_828_978_414_596_096,
-      "profile_image_url" => "http://pbs.twimg.com/profile_images/705833395796840450/7riDHwEK_normal.jpg",
+      "profile_image_url" =>
+        "http://pbs.twimg.com/profile_images/705833395796840450/7riDHwEK_normal.jpg",
       "profile_link_color" => "1DA1F2",
       "is_translation_enabled" => false,
       "verified" => false,
@@ -85,10 +88,12 @@ defmodule Memento.Capture.Twitter.FavTest do
       "url" => "https://t.co/ar6qcMi3Gw",
       "profile_background_tile" => false,
       "default_profile_image" => false,
-      "description" => "A news feed of open source Elixir repos being talked about on Twitter. Maintained by @benbjohnson.",
+      "description" =>
+        "A news feed of open source Elixir repos being talked about on Twitter. Maintained by @benbjohnson.",
       "favourites_count" => 0,
       "geo_enabled" => false,
-      "profile_image_url_https" => "https://pbs.twimg.com/profile_images/705833395796840450/7riDHwEK_normal.jpg",
+      "profile_image_url_https" =>
+        "https://pbs.twimg.com/profile_images/705833395796840450/7riDHwEK_normal.jpg",
       "profile_use_background_image" => true,
       "time_zone" => nil,
       "follow_request_sent" => nil,
@@ -99,7 +104,8 @@ defmodule Memento.Capture.Twitter.FavTest do
   test "content_from_api_result/1" do
     assert %{
              id: "935532750223880194",
-             text: "dialyzex - A Mix task for type-checking your Elixir project with dialyzer https://t.co/CLgZiRapp9",
+             text:
+               "dialyzex - A Mix task for type-checking your Elixir project with dialyzer https://t.co/CLgZiRapp9",
              screen_name: "oss_elixir",
              urls: ["https://t.co/CLgZiRapp9"],
              created_at: ~N[2017-11-28 15:36:03]
