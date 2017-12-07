@@ -29,3 +29,6 @@ memento-*.tar
 /frontend//bin/*
 
 /priv/static/
+
+# ENV
+.env
