@@ -20,6 +20,9 @@ run.config:
 
   extra_steps:
     - npm install -g elm
+    - make -C frontend install
+    - make -C frontend
+    - make -C frontend prod
 
   fs_watch: true
 
