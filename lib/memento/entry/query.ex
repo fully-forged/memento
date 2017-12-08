@@ -20,6 +20,12 @@ defmodule Memento.Entry.Query do
       select: fragment("MAX(content ->> 'id')")
   end
 
+  def max_pinboard_saved_at do
+    from e in Entry,
+      where: e.type == ^:pinboard_link,
+      select: max(e.saved_at)
+  end
+
   def search(initial, search_query) do
     from e in initial,
       join: si in Entry.SearchIndex,

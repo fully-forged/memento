@@ -1,7 +1,7 @@
 defmodule Memento.Capture.Supervisor do
   use Supervisor
 
-  alias Memento.Capture.{Github, Twitter}
+  alias Memento.Capture.{Github, Pinboard, Twitter}
 
   def start_link(env) do
     Supervisor.start_link(__MODULE__, env, name: __MODULE__)
@@ -21,6 +21,13 @@ defmodule Memento.Capture.Supervisor do
         Twitter.Feed
       }
 
-    [{Twitter.Feed, twitter_feed_start_args}, {Github.Feed, Github.Feed}]
+    pinboard_feed_start_args =
+      {System.get_env("PINBOARD_API_TOKEN"), Pinboard.Feed}
+
+    [
+      {Twitter.Feed, twitter_feed_start_args},
+      {Github.Feed, Github.Feed},
+      {Pinboard.Feed, pinboard_feed_start_args}
+    ]
   end
 end
