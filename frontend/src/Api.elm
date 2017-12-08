@@ -56,11 +56,15 @@ getEntries perPage page maybeSource =
         |> Cmd.map EntriesResponse
 
 
-searchEntries : Query -> Cmd Msg
-searchEntries query =
+searchEntries : Query -> PerPage -> Page -> Cmd Msg
+searchEntries query perPage page =
     let
         params =
-            cgiParameters [ ( "q", query ) ]
+            cgiParameters
+                [ ( "q", query )
+                , ( "per_page", toString perPage )
+                , ( "page", toString page )
+                ]
 
         url =
             baseUrl ++ "entries" ++ "?" ++ params

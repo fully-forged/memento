@@ -79,13 +79,24 @@ update msg model =
             )
 
         LoadMore ->
-            ( { model
-                | entries = combineEntries model.entries model.moreEntries
-                , moreEntries = Loading
-                , page = model.page + 1
-              }
-            , Api.getEntries model.perPage (model.page + 1) model.filterBy
-            )
+            let
+                newModel =
+                    { model
+                        | entries = combineEntries model.entries model.moreEntries
+                        , moreEntries = Loading
+                        , page = model.page + 1
+                    }
+            in
+            case newModel.query of
+                Nothing ->
+                    ( newModel
+                    , Api.getEntries model.perPage (model.page + 1) model.filterBy
+                    )
+
+                Just query ->
+                    ( newModel
+                    , Api.searchEntries query newModel.perPage newModel.page
+                    )
 
         Refresh ->
             ( model
@@ -109,5 +120,5 @@ update msg model =
                 )
             else
                 ( newModel
-                , Api.searchEntries query
+                , Api.searchEntries query newModel.perPage newModel.page
                 )
