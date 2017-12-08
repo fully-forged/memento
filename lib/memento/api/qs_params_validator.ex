@@ -14,7 +14,8 @@ defmodule Memento.API.QsParamsValidator do
     Saul.map(%{
       "page" => {:optional, &page_validator/1},
       "per_page" => {:optional, &per_page_validator/1},
-      "type" => {:optional, &type_validator/1}
+      "type" => {:optional, &type_validator/1},
+      "q" => {:optional, &q_validator/1}
     })
   end
 
@@ -22,7 +23,8 @@ defmodule Memento.API.QsParamsValidator do
     result = %{
       page: Map.get(map, "page", @default_page),
       per_page: Map.get(map, "per_page", @default_per_page),
-      type: Map.get(map, "type", @default_type)
+      type: Map.get(map, "type", @default_type),
+      q: Map.get(map, "q", :not_provided)
     }
 
     {:ok, result}
@@ -45,5 +47,9 @@ defmodule Memento.API.QsParamsValidator do
     else
       {:error, "invalid type string"}
     end
+  end
+
+  defp q_validator(q) do
+    is_binary(q)
   end
 end

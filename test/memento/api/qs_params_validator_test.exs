@@ -4,7 +4,7 @@ defmodule Memento.API.QsParamsValidatorTest do
   alias Memento.API.QsParamsValidator, as: Validator
 
   test "it applies defaults" do
-    assert {:ok, %{page: 1, per_page: 25, type: :all}} ==
+    assert {:ok, %{page: 1, per_page: 25, type: :all, q: :not_provided}} ==
              Validator.validate(%{})
   end
 
@@ -45,6 +45,20 @@ defmodule Memento.API.QsParamsValidatorTest do
 
     test "fails for non-existing types" do
       params = %{"type" => "non-existing-type"}
+
+      assert {:error, _} = Validator.validate(params)
+    end
+  end
+
+  describe "q" do
+    test "parses q" do
+      params = %{"q" => "elixir"}
+
+      assert {:ok, %{q: "elixir"}} = Validator.validate(params)
+    end
+
+    test "fails for non-string q" do
+      params = %{"q" => []}
 
       assert {:error, _} = Validator.validate(params)
     end

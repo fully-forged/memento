@@ -63,7 +63,7 @@ searchEntries query =
             cgiParameters [ ( "q", query ) ]
 
         url =
-            baseUrl ++ "/entries" ++ "?" ++ params
+            baseUrl ++ "entries" ++ "?" ++ params
     in
     Http.get url Decode.entriesDecoder
         |> RemoteData.sendRequest

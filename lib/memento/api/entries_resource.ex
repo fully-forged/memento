@@ -1,9 +1,7 @@
 defmodule Memento.API.EntriesResource do
   use PlugRest.Resource
 
-  alias Memento.{API.QsParamsValidator, Repo, Schema.Entry}
-
-  import Ecto.Query
+  alias Memento.{API.QsParamsValidator, Entry.Query, Repo, Schema.Entry}
 
   def allowed_methods(conn, state) do
     {["GET", "OPTIONS"], conn, state}
@@ -14,29 +12,33 @@ defmodule Memento.API.EntriesResource do
   end
 
   def to_json(conn, state) do
-    {:ok, %{page: page, per_page: per_page, type: type}} =
+    {:ok, %{page: page, per_page: per_page, type: type, q: q}} =
       QsParamsValidator.validate(conn.query_params)
 
     limit = per_page
     offset = (page - 1) * per_page
 
-    query =
-      from e in Entry,
-        order_by: [desc: :saved_at],
-        limit: ^limit,
-        offset: ^offset
+    query = Query.ordered_by_saved_at_desc(Entry, limit, offset)
 
-    query =
-      case type do
-        :all ->
+    with_filters_query =
+      case {q, type} do
+        {:not_provided, :all} ->
           query
 
-        filtered_type ->
-          from e in query, where: e.type == ^filtered_type
+        {q, type} when is_binary(q) ->
+          if String.length(q) >= 3 do
+            prefix_q = q <> ":*"
+            Query.search(query, prefix_q)
+          else
+            Query.by_type(query, type)
+          end
+
+        {_q, type} ->
+          Query.by_type(query, type)
       end
 
     body =
-      query
+      with_filters_query
       |> Repo.all()
       |> Poison.encode!()
 
