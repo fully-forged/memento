@@ -2,7 +2,9 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
-config :memento, ecto_repos: [Memento.Repo]
+config :memento,
+  ecto_repos: [Memento.Repo],
+  assets_namespace: "dev"
 
 config :memento, Memento.Repo,
   adapter: Ecto.Adapters.Postgres,
