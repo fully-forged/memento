@@ -8,4 +8,15 @@ defmodule Memento.Entry.Query do
       where: e.type == ^:twitter_fav,
       select: fragment("MAX(content ->> 'id')")
   end
+
+  def search(search_query) do
+    from e in Entry,
+      join: si in Entry.SearchIndex,
+      on: [id: e.id],
+      where: fragment(
+        "to_tsvector('english', text) @@ to_tsquery(?)",
+        ^search_query
+      ),
+      order_by: [desc: :saved_at]
+  end
 end
