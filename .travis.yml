@@ -1,7 +1,18 @@
 dist: trusty
 sudo: required
 install: sudo bash -c "$(curl -fsSL https://s3.amazonaws.com/tools.nanobox.io/bootstrap/ci.sh)"
-script: nanobox run mix test
-after_success:
-  - nanobox remote add memento
-  - nanobox deploy
+
+stages:
+  - test
+  - name: deploy
+    if: branch = master
+
+jobs:
+  include:
+    - stage: test
+      script: nanobox run mix test
+    - stage: deploy
+      script: skip
+      after_success:
+        - nanobox remote add memento
+        - nanobox deploy
