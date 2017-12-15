@@ -1,9 +1,15 @@
 defmodule Memento.Schema.Entry.Type do
   @behaviour Ecto.Type
 
-  @valid_types [:twitter_fav, :pinboard_link, :github_star]
+  @valid_types [
+    :twitter_fav,
+    :pinboard_link,
+    :github_star,
+    :instapaper_bookmark
+  ]
 
-  @type type :: :twitter_fav | :pinboard_link | :github_star
+  @type type ::
+          :twitter_fav | :pinboard_link | :github_star | :instapaper_bookmark
 
   @spec constraint_opts :: Keyword.t()
   def constraint_opts do
