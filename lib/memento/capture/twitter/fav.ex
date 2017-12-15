@@ -5,7 +5,7 @@ defmodule Memento.Capture.Twitter.Fav do
 
     screen_name = get_in(result, ["user", "screen_name"])
 
-    urls = get_in(result, ["entities", "urls", Access.all(), "url"])
+    urls = get_in(result, ["entities", "urls", Access.all(), "expanded_url"])
 
     {:ok, created_at} = parse_created_at(created_at_str)
 
