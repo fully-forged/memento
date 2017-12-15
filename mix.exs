@@ -27,7 +27,6 @@ defmodule Memento.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:qdate, github: "choptastic/qdate", ref: "4c91fc4"},
       {:postgrex, ">= 0.0.0"},
       {:ecto, "~> 2.2"},
       {:plug_rest, "~> 0.13.0"},
