@@ -41,6 +41,13 @@ contentBlock content =
                 , p [] [ a [ href gs.url ] [ text gs.url ] ]
                 ]
 
+        InstapaperContent ib ->
+            div [ class "content" ]
+                [ h1 []
+                    [ text ib.title ]
+                , p [] [ a [ href ib.url ] [ text ib.url ] ]
+                ]
+
 
 icon : Entry -> Html Msg
 icon entry =
@@ -53,6 +60,9 @@ icon entry =
 
         GithubContent gs ->
             i [ class "icon-github" ] []
+
+        InstapaperContent ib ->
+            i [ class "icon-instapaper" ] []
 
 
 entryItem : Entry -> Html Msg
@@ -142,6 +152,14 @@ navBar model =
                         , ( "active", model.filterBy == Just Github )
                         ]
                     , onClick (FilterBy Github)
+                    ]
+                    []
+                , i
+                    [ classList
+                        [ ( "icon-instapaper", True )
+                        , ( "active", model.filterBy == Just Instapaper )
+                        ]
+                    , onClick (FilterBy Instapaper)
                     ]
                     []
                 , span

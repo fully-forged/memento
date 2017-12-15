@@ -20,6 +20,7 @@ type Source
     = Twitter
     | Pinboard
     | Github
+    | Instapaper
 
 
 type RefreshStatus
@@ -57,10 +58,19 @@ type alias GithubStar =
     }
 
 
+type alias InstapaperBookmark =
+    { id : Id
+    , title : String
+    , url : String
+    , date : Date
+    }
+
+
 type Content
     = TwitterContent TwitterFav
     | PinboardContent PinboardLink
     | GithubContent GithubStar
+    | InstapaperContent InstapaperBookmark
 
 
 type alias Entry =

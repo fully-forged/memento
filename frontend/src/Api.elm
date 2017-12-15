@@ -37,6 +37,9 @@ getEntries perPage page maybeSource =
                 Just Pinboard ->
                     [ ( "type", "pinboard_link" ) ]
 
+                Just Instapaper ->
+                    [ ( "type", "instapaper_bookmark" ) ]
+
                 Nothing ->
                     []
 

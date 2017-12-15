@@ -35,12 +35,22 @@ githubStarDecoder =
         (JD.field "starred_at" decodeDate)
 
 
+instapaperBookmarkDecoder : JD.Decoder InstapaperBookmark
+instapaperBookmarkDecoder =
+    JD.map4 InstapaperBookmark
+        (JD.field "id" JD.string)
+        (JD.field "title" JD.string)
+        (JD.field "url" JD.string)
+        (JD.field "time" decodeDate)
+
+
 contentDecoder : JD.Decoder Content
 contentDecoder =
     JD.oneOf
         [ JD.map TwitterContent twitterFavDecoder
         , JD.map PinboardContent pinboardLinkDecoder
         , JD.map GithubContent githubStarDecoder
+        , JD.map InstapaperContent instapaperBookmarkDecoder
         ]
 
 
@@ -57,6 +67,9 @@ entryTypeDecoder =
 
                 "github_star" ->
                     Ok Github
+
+                "instapaper_bookmark" ->
+                    Ok Instapaper
 
                 otherwise ->
                     Err "unsupported content type"
