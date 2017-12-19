@@ -4,6 +4,8 @@ defmodule Memento.Schema.Entry do
 
   @primary_key {:id, :binary_id, autogenerate: true}
 
+  @type content :: Map.t()
+
   schema "entries" do
     field(:type, Memento.Schema.Entry.Type)
     field(:content, :map)
