@@ -65,7 +65,14 @@ defmodule Memento.Capture.Feed do
       when event_type in [:internal, :timeout] do
     case handler.refresh(data) do
       {:ok, new_entries_data, new_data} ->
-        insert_all(new_entries_data, handler)
+        {new_count, _} = insert_all(new_entries_data, handler)
+
+        Logger.info(fn ->
+          """
+          Refreshed #{inspect(handler)}, added #{new_count} new entries.
+          """
+        end)
+
         action = {:timeout, @refresh_interval, :refresh}
         {:keep_state, {new_data, handler}, action}
 
