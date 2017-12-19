@@ -67,7 +67,7 @@ defmodule Memento.Capture.Feed do
       {:ok, new_entries_data, new_data} ->
         insert_all(new_entries_data, handler)
         action = {:timeout, @refresh_interval, :refresh}
-        {:keep_state, new_data, action}
+        {:keep_state, {new_data, handler}, action}
 
       {:error, reason} ->
         Logger.error(fn ->
@@ -79,7 +79,7 @@ defmodule Memento.Capture.Feed do
         end)
 
         action = {:timeout, @retry_interval, :refresh}
-        {:keep_state, data, action}
+        {:keep_state, {data, handler}, action}
     end
   end
 
