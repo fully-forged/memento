@@ -10,7 +10,13 @@ defmodule Memento.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       aliases: aliases(),
-      dialyzer_ignored_warnings: dialyzer_ignored_warnings()
+      dialyzer_ignored_warnings: dialyzer_ignored_warnings(),
+      preferred_cli_env: [
+        vcr: :test,
+        "vcr.delete": :test,
+        "vcr.check": :test,
+        "vcr.show": :test
+      ]
     ]
   end
 
@@ -34,7 +40,8 @@ defmodule Memento.MixProject do
       {:saul, "~> 0.1.0"},
       {:oauther, "~> 1.1"},
       {:logster, "~> 0.4"},
-      {:dialyzex, "~> 1.0.0", only: :dev}
+      {:dialyzex, "~> 1.0.0", only: :dev},
+      {:exvcr, "~> 0.8", only: :test}
     ]
   end
 

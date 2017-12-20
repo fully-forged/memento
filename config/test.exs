@@ -9,3 +9,5 @@ config :memento, Memento.Repo,
   hostname: System.get_env("DATA_DB_HOST"),
   database: "memento_test",
   pool: Ecto.Adapters.SQL.Sandbox
+
+config :exvcr, vcr_cassette_library_dir: "test/fixture/vcr_cassettes"
