@@ -10,6 +10,10 @@ stages:
 jobs:
   include:
     - stage: test
+      before_script:
+        - env | grep 'TWITTER' > secrets
+        - nanobox evar load local secrets
+        - rm secrets
       script: nanobox run mix test
     - stage: deploy
       script: skip
