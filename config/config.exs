@@ -4,7 +4,9 @@ use Mix.Config
 
 config :memento,
   ecto_repos: [Memento.Repo],
-  assets_namespace: "dev"
+  assets_namespace: "dev",
+  twitter_username: "cloud8421",
+  github_username: "cloud8421"
 
 config :memento, Memento.Repo,
   adapter: Ecto.Adapters.Postgres,

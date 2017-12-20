@@ -8,7 +8,7 @@ defmodule Memento.Capture.Github.Handler do
   def get_saved_at(content), do: content.starred_at
 
   def initial_data do
-    %{username: "cloud8421"}
+    %{username: Application.get_env(:memento, :github_username)}
   end
 
   def authorize(data) do

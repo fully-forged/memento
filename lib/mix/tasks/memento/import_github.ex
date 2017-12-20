@@ -6,7 +6,8 @@ defmodule Mix.Tasks.Memento.ImportGithub do
 
     now = DateTime.utc_now()
 
-    Github.Stream.by_username("cloud8421")
+    Application.get_env(:memento, :github_username)
+    |> Github.Stream.by_username()
     |> Enum.chunk_every(50)
     |> Enum.each(fn chunk ->
          inserts =

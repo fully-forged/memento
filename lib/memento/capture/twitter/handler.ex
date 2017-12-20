@@ -10,7 +10,7 @@ defmodule Memento.Capture.Twitter.Handler do
 
   def initial_data do
     %{
-      username: "cloud8421",
+      username: Application.get_env(:memento, :twitter_username),
       consumer_key: System.get_env("TWITTER_CONSUMER_KEY"),
       consumer_secret: System.get_env("TWITTER_CONSUMER_SECRET")
     }
