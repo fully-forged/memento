@@ -57,7 +57,7 @@ defmodule Memento.Capture.Feed do
           """
         end)
 
-        {:stop, :reason}
+        {:stop, reason}
     end
   end
 
