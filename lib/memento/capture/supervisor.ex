@@ -7,6 +7,12 @@ defmodule Memento.Capture.Supervisor do
     Supervisor.start_link(__MODULE__, env, name: __MODULE__)
   end
 
+  def refresh_all do
+    Enum.each(workers(), fn w ->
+      Feed.refresh(w)
+    end)
+  end
+
   def init(env) do
     Supervisor.init(children(env), strategy: :one_for_one)
   end
@@ -14,11 +20,12 @@ defmodule Memento.Capture.Supervisor do
   defp children(:test), do: []
 
   defp children(_env) do
-    [
-      {Feed, Twitter.Handler},
-      {Feed, Github.Handler},
-      {Feed, Pinboard.Handler},
-      {Feed, Instapaper.Handler}
-    ]
+    Enum.map(workers(), fn w ->
+      {Feed, w}
+    end)
+  end
+
+  defp workers do
+    [Twitter.Handler, Github.Handler, Pinboard.Handler, Instapaper.Handler]
   end
 end

@@ -22,6 +22,12 @@ defmodule Memento.API.Router do
     send_resp(conn, 200, Memento.Template.index())
   end
 
+  get "/entries/refresh" do
+    :ok = Memento.Capture.Supervisor.refresh_all()
+
+    send_resp(conn, 200, Poison.encode!(%{status: :refreshed}))
+  end
+
   get "/entries" do
     {:ok, %{page: page, per_page: per_page, type: type, q: q}} =
       QsParamsValidator.validate(conn.query_params)

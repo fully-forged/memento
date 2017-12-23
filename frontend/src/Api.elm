@@ -16,7 +16,7 @@ refresh : Cmd Msg
 refresh =
     let
         url =
-            baseUrl ++ "refresh"
+            baseUrl ++ "entries/refresh"
     in
     Http.get url Decode.refreshStatusDecoder
         |> RemoteData.sendRequest
