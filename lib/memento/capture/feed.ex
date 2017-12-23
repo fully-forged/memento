@@ -37,6 +37,10 @@ defmodule Memento.Capture.Feed do
     )
   end
 
+  def refresh(worker) do
+    :gen_statem.call(worker, :refresh)
+  end
+
   def init({initial_data, handler}) do
     action = {:next_event, :internal, :authorize}
     {:ok, :idle, {initial_data, handler}, action}
@@ -86,6 +90,34 @@ defmodule Memento.Capture.Feed do
         end)
 
         action = {:timeout, @retry_interval, :refresh}
+        {:keep_state, {data, handler}, action}
+    end
+  end
+
+  def authorized({:call, from}, :refresh, {data, handler}) do
+    case handler.refresh(data) do
+      {:ok, new_entries_data, new_data} ->
+        {new_count, _} = insert_all(new_entries_data, handler)
+
+        Logger.info(fn ->
+          """
+          Refreshed #{inspect(handler)}, added #{new_count} new entries.
+          """
+        end)
+
+        action = {:reply, from, {:ok, new_count}}
+        {:keep_state, {new_data, handler}, action}
+
+      {:error, reason} ->
+        Logger.error(fn ->
+          """
+          Error refreshing #{inspect(handler)}.
+
+          Reason: #{inspect(reason)}
+          """
+        end)
+
+        action = {:reply, from, {:error, reason}}
         {:keep_state, {data, handler}, action}
     end
   end

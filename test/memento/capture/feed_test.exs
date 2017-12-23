@@ -79,8 +79,12 @@ defmodule Memento.Capture.FeedTest do
       assert {:authorized, _} = :sys.get_state(worker)
     end
 
-    test "it refreshes data", %{worker: worker} do
+    test "it automatically refreshes data", %{worker: worker} do
       assert {:authorized, {%{refresh_counter: 1}, _}} = :sys.get_state(worker)
+    end
+
+    test "it refreshes data on demand", %{worker: worker} do
+      assert {:ok, 0} == Capture.Feed.refresh(worker)
     end
 
     test "it saves data", %{worker: worker} do
