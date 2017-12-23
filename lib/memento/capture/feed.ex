@@ -67,10 +67,8 @@ defmodule Memento.Capture.Feed do
 
   def authorized(event_type, :refresh, {data, handler})
       when event_type in [:internal, :timeout] do
-    case handler.refresh(data) do
-      {:ok, new_entries_data, new_data} ->
-        {new_count, _} = insert_all(new_entries_data, handler)
-
+    case refresh_and_save(handler, data) do
+      {:ok, new_count, new_data} ->
         Logger.info(fn ->
           """
           Refreshed #{inspect(handler)}, added #{new_count} new entries.
@@ -95,30 +93,25 @@ defmodule Memento.Capture.Feed do
   end
 
   def authorized({:call, from}, :refresh, {data, handler}) do
-    case handler.refresh(data) do
-      {:ok, new_entries_data, new_data} ->
-        {new_count, _} = insert_all(new_entries_data, handler)
-
-        Logger.info(fn ->
-          """
-          Refreshed #{inspect(handler)}, added #{new_count} new entries.
-          """
-        end)
-
+    case refresh_and_save(handler, data) do
+      {:ok, new_count, new_data} ->
         action = {:reply, from, {:ok, new_count}}
         {:keep_state, {new_data, handler}, action}
 
       {:error, reason} ->
-        Logger.error(fn ->
-          """
-          Error refreshing #{inspect(handler)}.
-
-          Reason: #{inspect(reason)}
-          """
-        end)
-
         action = {:reply, from, {:error, reason}}
         {:keep_state, {data, handler}, action}
+    end
+  end
+
+  defp refresh_and_save(handler, data) do
+    case handler.refresh(data) do
+      {:ok, new_entries_data, new_data} ->
+        {new_count, _} = insert_all(new_entries_data, handler)
+        {:ok, new_count, new_data}
+
+      error ->
+        error
     end
   end
 
