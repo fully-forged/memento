@@ -20,7 +20,7 @@ defmodule Memento.Capture.Github.StarredRepo do
       owner: get_in(result, ["repo", "owner", "login"]),
       name: get_in(result, ["repo", "name"]),
       description: get_in(result, ["repo", "description"]),
-      url: get_in(result, ["repo", "url"]),
+      url: get_in(result, ["repo", "html_url"]),
       created_at: created_at,
       pushed_at: pushed_at,
       starred_at: starred_at
