@@ -88,7 +88,7 @@ defmodule Memento.Capture.Feed do
         end)
 
         action = {:timeout, @retry_interval, :refresh}
-        {:keep_state, {data, handler}, action}
+        {:keep_state_and_data, action}
     end
   end
 
@@ -100,7 +100,7 @@ defmodule Memento.Capture.Feed do
 
       {:error, reason} ->
         action = {:reply, from, {:error, reason}}
-        {:keep_state, {data, handler}, action}
+        {:keep_state_and_data, action}
     end
   end
 
