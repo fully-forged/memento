@@ -95,12 +95,20 @@ defmodule Memento.Capture.Feed do
   def authorized({:call, from}, :refresh, {data, handler}) do
     case refresh_and_save(handler, data) do
       {:ok, new_count, new_data} ->
-        action = {:reply, from, {:ok, new_count}}
-        {:keep_state, {new_data, handler}, action}
+        actions = [
+          {:reply, from, {:ok, new_count}},
+          {:timeout, @refresh_interval, :refresh}
+        ]
+
+        {:keep_state, {new_data, handler}, actions}
 
       {:error, reason} ->
-        action = {:reply, from, {:error, reason}}
-        {:keep_state_and_data, action}
+        actions = [
+          {:reply, from, {:error, reason}},
+          {:timeout, @refresh_interval, :refresh}
+        ]
+
+        {:keep_state_and_data, actions}
     end
   end
 
