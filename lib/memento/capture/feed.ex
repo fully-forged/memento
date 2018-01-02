@@ -8,10 +8,10 @@ defmodule Memento.Capture.Feed do
 
   require Logger
 
-  def child_spec(handler) do
+  def child_spec(config) do
     %{
-      id: {__MODULE__, handler},
-      start: {__MODULE__, :start_link, [handler]},
+      id: {__MODULE__, config.handler},
+      start: {__MODULE__, :start_link, [config.handler]},
       type: :worker,
       restart: :permanent,
       shutdown: 500

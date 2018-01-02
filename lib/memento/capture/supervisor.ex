@@ -3,6 +3,9 @@ defmodule Memento.Capture.Supervisor do
 
   alias Memento.Capture.{Feed, Github, Instapaper, Pinboard, Twitter}
 
+  @refresh_interval 1000 * 60 * 5
+  @retry_interval 5000
+
   def start_link(env) do
     Supervisor.start_link(__MODULE__, env, name: __MODULE__)
   end
@@ -21,11 +24,20 @@ defmodule Memento.Capture.Supervisor do
 
   defp children(_env) do
     Enum.map(workers(), fn w ->
-      {Feed, w}
+      {Feed, worker_config(w)}
     end)
   end
 
   defp workers do
     [Twitter.Handler, Github.Handler, Pinboard.Handler, Instapaper.Handler]
+  end
+
+  defp worker_config(handler) do
+    %{
+      handler: handler,
+      name: handler,
+      refresh_interval: @refresh_interval,
+      retry_interval: @retry_interval
+    }
   end
 end
