@@ -3,6 +3,7 @@ defmodule Memento.API.QsParamsValidatorTest do
   use ExUnitProperties
 
   alias Memento.API.QsParamsValidator, as: Validator
+  doctest Validator
 
   test "it applies defaults" do
     assert {:ok, %{page: 1, per_page: 25, type: :all, q: :not_provided}} ==
