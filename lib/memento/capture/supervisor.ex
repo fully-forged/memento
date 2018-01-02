@@ -36,6 +36,7 @@ defmodule Memento.Capture.Supervisor do
     %{
       handler: handler,
       name: handler,
+      initial_data: handler.initial_data(),
       refresh_interval: @refresh_interval,
       retry_interval: @retry_interval
     }

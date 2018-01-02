@@ -11,7 +11,7 @@ defmodule Memento.Capture.Feed do
   def child_spec(config) do
     %{
       id: {__MODULE__, config.handler},
-      start: {__MODULE__, :start_link, [config.handler]},
+      start: {__MODULE__, :start_link, [config]},
       type: :worker,
       restart: :permanent,
       shutdown: 500
@@ -20,19 +20,11 @@ defmodule Memento.Capture.Feed do
 
   def callback_mode, do: :state_functions
 
-  def start_link(handler) do
-    start_link(handler, handler)
-  end
-
-  def start_link(handler, name) do
-    start_link(handler.initial_data(), handler, name)
-  end
-
-  def start_link(initial_data, handler, name) do
+  def start_link(config) do
     :gen_statem.start_link(
-      {:local, name},
+      {:local, config.name},
       __MODULE__,
-      {initial_data, handler},
+      {config.initial_data, config.handler},
       []
     )
   end

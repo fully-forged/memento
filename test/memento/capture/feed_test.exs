@@ -47,12 +47,13 @@ defmodule Memento.Capture.FeedTest do
     test "it stops the worker", context do
       Process.flag(:trap_exit, true)
 
-      {:ok, worker} =
-        Capture.Feed.start_link(
-          %{invalid: "credentials"},
-          TestHandler,
-          context.test
-        )
+      config = %{
+        name: context.test,
+        handler: TestHandler,
+        initial_data: %{invalid: "credentials"}
+      }
+
+      {:ok, worker} = Capture.Feed.start_link(config)
 
       assert_receive {:EXIT, ^worker, %{failed: :authorization}}
       refute Process.alive?(worker)
@@ -63,12 +64,13 @@ defmodule Memento.Capture.FeedTest do
     setup context do
       parent = self()
 
-      {:ok, worker} =
-        Capture.Feed.start_link(
-          %{valid: "credentials"},
-          TestHandler,
-          context.test
-        )
+      config = %{
+        name: context.test,
+        handler: TestHandler,
+        initial_data: %{valid: "credentials"}
+      }
+
+      {:ok, worker} = Capture.Feed.start_link(config)
 
       Ecto.Adapters.SQL.Sandbox.allow(Repo, parent, worker)
 
