@@ -1,5 +1,6 @@
 defmodule Memento.API.QsParamsValidatorTest do
   use ExUnit.Case, async: true
+  use ExUnitProperties
 
   alias Memento.API.QsParamsValidator, as: Validator
 
@@ -8,32 +9,28 @@ defmodule Memento.API.QsParamsValidatorTest do
              Validator.validate(%{})
   end
 
-  describe "page" do
-    test "parses page" do
-      params = %{"page" => "8"}
+  describe "page and per_page" do
+    property "allows page and per page integer strings" do
+      check all page_string <- pagination_params_generator(),
+                per_page_string <- pagination_params_generator() do
+        params = %{"page" => page_string, "per_page" => per_page_string}
 
-      assert {:ok, %{page: 8}} = Validator.validate(params)
+        assert {:ok, %{page: page, per_page: per_page}} =
+                 Validator.validate(params)
+
+        assert is_integer(page)
+        assert is_integer(per_page)
+      end
     end
 
     test "fails for non-numeric values" do
-      params = %{"page" => "foo"}
-
-      assert {:error, _} = Validator.validate(params)
+      assert {:error, _} = Validator.validate(%{"page" => "foo"})
+      assert {:error, _} = Validator.validate(%{"per_page" => "foo"})
     end
   end
 
-  describe "per_page" do
-    test "parses per_page" do
-      params = %{"per_page" => "8"}
-
-      assert {:ok, %{per_page: 8}} = Validator.validate(params)
-    end
-
-    test "fails for non-numeric values" do
-      params = %{"per_page" => "foo"}
-
-      assert {:error, _} = Validator.validate(params)
-    end
+  defp pagination_params_generator do
+    StreamData.map(StreamData.integer(), &Integer.to_string/1)
   end
 
   describe "type" do

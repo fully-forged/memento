@@ -10,6 +10,12 @@
     resource: 3,
     match: 2,
     # ecto
-    from: 2
+    from: 2,
+    # stream_data
+    property: 2,
+    property: 3,
+    check: 2,
+    gen: 2,
+    pick: 1
   ]
 ]
