@@ -40,6 +40,7 @@ defmodule Memento.MixProject do
       {:saul, "~> 0.1.0"},
       {:oauther, "~> 1.1"},
       {:logster, "~> 0.4"},
+      {:ex_doc, "~> 0.18.1", only: :dev},
       {:dialyzex, "~> 1.0.0", only: :dev},
       {:exvcr, "~> 0.8", only: :test}
     ]
