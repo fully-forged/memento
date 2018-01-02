@@ -1,9 +1,6 @@
 defmodule Memento.Capture.Feed do
   @behaviour :gen_statem
 
-  @retry_interval 5000
-  @refresh_interval 1000 * 60 * 5
-
   alias Memento.{Repo, Schema.Entry}
 
   require Logger
@@ -21,33 +18,29 @@ defmodule Memento.Capture.Feed do
   def callback_mode, do: :state_functions
 
   def start_link(config) do
-    :gen_statem.start_link(
-      {:local, config.name},
-      __MODULE__,
-      {config.initial_data, config.handler},
-      []
-    )
+    :gen_statem.start_link({:local, config.name}, __MODULE__, config, [])
   end
 
   def refresh(worker) do
     :gen_statem.call(worker, :refresh)
   end
 
-  def init({initial_data, handler}) do
+  def init(config) do
     action = {:next_event, :internal, :authorize}
-    {:ok, :idle, {initial_data, handler}, action}
+    {:ok, :idle, config, action}
   end
 
-  def idle(:internal, :authorize, {data, handler}) do
-    case handler.authorize(data) do
+  def idle(:internal, :authorize, state) do
+    case state.handler.authorize(state.data) do
       {:ok, new_data} ->
         action = {:next_event, :internal, :refresh}
-        {:next_state, :authorized, {new_data, handler}, action}
+        new_state = %{state | data: new_data}
+        {:next_state, :authorized, new_state, action}
 
       {:error, reason} ->
         Logger.error(fn ->
           """
-          Error authorizing #{inspect(handler)}.
+          Error authorizing #{inspect(state.handler)}.
 
           Reason: #{inspect(reason)}
           """
@@ -57,47 +50,50 @@ defmodule Memento.Capture.Feed do
     end
   end
 
-  def authorized(event_type, :refresh, {data, handler})
+  def authorized(event_type, :refresh, state)
       when event_type in [:internal, :timeout] do
-    case refresh_and_save(handler, data) do
+    case refresh_and_save(state.handler, state.data) do
       {:ok, new_count, new_data} ->
         Logger.info(fn ->
           """
-          Refreshed #{inspect(handler)}, added #{new_count} new entries.
+          Refreshed #{inspect(state.handler)}, added #{new_count} new entries.
           """
         end)
 
-        action = {:timeout, @refresh_interval, :refresh}
-        {:keep_state, {new_data, handler}, action}
+        action = {:timeout, state.refresh_interval, :refresh}
+        new_state = %{state | data: new_data}
+        {:keep_state, new_state, action}
 
       {:error, reason} ->
         Logger.error(fn ->
           """
-          Error refreshing #{inspect(handler)}.
+          Error refreshing #{inspect(state.handler)}.
 
           Reason: #{inspect(reason)}
           """
         end)
 
-        action = {:timeout, @retry_interval, :refresh}
+        action = {:timeout, state.retry_interval, :refresh}
         {:keep_state_and_data, action}
     end
   end
 
-  def authorized({:call, from}, :refresh, {data, handler}) do
-    case refresh_and_save(handler, data) do
+  def authorized({:call, from}, :refresh, state) do
+    case refresh_and_save(state.handler, state.data) do
       {:ok, new_count, new_data} ->
         actions = [
           {:reply, from, {:ok, new_count}},
-          {:timeout, @refresh_interval, :refresh}
+          {:timeout, state.refresh_interval, :refresh}
         ]
 
-        {:keep_state, {new_data, handler}, actions}
+        new_state = %{state | data: new_data}
+
+        {:keep_state, new_state, actions}
 
       {:error, reason} ->
         actions = [
           {:reply, from, {:error, reason}},
-          {:timeout, @refresh_interval, :refresh}
+          {:timeout, state.refresh_interval, :refresh}
         ]
 
         {:keep_state_and_data, actions}

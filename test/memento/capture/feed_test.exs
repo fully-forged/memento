@@ -50,7 +50,9 @@ defmodule Memento.Capture.FeedTest do
       config = %{
         name: context.test,
         handler: TestHandler,
-        initial_data: %{invalid: "credentials"}
+        data: %{invalid: "credentials"},
+        refresh_interval: 30000,
+        retry_interval: 5000
       }
 
       {:ok, worker} = Capture.Feed.start_link(config)
@@ -67,7 +69,9 @@ defmodule Memento.Capture.FeedTest do
       config = %{
         name: context.test,
         handler: TestHandler,
-        initial_data: %{valid: "credentials"}
+        data: %{valid: "credentials"},
+        refresh_interval: 10,
+        retry_interval: 50
       }
 
       {:ok, worker} = Capture.Feed.start_link(config)
@@ -82,7 +86,13 @@ defmodule Memento.Capture.FeedTest do
     end
 
     test "it automatically refreshes data", %{worker: worker} do
-      assert {:authorized, {%{refresh_counter: 1}, _}} = :sys.get_state(worker)
+      assert {:authorized, %{data: %{refresh_counter: 1}}} =
+               :sys.get_state(worker)
+
+      Process.sleep(10)
+
+      assert {:authorized, %{data: %{refresh_counter: 2}}} =
+               :sys.get_state(worker)
     end
 
     test "it refreshes data on demand", %{worker: worker} do
@@ -90,7 +100,9 @@ defmodule Memento.Capture.FeedTest do
     end
 
     test "it saves data", %{worker: worker} do
-      assert {:authorized, {%{refresh_counter: 1}, _}} = :sys.get_state(worker)
+      assert {:authorized, %{data: %{refresh_counter: 1}}} =
+               :sys.get_state(worker)
+
       assert 1 == Repo.aggregate(Entry, :count, :id)
     end
   end
