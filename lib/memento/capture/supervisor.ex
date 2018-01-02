@@ -5,15 +5,23 @@ defmodule Memento.Capture.Supervisor do
 
   @refresh_interval 1000 * 60 * 5
   @retry_interval 5000
+  @workers [
+    Twitter.Handler,
+    Github.Handler,
+    Pinboard.Handler,
+    Instapaper.Handler
+  ]
 
   def start_link(env) do
     Supervisor.start_link(__MODULE__, env, name: __MODULE__)
   end
 
   def refresh_all do
-    Enum.each(workers(), fn w ->
-      Feed.refresh(w)
-    end)
+    @workers
+    |> Enum.map(fn w ->
+         Task.async(Feed, :refresh, [w])
+       end)
+    |> Enum.map(&Task.await/1)
   end
 
   def init(env) do
@@ -23,13 +31,9 @@ defmodule Memento.Capture.Supervisor do
   defp children(:test), do: []
 
   defp children(_env) do
-    Enum.map(workers(), fn w ->
+    Enum.map(@workers, fn w ->
       {Feed, worker_config(w)}
     end)
-  end
-
-  defp workers do
-    [Twitter.Handler, Github.Handler, Pinboard.Handler, Instapaper.Handler]
   end
 
   defp worker_config(handler) do

@@ -23,7 +23,7 @@ defmodule Memento.API.Router do
   end
 
   get "/entries/refresh" do
-    :ok = Memento.Capture.Supervisor.refresh_all()
+    Memento.Capture.Supervisor.refresh_all()
 
     send_resp(conn, 200, Poison.encode!(%{status: :refreshed}))
   end
