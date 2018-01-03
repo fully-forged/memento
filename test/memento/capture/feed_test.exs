@@ -50,6 +50,7 @@ defmodule Memento.Capture.FeedTest do
       config = %{
         name: context.test,
         handler: TestHandler,
+        status: Capture.Status,
         data: %{invalid: "credentials"},
         refresh_interval: 30000,
         retry_interval: 5000
@@ -69,6 +70,7 @@ defmodule Memento.Capture.FeedTest do
       config = %{
         name: context.test,
         handler: TestHandler,
+        status: Capture.Status,
         data: %{valid: "credentials"},
         refresh_interval: 10,
         retry_interval: 50
