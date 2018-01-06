@@ -105,4 +105,39 @@ defmodule Memento.Capture.Twitter.FavTest do
              created_at: ~N[2017-11-28 15:36:03]
            } == Fav.content_from_api_result(@api_result)
   end
+
+  test "with media" do
+    media = [
+      %{
+        "display_url" => "pic.twitter.com/gw3oFiADKc",
+        "expanded_url" => "https://twitter.com/waneella_/status/949454537579991040/photo/1",
+        "id" => 949_454_503_555_796_993,
+        "id_str" => "949454503555796993",
+        "indices" => [0, 23],
+        "media_url" => "http://pbs.twimg.com/tweet_video_thumb/DS0j1y7WkAEccC_.jpg",
+        "media_url_https" => "https://pbs.twimg.com/tweet_video_thumb/DS0j1y7WkAEccC_.jpg",
+        "sizes" => %{
+          "large" => %{"h" => 810, "resize" => "fit", "w" => 540},
+          "medium" => %{"h" => 810, "resize" => "fit", "w" => 540},
+          "small" => %{"h" => 680, "resize" => "fit", "w" => 453},
+          "thumb" => %{"h" => 150, "resize" => "crop", "w" => 150}
+        },
+        "type" => "photo",
+        "url" => "https://t.co/gw3oFiADKc"
+      }
+    ]
+
+    api_result = put_in(@api_result, ["entities", "media"], media)
+
+    assert %{
+             id: "935532750223880194",
+             text: "dialyzex - A Mix task for type-checking your Elixir project with dialyzer https://t.co/CLgZiRapp9",
+             screen_name: "oss_elixir",
+             urls: [
+               "https://github.com/comcast/dialyzex",
+               "https://twitter.com/waneella_/status/949454537579991040/photo/1"
+             ],
+             created_at: ~N[2017-11-28 15:36:03]
+           } == Fav.content_from_api_result(api_result)
+  end
 end
