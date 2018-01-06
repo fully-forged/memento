@@ -1,5 +1,7 @@
 # Memento
 
+[![Build Status](https://travis-ci.org/fully-forged/memento.svg?branch=master)](https://travis-ci.org/fully-forged/memento)
+
 **TODO: Add description**
 
 ## Installation
