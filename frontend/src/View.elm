@@ -162,7 +162,7 @@ navBar model =
                         ]
                     , onClick ClearFilter
                     ]
-                    [ text "None" ]
+                    [ text "All" ]
                 ]
             ]
         ]
