@@ -36,6 +36,10 @@ nav {
   .title {
     display: flex;
     align-items: center;
+
+    h1 {
+      cursor: pointer;
+    }
   }
 
   input {
@@ -43,10 +47,6 @@ nav {
     border-radius: 0;
     font-size: 1em;
     padding: 0.5em;
-  }
-
-  .logo {
-    margin-right: 1em;
   }
 
   .filters {

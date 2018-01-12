@@ -111,13 +111,7 @@ navBar : Model -> Html Msg
 navBar model =
     nav []
         [ div [ class "title" ]
-            [ img
-                [ class "logo"
-                , src "/assets/images/nav-logo.png"
-                , onClick Refresh
-                ]
-                []
-            , h1 [] [ text "MEMENTO" ]
+            [ h1 [ onClick Refresh ] [ text "MEMENTO" ]
             ]
         , div [ class "filters" ]
             [ input
