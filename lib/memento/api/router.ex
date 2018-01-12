@@ -19,13 +19,17 @@ defmodule Memento.API.Router do
   plug :dispatch
 
   get "/" do
-    send_resp(conn, 200, Memento.Template.index())
+    html_resp(conn, 200, Memento.Template.index())
+  end
+
+  get "/status" do
+    json_resp(conn, 200, get_status())
   end
 
   get "/entries/refresh" do
     Memento.Capture.Supervisor.refresh_all()
 
-    send_resp(conn, 200, Poison.encode!(%{status: :refreshed}))
+    json_resp(conn, 200, Poison.encode!(%{status: :refreshed}))
   end
 
   get "/entries" do
@@ -59,10 +63,30 @@ defmodule Memento.API.Router do
       |> Repo.all()
       |> Poison.encode!()
 
-    send_resp(conn, 200, body)
+    json_resp(conn, 200, body)
   end
 
   match _ do
-    send_resp(conn, 404, "Not found")
+    html_resp(conn, 404, "Not found")
+  end
+
+  defp get_status do
+    Memento.Capture.Status.all()
+    |> Enum.map(fn {handler, last_update} ->
+         %{handler: handler, last_update: last_update}
+       end)
+    |> Poison.encode!()
+  end
+
+  defp html_resp(conn, status_code, body) do
+    conn
+    |> put_resp_header("content-type", "text/html; charset=utf-8")
+    |> send_resp(status_code, body)
+  end
+
+  defp json_resp(conn, status_code, body) do
+    conn
+    |> put_resp_header("content-type", "application/json")
+    |> send_resp(status_code, body)
   end
 end
