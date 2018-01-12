@@ -99,7 +99,7 @@ update msg model =
                     )
 
         Refresh ->
-            ( model
+            ( { model | entries = Loading }
             , Api.refresh
             )
 
