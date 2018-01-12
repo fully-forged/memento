@@ -53,6 +53,10 @@ This is implemented via [Plug](https://github.com/elixir-plug/plug), defined in 
 
 The UI is contained in the [frontend](https://github.com/fully-forged/memento/tree/master/frontend) folder and uses [elm.mk](https://github.com/cloud8421/elm.mk) for compilation/watch. It's served via the parent Elixir application.
 
+## Configuration
+
+Please check [`config/config.exs`](https://github.com/fully-forged/memento/blob/master/config/config.exs), configuration options are documented there.
+
 ## Development
 
 You will need a series of environment variables (for authentication against the sources APIs).
