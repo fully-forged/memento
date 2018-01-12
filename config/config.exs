@@ -7,6 +7,8 @@ config :memento,
   assets_namespace: "dev",
   twitter_username: "cloud8421",
   github_username: "cloud8421",
+  refresh_interval: 60_000 * 5,
+  retry_interval: 30_000,
   enabled_handlers: [
     Memento.Capture.Twitter.Handler,
     Memento.Capture.Github.Handler,

@@ -3,8 +3,8 @@ defmodule Memento.Capture.Supervisor do
 
   alias Memento.Capture.{Feed, Status}
 
-  @refresh_interval 1000 * 60 * 5
-  @retry_interval 5000
+  @refresh_interval Application.get_env(:memento, :refresh_interval, 60_000 * 5)
+  @retry_interval Application.get_env(:memento, :retry_interval, 30_000)
   @enabled_handlers Application.get_env(:memento, :enabled_handlers, [])
 
   def start_link(env) do
