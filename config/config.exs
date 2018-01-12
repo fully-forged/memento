@@ -6,7 +6,13 @@ config :memento,
   ecto_repos: [Memento.Repo],
   assets_namespace: "dev",
   twitter_username: "cloud8421",
-  github_username: "cloud8421"
+  github_username: "cloud8421",
+  enabled_handlers: [
+    Memento.Capture.Twitter.Handler,
+    Memento.Capture.Github.Handler,
+    Memento.Capture.Pinboard.Handler,
+    Memento.Capture.Instapaper.Handler
+  ]
 
 config :memento, Memento.Repo,
   adapter: Ecto.Adapters.Postgres,

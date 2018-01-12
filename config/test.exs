@@ -1,5 +1,7 @@
 use Mix.Config
 
+config :memento, enabled_handlers: []
+
 config :logger, level: :error
 
 config :memento, Memento.Repo,
