@@ -110,8 +110,16 @@ entriesContainer entries =
 navBar : Model -> Html Msg
 navBar model =
     nav []
-        [ div [ class "title" ]
-            [ h1 [ onClick Refresh ] [ text "MEMENTO" ]
+        [ div
+            [ class "title"
+            , onClick Refresh
+            ]
+            [ img
+                [ class "logo"
+                , src "/assets/images/nav-logo.png"
+                ]
+                []
+            , h1 [] [ text "MEMENTO" ]
             ]
         , div [ class "filters" ]
             [ input

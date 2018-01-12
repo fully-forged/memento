@@ -40,9 +40,10 @@ nav {
   .title {
     display: flex;
     align-items: center;
+    cursor: pointer;
 
-    h1 {
-      cursor: pointer;
+    .logo {
+      margin-right: 0.5em;
     }
   }
 
