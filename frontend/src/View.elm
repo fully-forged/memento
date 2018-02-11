@@ -111,27 +111,13 @@ navBar : Model -> Html Msg
 navBar model =
     nav []
         [ div
-            [ class "title"
-            , onClick Refresh
-            ]
-            [ img
+            [ class "left-nav" ]
+            [ span
                 [ class "logo"
-                , src "/assets/images/nav-logo.png"
+                , onClick Refresh
                 ]
-                []
-            , h1 [] [ text "MEMENTO" ]
-            ]
-        , div [ class "filters" ]
-            [ input
-                [ type_ "search"
-                , id "q"
-                , name "q"
-                , onInput Search
-                , value (Maybe.withDefault "" model.query)
-                , placeholder "e.g. erlang"
-                ]
-                []
-            , p [ class "source" ]
+                [ text "M" ]
+            , div [ class "source" ]
                 [ i
                     [ classList
                         [ ( "icon-twitter", True )
@@ -164,7 +150,7 @@ navBar model =
                     , onClick (FilterBy Instapaper)
                     ]
                     []
-                , span
+                , i
                     [ classList
                         [ ( "active", model.filterBy == Nothing )
                         ]
@@ -172,6 +158,17 @@ navBar model =
                     ]
                     [ text "All" ]
                 ]
+            ]
+        , div [ class "filters" ]
+            [ input
+                [ type_ "search"
+                , id "q"
+                , name "q"
+                , onInput Search
+                , value (Maybe.withDefault "" model.query)
+                , placeholder "e.g. erlang"
+                ]
+                []
             ]
         ]
 
@@ -187,14 +184,14 @@ loadMoreBar model =
                 ( Success entries, _ ) ->
                     [ button
                         [ onClick LoadMore ]
-                        [ text "load more" ]
+                        [ text "more" ]
                     ]
 
                 otherwise ->
                     []
     in
-    nav [ class "load-more" ]
-        content
+        nav [ class "load-more" ]
+            content
 
 
 root : Model -> Html Msg
