@@ -9,6 +9,8 @@ defmodule Memento.Capture.Status do
     GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
   end
 
+  def init(args), do: {:ok, args}
+
   def track(handler) do
     now = DateTime.utc_now()
     GenServer.cast(__MODULE__, {:track, handler, now})
