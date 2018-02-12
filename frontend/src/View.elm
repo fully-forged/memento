@@ -166,7 +166,7 @@ navBar model =
                 , name "q"
                 , onInput Search
                 , value (Maybe.withDefault "" model.query)
-                , placeholder "e.g. erlang"
+                , placeholder "e.g. tutorial"
                 ]
                 []
             ]
@@ -190,8 +190,8 @@ loadMoreBar model =
                 otherwise ->
                     []
     in
-        nav [ class "load-more" ]
-            content
+    nav [ class "load-more" ]
+        content
 
 
 root : Model -> Html Msg
