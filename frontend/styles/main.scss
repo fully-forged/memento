@@ -93,6 +93,7 @@ nav {
   }
 
   i {
+    font-style: normal;
     margin-left: 1em;
     cursor: pointer;
   }
@@ -124,12 +125,14 @@ nav {
 
   a {
     color: $accent-color;
+    font-size: 0.7em;
+    font-family: $accent-font;
   }
 
   header {
     color: $text-secondary-color;
 
-    i, .date, ul a {
+    i, .date {
       font-size: 0.8em;
       font-family: $accent-font;
     }
@@ -199,8 +202,20 @@ nav {
       }
     }
 
+    .left-nav {
+      flex-direction: column;
+
+      .logo {
+        padding-right: 0;
+      }
+    }
+
     .source {
       margin-bottom: 1em;
+
+      i:first-child {
+        margin-left: 0;
+      }
     }
 
     h1 {
