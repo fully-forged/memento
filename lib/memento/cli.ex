@@ -1,14 +1,24 @@
 defmodule Memento.CLI do
   @switches [
-    base_url: :string
+    base_url: :string,
+    page: :integer,
+    per_page: :integer,
+    type: :string
+  ]
+
+  @default_opts [
+    per_page: 10,
+    type: "all",
+    page: 1
   ]
 
   def main(args) do
-    {opts, _, _} = OptionParser.parse(args, switches: @switches)
+    {user_opts, _, _} = OptionParser.parse(args, switches: @switches)
+    opts = Keyword.merge(@default_opts, user_opts)
 
     case Keyword.get(opts, :base_url, System.get_env("MEMENTO_BASE_URL")) do
       base_url when is_binary(base_url) ->
-        fetch_entries(base_url)
+        fetch_entries(base_url, opts)
 
       _otherwise ->
         IO.puts(:stderr, """
@@ -30,21 +40,40 @@ defmodule Memento.CLI do
     end
   end
 
-  def fetch_entries(base_url) do
+  def fetch_entries(base_url, opts) do
     Application.ensure_all_started(:inets)
     Application.ensure_all_started(:ssl)
 
-    entries_url = base_url <> "/entries"
+    initial_qs = Keyword.take(opts, [:page, :per_page])
 
-    with resp <- Memento.HTTPClient.get(entries_url),
-         200 <- resp.status_code,
+    qs =
+      case Keyword.get(opts, :type) do
+        "all" -> initial_qs
+        type -> Keyword.put(initial_qs, :type, type)
+      end
+
+    entries_url =
+      base_url
+      |> URI.parse()
+      |> Map.put(:path, "/entries")
+      |> Map.put(:query, URI.encode_query(qs))
+      |> URI.to_string()
+
+    with resp = %{status_code: 200} <- Memento.HTTPClient.get(entries_url),
          {:ok, entries} <- Poison.decode(resp.body) do
       Enum.each(entries, fn e ->
         format_entry(e) |> IO.puts()
       end)
     else
       error ->
-        IO.puts(:stderr, inspect(error))
+        IO.puts(:stderr, """
+        #{IO.ANSI.red()}
+        Memento failed with the following error:
+
+        #{inspect(error)}
+        #{IO.ANSI.default_color()}
+        """)
+
         System.halt(1)
     end
   end
