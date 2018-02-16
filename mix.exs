@@ -26,7 +26,10 @@ defmodule Memento.MixProject do
   def application do
     [
       extra_applications: [:logger, :inets, :ssl],
-      mod: {Memento.Application, Mix.env()}
+      mod: {Memento.Application, Mix.env()},
+      start_phases: [
+        create_status_table: []
+      ]
     ]
   end
 

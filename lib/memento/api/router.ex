@@ -72,9 +72,6 @@ defmodule Memento.API.Router do
 
   defp get_status do
     Memento.Capture.Status.all()
-    |> Enum.map(fn {handler, last_update} ->
-         %{handler: handler, last_update: last_update}
-       end)
     |> Poison.encode!()
   end
 

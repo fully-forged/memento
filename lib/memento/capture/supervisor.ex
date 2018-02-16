@@ -14,18 +14,16 @@ defmodule Memento.Capture.Supervisor do
   def refresh_all do
     @enabled_handlers
     |> Enum.map(fn w ->
-         Task.async(Feed, :refresh, [w])
-       end)
+      Task.async(Feed, :refresh, [w])
+    end)
     |> Enum.map(&Task.await/1)
   end
 
   def init(_env) do
-    feed_workers =
+    children =
       Enum.map(@enabled_handlers, fn w ->
         {Feed, worker_config(w)}
       end)
-
-    children = [Status] ++ feed_workers
 
     Supervisor.init(children, strategy: :one_for_one)
   end

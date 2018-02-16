@@ -17,4 +17,9 @@ defmodule Memento.Application do
     opts = [strategy: :one_for_one, name: Memento.Supervisor]
     Supervisor.start_link(children, opts)
   end
+
+  def start_phase(:create_status_table, _type, _env) do
+    Memento.Capture.Status.create_table()
+    :ok
+  end
 end

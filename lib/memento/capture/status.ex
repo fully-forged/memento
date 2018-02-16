@@ -3,28 +3,23 @@ defmodule Memento.Capture.Status do
   Tracks last updates per Capture handler.
   """
 
-  use GenServer
-
-  def start_link(_) do
-    GenServer.start_link(__MODULE__, %{}, name: __MODULE__)
+  def create_table() do
+    :ets.new(__MODULE__, [:set, :public, :named_table])
   end
 
-  def init(args), do: {:ok, args}
-
-  def track(handler) do
+  def track(handler, status) do
     now = DateTime.utc_now()
-    GenServer.cast(__MODULE__, {:track, handler, now})
+    :ets.insert(__MODULE__, {handler, now, status})
   end
 
   def all do
-    GenServer.call(__MODULE__, :all)
+    :ets.tab2list(__MODULE__)
+    |> format_as_map()
   end
 
-  def handle_cast({:track, handler, now}, state) do
-    {:noreply, Map.put(state, handler, now)}
-  end
-
-  def handle_call(:all, _from, state) do
-    {:reply, state, state}
+  defp format_as_map(table_list) do
+    Enum.map(table_list, fn {handler, timestamp, status} ->
+      %{handler: handler, last_update: timestamp, status: status}
+    end)
   end
 end

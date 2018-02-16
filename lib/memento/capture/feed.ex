@@ -38,6 +38,8 @@ defmodule Memento.Capture.Feed do
         {:next_state, :authorized, new_state, action}
 
       {:error, reason} ->
+        state.status.track(state.handler, :auth_failure)
+
         Logger.error(fn ->
           """
           Error authorizing #{inspect(state.handler)}.
@@ -54,7 +56,7 @@ defmodule Memento.Capture.Feed do
       when event_type in [:internal, :timeout] do
     case refresh_and_save(state.handler, state.data) do
       {:ok, new_count, new_data} ->
-        state.status.track(state.handler)
+        state.status.track(state.handler, :success)
 
         Logger.info(fn ->
           """
@@ -67,6 +69,8 @@ defmodule Memento.Capture.Feed do
         {:keep_state, new_state, action}
 
       {:error, reason} ->
+        state.status.track(state.handler, :refresh_failure)
+
         Logger.error(fn ->
           """
           Error refreshing #{inspect(state.handler)}.
@@ -83,7 +87,7 @@ defmodule Memento.Capture.Feed do
   def authorized({:call, from}, :refresh, state) do
     case refresh_and_save(state.handler, state.data) do
       {:ok, new_count, new_data} ->
-        state.status.track(state.handler)
+        state.status.track(state.handler, :success)
 
         actions = [
           {:reply, from, {:ok, new_count}},
@@ -95,6 +99,8 @@ defmodule Memento.Capture.Feed do
         {:keep_state, new_state, actions}
 
       {:error, reason} ->
+        state.status.track(state.handler, :refresh_failure)
+
         actions = [
           {:reply, from, {:error, reason}},
           {:timeout, state.refresh_interval, :refresh}
