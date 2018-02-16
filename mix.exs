@@ -7,6 +7,7 @@ defmodule Memento.MixProject do
       version: "0.1.0",
       elixir: "~> 1.5",
       elixirc_paths: elixirc_paths(Mix.env()),
+      escript: escript(),
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       aliases: aliases(),
@@ -30,6 +31,14 @@ defmodule Memento.MixProject do
       start_phases: [
         create_status_table: []
       ]
+    ]
+  end
+
+  def escript do
+    [
+      main_module: Memento.CLI,
+      app: nil,
+      path: "./bin/memento"
     ]
   end
 

@@ -36,3 +36,6 @@ memento-*.tar
 # VCR cassettes
 
 /test/fixture
+
+# CLI artifact
+/bin/memento
