@@ -44,7 +44,7 @@ defmodule Memento.MixProject do
       {:oauther, "~> 1.1"},
       {:logster, "~> 0.4"},
       {:ex_doc, "~> 0.18.1", only: :dev},
-      {:dialyzex, "~> 1.0.0", only: :dev},
+      {:dialyzex, "~> 1.1.0", only: :dev},
       {:stream_data, "~> 0.4.0", only: :test},
       {:exvcr, "~> 0.8", only: :test}
     ]
