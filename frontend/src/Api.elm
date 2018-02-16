@@ -12,6 +12,17 @@ baseUrl =
     "/"
 
 
+status : Cmd Msg
+status =
+    let
+        url =
+            baseUrl ++ "status"
+    in
+    Http.get url Decode.statusDecoder
+        |> RemoteData.sendRequest
+        |> Cmd.map StatusResponse
+
+
 refresh : Cmd Msg
 refresh =
     let

@@ -94,3 +94,8 @@ entriesDecoder =
 refreshStatusDecoder : JD.Decoder RefreshStatus
 refreshStatusDecoder =
     JD.succeed Done
+
+
+statusDecoder : JD.Decoder JD.Value
+statusDecoder =
+    JD.value

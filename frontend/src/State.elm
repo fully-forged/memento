@@ -1,8 +1,13 @@
-module State exposing (..)
+port module State exposing (..)
 
 import Api
+import Json.Decode as JD
+import Platform.Cmd as Cmd
 import RemoteData exposing (..)
 import Types exposing (..)
+
+
+port logStatus : JD.Value -> Cmd msg
 
 
 initialPage : Page
@@ -24,7 +29,10 @@ init =
       , perPage = perPage
       , query = Nothing
       }
-    , Api.getEntries perPage initialPage Nothing
+    , Cmd.batch
+        [ Api.getEntries perPage initialPage Nothing
+        , Api.status
+        ]
     )
 
 
@@ -102,6 +110,14 @@ update msg model =
             ( { model | entries = Loading }
             , Api.refresh
             )
+
+        StatusResponse statusResponse ->
+            case statusResponse of
+                Success status ->
+                    ( model, logStatus status )
+
+                otherwise ->
+                    model ! []
 
         Search query ->
             let

@@ -1,6 +1,7 @@
 module Types exposing (..)
 
 import Date exposing (Date)
+import Json.Decode as JD
 import RemoteData exposing (..)
 
 
@@ -85,6 +86,7 @@ type Msg
     = NoOp
     | EntriesResponse (WebData (List Entry))
     | RefreshResponse (WebData RefreshStatus)
+    | StatusResponse (WebData JD.Value)
     | FilterBy Source
     | ClearFilter
     | LoadMore
