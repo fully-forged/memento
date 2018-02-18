@@ -27,6 +27,7 @@ Memento has four main components:
 - **permanent storage** powered by Ecto and Postgresql
 - a very simple **http api** to serve and search stored content
 - a UI (written in [Elm](http://elm-lang.org/))
+- a CLI-based UI written in Elixir
 
 ### Capture
 
