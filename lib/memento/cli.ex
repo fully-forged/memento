@@ -116,7 +116,7 @@ defmodule Memento.CLI do
     (TW) #{saved_at}
     #{IO.ANSI.blue() <> screen_name <> IO.ANSI.default_color()} - #{text}
     #{IO.ANSI.green()}
-    #{Enum.map(links, fn l -> l <> "\n" end)} #{IO.ANSI.default_color()}
+    #{Enum.join(links, "\n")} #{IO.ANSI.default_color()}
     """
   end
 
