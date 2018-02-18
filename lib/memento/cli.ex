@@ -3,7 +3,8 @@ defmodule Memento.CLI do
     base_url: :string,
     page: :integer,
     per_page: :integer,
-    type: :string
+    type: :string,
+    help: :boolean
   ]
 
   @default_opts [
@@ -12,9 +13,36 @@ defmodule Memento.CLI do
     page: 1
   ]
 
+  @help_text """
+  Use the memento CLI utility to fetch entries from a Memento instance.
+
+  Available switches (defaults can be ommitted):
+
+  - #{IO.ANSI.blue()}--help#{IO.ANSI.default_color()} - Display this help text
+
+  - #{IO.ANSI.blue()}--base-url#{IO.ANSI.default_color()} - Usually mandatory, but can be replaced
+    by the #{IO.ANSI.blue()}MEMENTO_BASE_URL#{IO.ANSI.default_color()} environment variable.
+    Example: https://memento.my-site.com
+
+  - #{IO.ANSI.blue()}--page#{IO.ANSI.default_color()} - Which page to start from (defaults to 1)
+    Example: 1
+
+  - #{IO.ANSI.blue()}--per_page#{IO.ANSI.default_color()} - How many items per page (defaults to 10)
+    Example: 20
+
+  - #{IO.ANSI.blue()}--type#{IO.ANSI.default_color()} - Which items to display. Can be any of twitter_fav, pinboard_link,
+    github_star, instapaper_bookmark, all. Defaults to all.
+    Example: pinboard_link
+  """
+
   def main(args) do
     {user_opts, _, _} = OptionParser.parse(args, switches: @switches)
     opts = Keyword.merge(@default_opts, user_opts)
+
+    if Keyword.get(user_opts, :help) do
+      IO.puts(@help_text)
+      System.halt(0)
+    end
 
     case Keyword.get(opts, :base_url, System.get_env("MEMENTO_BASE_URL")) do
       base_url when is_binary(base_url) ->
