@@ -86,3 +86,19 @@ To work on the UI, open another container session in a different terminal, `cd f
 ## Deployment
 
 Assuming you have Nanobox setup for deployment, you just need to call `nanobox deploy`. Note that the project is also setup for [Travis.ci](https://travis-ci.org/fully-forged/memento). Note that Travis needs the same environment variables you setup locally to function.
+
+## CLI Utility
+
+Running `mix escript.build` will build a `memento` cli executable in `./bin` (which requires, to be executed, a working Erlang installation on the host machine) that can be used to browse a Memento instance from the command line.
+
+Once built, you can call:
+
+`./bin/memento --base-url https://memento.my-site.com`
+
+For the full range of options, please call `./bin/memento --help`.
+
+Please note that the file can be safely moved and dropped in your `$PATH`.
+
+For ease of using, it's recommended to pipe the command to `less -r`, which will paginate the results in glorious full colour.
+
+`./bin/memento --base-url https://memento.my-site.com | less -r`
