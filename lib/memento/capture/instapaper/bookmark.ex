@@ -1,4 +1,5 @@
 defmodule Memento.Capture.Instapaper.Bookmark do
+  @moduledoc false
   def content_from_api_result(result) do
     %{"bookmark_id" => id, "title" => title, "url" => url, "time" => unix_time} =
       result

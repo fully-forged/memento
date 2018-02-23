@@ -1,4 +1,5 @@
 defmodule Memento.Capture.Pinboard.Client do
+  @moduledoc false
   alias Memento.HTTPClient
 
   def get_links(token, since) do

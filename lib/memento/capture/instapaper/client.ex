@@ -1,4 +1,5 @@
 defmodule Memento.Capture.Instapaper.Client do
+  @moduledoc false
   alias Memento.HTTPClient
 
   @base_url "https://www.instapaper.com/api/1"

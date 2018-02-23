@@ -1,4 +1,5 @@
 defmodule Memento.Capture.Github.Link do
+  @moduledoc false
   @link_matcher ~r/^<(?<url>.*)>; rel="(?<rel>.*)"$/
 
   def parse_headers(headers) do

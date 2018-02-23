@@ -1,4 +1,5 @@
 defmodule Memento.Capture.Github.StarredRepo do
+  @moduledoc false
   def content_from_api_result(result) do
     starred_at =
       result

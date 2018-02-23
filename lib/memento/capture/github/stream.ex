@@ -1,4 +1,5 @@
 defmodule Memento.Capture.Github.Stream do
+  @moduledoc false
   alias Memento.Capture.Github.Client
 
   def by_username(username) do

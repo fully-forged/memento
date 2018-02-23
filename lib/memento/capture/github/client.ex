@@ -1,4 +1,5 @@
 defmodule Memento.Capture.Github.Client do
+  @moduledoc false
   alias Memento.{HTTPClient, Capture.Github}
 
   @type username :: String.t()

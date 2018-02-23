@@ -1,4 +1,5 @@
 defmodule Memento.Capture.Twitter.Client do
+  @moduledoc false
   alias Memento.HTTPClient
 
   def get_token(consumer_key, consumer_secret) do

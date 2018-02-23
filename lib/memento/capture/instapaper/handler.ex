@@ -1,4 +1,5 @@
 defmodule Memento.Capture.Instapaper.Handler do
+  @moduledoc false
   @behaviour Memento.Capture.Handler
 
   alias Memento.Capture.Instapaper.{Bookmark, Client}
@@ -47,8 +48,8 @@ defmodule Memento.Capture.Instapaper.Handler do
         bookmark_contents =
           resp
           |> Enum.filter(fn element ->
-               Map.get(element, "type") == "bookmark"
-             end)
+            Map.get(element, "type") == "bookmark"
+          end)
           |> Enum.map(&Bookmark.content_from_api_result/1)
 
         {:ok, bookmark_contents, data}

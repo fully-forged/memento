@@ -1,4 +1,5 @@
 defmodule Memento.Capture.Pinboard.Handler do
+  @moduledoc false
   @behaviour Memento.Capture.Handler
 
   alias Memento.Capture.Pinboard.{Client, Link}

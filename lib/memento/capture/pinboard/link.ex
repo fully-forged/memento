@@ -1,4 +1,5 @@
 defmodule Memento.Capture.Pinboard.Link do
+  @moduledoc false
   def content_from_api_result(result) do
     %{
       "hash" => id,

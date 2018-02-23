@@ -1,4 +1,5 @@
 defmodule Memento.Capture.Github.Handler do
+  @moduledoc false
   @behaviour Memento.Capture.Handler
 
   alias Memento.Capture.Github.{Client, StarredRepo}

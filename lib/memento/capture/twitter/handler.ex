@@ -1,4 +1,5 @@
 defmodule Memento.Capture.Twitter.Handler do
+  @moduledoc false
   @behaviour Memento.Capture.Handler
 
   alias Memento.Capture.Twitter.{Client, Fav}
