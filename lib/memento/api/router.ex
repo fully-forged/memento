@@ -1,4 +1,6 @@
 defmodule Memento.API.Router do
+  @moduledoc false
+
   use Plug.Router
   use Plug.ErrorHandler
 
