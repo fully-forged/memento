@@ -1,4 +1,5 @@
 defmodule Memento.Capture.Supervisor do
+  @moduledoc false
   use Supervisor
 
   alias Memento.Capture.{Feed, Status}
