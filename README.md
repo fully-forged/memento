@@ -58,6 +58,10 @@ The UI is contained in the [frontend](https://github.com/fully-forged/memento/tr
 
 Please check [`config/config.exs`](https://github.com/fully-forged/memento/blob/master/config/config.exs), configuration options are documented there.
 
+## Documentation
+
+A copy of the documentation is available at <https://memento-docs.surge.sh>.
+
 ## Development
 
 You will need a series of environment variables (for authentication against the sources APIs).
