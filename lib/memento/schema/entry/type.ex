@@ -1,4 +1,5 @@
 defmodule Memento.Schema.Entry.Type do
+  @moduledoc false
   @behaviour Ecto.Type
 
   @valid_types [

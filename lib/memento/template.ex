@@ -1,4 +1,6 @@
 defmodule Memento.Template do
+  @moduledoc false
+
   @static_path Path.join([:code.priv_dir(:memento), "static"])
   @namespace Application.get_env(:memento, :assets_namespace)
 

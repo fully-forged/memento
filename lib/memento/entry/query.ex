@@ -1,4 +1,5 @@
 defmodule Memento.Entry.Query do
+  @moduledoc false
   import Ecto.Query
 
   alias Memento.Schema.Entry
@@ -30,9 +31,10 @@ defmodule Memento.Entry.Query do
     from e in initial,
       join: si in Entry.SearchIndex,
       on: [id: e.id],
-      where: fragment(
-        "to_tsvector('english', text) @@ to_tsquery(?)",
-        ^search_query
-      )
+      where:
+        fragment(
+          "to_tsvector('english', text) @@ to_tsquery(?)",
+          ^search_query
+        )
   end
 end
