@@ -1,6 +1,10 @@
 defmodule Mix.Tasks.Memento.ImportGithub do
+  @shortdoc "Imports all entries from Github"
+  @moduledoc @shortdoc
+
   alias Memento.{Repo, Schema.Entry, Capture.Github}
 
+  @doc false
   def run(_) do
     Application.ensure_all_started(:memento)
 
@@ -10,20 +14,20 @@ defmodule Mix.Tasks.Memento.ImportGithub do
     |> Github.Stream.by_username()
     |> Enum.chunk_every(50)
     |> Enum.each(fn chunk ->
-         inserts =
-           chunk
-           |> Enum.map(&Github.StarredRepo.content_from_api_result/1)
-           |> Enum.map(fn sr ->
-                [
-                  type: :github_star,
-                  content: sr,
-                  saved_at: sr.starred_at,
-                  inserted_at: now,
-                  updated_at: now
-                ]
-              end)
+      inserts =
+        chunk
+        |> Enum.map(&Github.StarredRepo.content_from_api_result/1)
+        |> Enum.map(fn sr ->
+          [
+            type: :github_star,
+            content: sr,
+            saved_at: sr.starred_at,
+            inserted_at: now,
+            updated_at: now
+          ]
+        end)
 
-         Repo.insert_all(Entry, inserts, on_conflict: :nothing)
-       end)
+      Repo.insert_all(Entry, inserts, on_conflict: :nothing)
+    end)
   end
 end
