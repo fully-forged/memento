@@ -11,6 +11,7 @@ defmodule Memento.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       aliases: aliases(),
+      docs: docs(),
       dialyzer_ignored_warnings: dialyzer_ignored_warnings(),
       preferred_cli_env: [
         vcr: :test,
@@ -58,6 +59,10 @@ defmodule Memento.MixProject do
       {:stream_data, "~> 0.4.0", only: :test},
       {:exvcr, "~> 0.8", only: :test}
     ]
+  end
+
+  defp docs do
+    [extras: ["README.md"]]
   end
 
   defp aliases do
