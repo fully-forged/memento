@@ -1,4 +1,14 @@
 defmodule Memento.CLI do
+  @moduledoc """
+  This CLI module allows browsing a memento instance from the command line.
+
+  The module gets compiled to a escript executable (via `mix escript.build`)
+  which requires a compatible version of Erlang to run. The binary will be available
+  at `bin/memento`.
+
+  Details around switches and options are available via the `--help` flag.
+  """
+
   @switches [
     base_url: :string,
     page: :integer,
