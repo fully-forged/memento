@@ -47,7 +47,7 @@ body {
   padding: 0;
   font-family: $main-font;
   font-weight: 400;
-  font-size: 14px;
+  font-size: 16px;
 }
 
 main {
@@ -190,6 +190,10 @@ nav {
 }
 
 @media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
   nav {
     flex-direction: column;
 
