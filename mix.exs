@@ -30,7 +30,8 @@ defmodule Memento.MixProject do
       extra_applications: [:logger, :inets, :ssl],
       mod: {Memento.Application, Mix.env()},
       start_phases: [
-        create_status_table: []
+        create_status_table: [],
+        create_rate_limiter_table: []
       ]
     ]
   end

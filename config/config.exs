@@ -34,6 +34,10 @@ config :memento, Memento.Repo,
   database: "gonano",
   pool_size: 10
 
+config :memento, Memento.RateLimiter,
+  max_per_interval: 2,
+  reset_interval_in_ms: 10000
+
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
 # file won't be loaded nor affect the parent project. For this reason,
