@@ -20,7 +20,8 @@ defmodule Memento.Capture.Github.StarredRepo do
       id: get_in(result, ["repo", "id"]) |> to_string(),
       owner: get_in(result, ["repo", "owner", "login"]),
       name: get_in(result, ["repo", "name"]),
-      description: get_in(result, ["repo", "description"]),
+      description:
+        get_in(result, ["repo", "description"]) || "Description not available",
       url: get_in(result, ["repo", "html_url"]),
       created_at: created_at,
       pushed_at: pushed_at,
