@@ -24,7 +24,8 @@ defmodule Memento.Capture.FeedTest do
 
       twitter_fav = %{
         id: "935532750223880194",
-        text: "dialyzex - A Mix task for type-checking your Elixir project with dialyzer https://t.co/CLgZiRapp9",
+        text:
+          "dialyzex - A Mix task for type-checking your Elixir project with dialyzer https://t.co/CLgZiRapp9",
         screen_name: "oss_elixir",
         urls: ["https://github.com/comcast/dialyzex"],
         created_at: ~N[2017-11-28 15:36:03]

@@ -61,7 +61,8 @@ defmodule Memento.HTTPClient do
 
     :httpc.request(
       :post,
-      {String.to_charlist(url), headers, String.to_charlist(content_type), body},
+      {String.to_charlist(url), headers, String.to_charlist(content_type),
+       body},
       [],
       []
     )
