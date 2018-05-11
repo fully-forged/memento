@@ -24,7 +24,9 @@ defmodule Auth.Api.V2.RouterTest do
         |> Router.call(@api_router_opts)
 
       assert conn.status == 429
-      assert %{"error" => "rate_limit_reached"} == Poison.decode!(conn.resp_body)
+
+      assert %{"error" => "rate_limit_reached"} ==
+               Poison.decode!(conn.resp_body)
     end
   end
 end
