@@ -17,6 +17,8 @@ defmodule Memento.API.Router do
     from: {:memento, "priv/static/#{Mix.env()}"},
     at: "/assets"
 
+  plug Memento.API.RateLimiter, only: ["/entries/refresh"]
+
   plug :match
   plug :dispatch
 
