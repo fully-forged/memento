@@ -15,7 +15,7 @@ defmodule Memento.Capture.Handler do
   A handler's data is a map with freeform structure. This map is passed to
   the handler at different stages of its lifecycle.
   """
-  @type data :: Map.t()
+  @type data :: map()
   @type content_list :: [Entry.content()]
 
   @doc """

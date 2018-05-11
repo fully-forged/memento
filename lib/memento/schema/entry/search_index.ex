@@ -12,7 +12,7 @@ defmodule Memento.Schema.Entry.SearchIndex do
   @primary_key {:id, :binary_id, autogenerate: false}
 
   @type t :: %__MODULE__{
-          __meta__: Ecto.Schema.Metadata.t(),
+          __meta__: %Ecto.Schema.Metadata{},
           id: String.t(),
           text: String.t()
         }

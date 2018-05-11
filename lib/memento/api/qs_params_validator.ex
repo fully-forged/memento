@@ -33,7 +33,8 @@ defmodule Memento.API.QsParamsValidator do
       iex> V.validate(%{"page" => "10"})
       {:ok, %{page: 10, per_page: 25, q: :not_provided, type: :all}}
   """
-  @spec validate(Map.t()) :: {:ok, params} | {:error, term}
+  @spec validate(%{optional(String.t()) => term}) ::
+          {:ok, params} | {:error, term}
   def validate(qs_params) do
     steps = Saul.all_of([validator(), &transformer/1])
     Saul.validate(qs_params, steps)

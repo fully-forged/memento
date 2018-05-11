@@ -12,6 +12,7 @@ defmodule Memento.MixProject do
       deps: deps(),
       aliases: aliases(),
       docs: docs(),
+      dialyzer_warnings: dialyzer_warnings(),
       dialyzer_ignored_warnings: dialyzer_ignored_warnings(),
       preferred_cli_env: [
         vcr: :test,
@@ -56,7 +57,7 @@ defmodule Memento.MixProject do
       {:logster, "~> 0.4"},
       {:html_entities, "~> 0.4.0"},
       {:ex_doc, "~> 0.18.1", only: :dev},
-      {:dialyzex, "~> 1.1.0", only: :dev},
+      {:dialyzex, "~> 1.1", only: :dev},
       {:stream_data, "~> 0.4.0", only: :test},
       {:exvcr, "~> 0.8", only: :test}
     ]
@@ -72,6 +73,10 @@ defmodule Memento.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
+  end
+
+  defp dialyzer_warnings do
+    [:unmatched_returns, :error_handling, :race_conditions, :unknown]
   end
 
   defp dialyzer_ignored_warnings do

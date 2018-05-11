@@ -9,12 +9,12 @@ defmodule Memento.Schema.Entry do
 
   @primary_key {:id, :binary_id, autogenerate: true}
 
-  @type content :: Map.t()
+  @type content :: %{optional(String.t()) => term}
   @type t :: %__MODULE__{
-          __meta__: Ecto.Schema.Metadata.t(),
+          __meta__: %Ecto.Schema.Metadata{},
           id: String.t(),
           type: Memento.Schema.Entry.Type.t(),
-          content: map(),
+          content: content,
           saved_at: DateTime.t(),
           inserted_at: DateTime.t(),
           updated_at: DateTime.t()
