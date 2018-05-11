@@ -66,7 +66,7 @@ update msg model =
                     update ClearFilter model
 
                 otherwise ->
-                    ( model, Cmd.none )
+                    update ClearFilter model
 
         FilterBy source ->
             ( { model
