@@ -51,7 +51,7 @@ defmodule Memento.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:ecto, "~> 2.2"},
       {:plug, "~> 1.4"},
-      {:cowboy, "~> 1.1.0"},
+      {:cowboy, "~> 2.1"},
       {:saul, "~> 0.1.0"},
       {:oauther, "~> 1.1"},
       {:logster, "~> 0.4"},

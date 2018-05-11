@@ -10,7 +10,8 @@ defmodule Memento.Application do
       {Memento.Repo, []},
       {Memento.Capture.Supervisor, env},
       Memento.RateLimiter.Supervisor,
-      Plug.Adapters.Cowboy.child_spec(:http, Router, [], port: 8080)
+      {Plug.Adapters.Cowboy2,
+       scheme: :http, plug: Router, options: [port: 8080]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
