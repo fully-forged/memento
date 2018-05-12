@@ -10,6 +10,8 @@ defmodule Memento.HTTPClient do
   @type qs_params :: %{String.t() => String.t() | number | atom}
   @type content_type :: String.t()
 
+  @http_options [connect_timeout: 1000, timeout: 5000]
+
   @doc """
   Issues an HTTP request to the specified url, optionally passing a list
   of headers.
@@ -24,7 +26,7 @@ defmodule Memento.HTTPClient do
         {String.to_charlist(k), String.to_charlist(v)}
       end)
 
-    :httpc.request(:get, {String.to_charlist(url), headers}, [], [])
+    :httpc.request(:get, {String.to_charlist(url), headers}, @http_options, [])
     |> process_response
   end
 
@@ -47,7 +49,12 @@ defmodule Memento.HTTPClient do
 
     url_with_qs = url <> "?" <> URI.encode_query(qs_params)
 
-    :httpc.request(:get, {String.to_charlist(url_with_qs), headers}, [], [])
+    :httpc.request(
+      :get,
+      {String.to_charlist(url_with_qs), headers},
+      @http_options,
+      []
+    )
     |> process_response
   end
 
@@ -63,7 +70,7 @@ defmodule Memento.HTTPClient do
       :post,
       {String.to_charlist(url), headers, String.to_charlist(content_type),
        body},
-      [],
+      @http_options,
       []
     )
     |> process_response
