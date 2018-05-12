@@ -5,6 +5,7 @@ stages:
   - test
   - name: deploy
     if: branch = master
+  - docs
 
 jobs:
   include:
@@ -19,3 +20,12 @@ jobs:
       after_success:
         - nanobox remote add memento
         - nanobox deploy
+    - stage: docs
+      before_script:
+        - env | grep 'SURGE' > secrets
+        - nanobox evar load local secrets
+        - rm secrets
+      script:
+        - nanobox run mix docs
+        - nanobox run npm install -g surge
+        - nanobox run surge -d memento-docs.surge.sh -p doc
