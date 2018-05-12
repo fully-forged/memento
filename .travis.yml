@@ -5,7 +5,8 @@ stages:
   - test
   - name: deploy
     if: branch = master
-  - docs
+  - name: docs
+    if: branch = master
 
 jobs:
   include:
