@@ -50,6 +50,13 @@ All entries are stored on Postgresql. For search, we define a `entries_search_in
 
 This is implemented via [Plug](https://github.com/elixir-plug/plug), defined in [Memento.API.Router](https://github.com/fully-forged/memento/blob/master/lib/memento/api/router.ex).
 
+The api also uses a custom rate limiter in front of the `refresh` endpoint to avoid incurring into issues due the abuse of the capture-related apis. Its components are:
+
+- a public API module defined in [Memento.RateLimiter](https://github.com/fully-forged/memento/blob/master/lib/memento/rate_limiter.ex)
+- an ETS-backed store defined in [Memento.RateLimiter.Store](https://github.com/fully-forged/memento/blob/master/lib/memento/rate_limiter/store.ex)
+- a prune worker which resets the store at the configured interval (defined in [Memento.RateLimiter.Prune](https://github.com/fully-forged/memento/blob/master/lib/memento/rate_limiter/prune.ex) and started by [Memento.RateLimiter.Supervisor](https://github.com/fully-forged/memento/blob/master/lib/memento/rate_limiter/supervisor.ex)).
+- a rate limiter plug defined in [Memento.API.RateLimiter](https://github.com/fully-forged/memento/blob/master/lib/memento/api/rate_limiter.ex)
+
 ### UI
 
 The UI is contained in the [frontend](https://github.com/fully-forged/memento/tree/master/frontend) folder and uses [elm.mk](https://github.com/cloud8421/elm.mk) for compilation/watch. It's served via the parent Elixir application.
