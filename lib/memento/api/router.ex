@@ -31,7 +31,7 @@ defmodule Memento.API.Router do
   end
 
   get "/entries/refresh" do
-    Memento.Capture.refresh_all()
+    Memento.Capture.refresh_feeds()
 
     json_resp(conn, 200, Poison.encode!(%{status: :refreshed}))
   end

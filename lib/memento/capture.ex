@@ -8,7 +8,7 @@ defmodule Memento.Capture do
   @doc """
   Refreshes all sources with running feed.
   """
-  def refresh_all, do: Capture.Supervisor.refresh_all()
+  def refresh_feeds, do: Capture.Supervisor.refresh_feeds()
 
   @doc """
   Returns the status of the last refresh attempt.

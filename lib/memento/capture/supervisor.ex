@@ -12,7 +12,7 @@ defmodule Memento.Capture.Supervisor do
     Supervisor.start_link(__MODULE__, env, name: __MODULE__)
   end
 
-  def refresh_all do
+  def refresh_feeds do
     __MODULE__
     |> Supervisor.which_children()
     |> Enum.map(fn child -> :erlang.element(2, child) end)
