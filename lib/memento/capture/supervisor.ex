@@ -13,11 +13,11 @@ defmodule Memento.Capture.Supervisor do
   end
 
   def refresh_all do
-    @enabled_handlers
-    |> Enum.map(fn w ->
-      Task.async(Feed, :refresh, [w])
-    end)
-    |> Enum.map(&Task.await/1)
+    __MODULE__
+    |> Supervisor.which_children()
+    |> Enum.map(fn child -> :erlang.element(2, child) end)
+    |> Enum.filter(&is_pid/1)
+    |> do_refresh_all()
   end
 
   def init(_env) do
@@ -38,5 +38,13 @@ defmodule Memento.Capture.Supervisor do
       refresh_interval: @refresh_interval,
       retry_interval: @retry_interval
     }
+  end
+
+  defp do_refresh_all(workers) do
+    workers
+    |> Enum.map(fn w ->
+      Task.async(Feed, :refresh, [w])
+    end)
+    |> Enum.map(&Task.await/1)
   end
 end
