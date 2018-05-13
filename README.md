@@ -42,6 +42,8 @@ The Feed (implemented as a state machine via [gen_statem](http://erlang.org/doc/
 
 What changes between two sources is how some specific steps are performed and this where the Handler comes in: defined as a [behaviour](http://elixir-lang.github.io/getting-started/typespecs-and-behaviours.html#behaviours), it’s implemented by every source in their own way, as all APIs are different.
 
+The [Memento.Capture](https://github.com/fully-forged/memento/blob/master/lib/memento/capture.ex) module provides a top level api for manual operations (e.g. forcing a refresh or inspecting the status of refresh operations).
+
 ### Storage and search
 
 All entries are stored on Postgresql. For search, we define a `entries_search_index` materialized view where we use Postgresql's full text search functionality. This view is updated via a database trigger (all of this is defined as database migrations, see the [migrations folder](https://github.com/fully-forged/memento/tree/master/priv/repo/migrations) for more details.
