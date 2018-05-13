@@ -16,6 +16,11 @@ defmodule Memento.Capture do
   def start_feed(handler), do: Capture.Supervisor.start_feed(handler)
 
   @doc """
+  Stops the feed for a given handler module.
+  """
+  def stop_feed(handler), do: Capture.Supervisor.stop_feed(handler)
+
+  @doc """
   Returns the status of the last refresh attempt.
   """
   def status, do: Capture.Status.all()

@@ -24,6 +24,13 @@ defmodule Memento.Capture.Supervisor do
     Supervisor.start_child(__MODULE__, {Feed, worker_config(handler)})
   end
 
+  def stop_feed(handler) do
+    case Supervisor.terminate_child(__MODULE__, {Feed, handler}) do
+      :ok -> Supervisor.delete_child(__MODULE__, {Feed, handler})
+      error -> error
+    end
+  end
+
   def init(_env) do
     children =
       Enum.map(@enabled_handlers, fn w ->
