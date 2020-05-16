@@ -34,8 +34,10 @@ memento-*.tar
 .envrc
 
 # VCR cassettes
-
 /test/fixture
 
 # CLI artifact
 /bin/memento
+
+# Tooling
+.elixir_ls/
