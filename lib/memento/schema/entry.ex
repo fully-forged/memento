@@ -7,6 +7,9 @@ defmodule Memento.Schema.Entry do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder,
+           only: [:id, :type, :content, :saved_at, :inserted_at, :updated_at]}
+
   @primary_key {:id, :binary_id, autogenerate: true}
 
   @type content :: %{optional(String.t()) => term}
@@ -26,15 +29,6 @@ defmodule Memento.Schema.Entry do
     field(:saved_at, :utc_datetime)
 
     timestamps(type: :utc_datetime)
-  end
-
-  defimpl Poison.Encoder do
-    def encode(entry, opts) do
-      entry
-      |> Map.from_struct()
-      |> Map.delete(:__meta__)
-      |> Poison.encode!(opts)
-    end
   end
 
   @doc """

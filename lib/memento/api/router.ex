@@ -11,7 +11,7 @@ defmodule Memento.API.Router do
   plug Plug.Parsers,
     parsers: [:json],
     pass: ["*/*"],
-    json_decoder: Poison
+    json_decoder: Jason
 
   plug Plug.Static,
     from: {:memento, "priv/static/#{Mix.env()}"},
@@ -33,7 +33,7 @@ defmodule Memento.API.Router do
   get "/entries/refresh" do
     Memento.Capture.refresh_feeds()
 
-    json_resp(conn, 200, Poison.encode!(%{status: :refreshed}))
+    json_resp(conn, 200, Jason.encode!(%{status: :refreshed}))
   end
 
   get "/entries" do
@@ -65,7 +65,7 @@ defmodule Memento.API.Router do
     body =
       with_filters_query
       |> Repo.all()
-      |> Poison.encode!()
+      |> Jason.encode!()
 
     json_resp(conn, 200, body)
   end
@@ -76,7 +76,7 @@ defmodule Memento.API.Router do
 
   defp get_status do
     Memento.Capture.status()
-    |> Poison.encode!()
+    |> Jason.encode!()
   end
 
   defp html_resp(conn, status_code, body) do

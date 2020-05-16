@@ -24,7 +24,7 @@ defmodule Memento.API.RateLimiter do
       conn
       |> send_resp(
         :too_many_requests,
-        Poison.encode!(%{error: :rate_limit_reached})
+        Jason.encode!(%{error: :rate_limit_reached})
       )
       |> halt()
     end

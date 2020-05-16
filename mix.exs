@@ -48,17 +48,19 @@ defmodule Memento.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:jason, "~> 1.2"},
       {:postgrex, ">= 0.0.0"},
-      {:ecto, "~> 2.2"},
+      {:ecto, "~> 3.4"},
+      {:ecto_sql, "~> 3.0"},
       {:plug, "~> 1.4"},
       {:cowboy, "~> 2.1"},
       {:saul, "~> 0.1.0"},
       {:oauther, "~> 1.1"},
-      {:logster, "~> 0.4"},
-      {:html_entities, "~> 0.4.0"},
-      {:ex_doc, "~> 0.18.1", only: :dev},
+      {:logster, "~> 1.0"},
+      {:html_entities, "~> 0.5.0"},
+      {:ex_doc, "~> 0.22.0", only: :dev},
       {:dialyzex, "~> 1.1", only: :dev},
-      {:stream_data, "~> 0.4.0", only: :test},
+      {:stream_data, "~> 0.5.0", only: :test},
       {:exvcr, "~> 0.8", only: :test}
     ]
   end
