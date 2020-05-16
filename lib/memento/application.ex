@@ -10,7 +10,7 @@ defmodule Memento.Application do
       # Start the Telemetry supervisor
       MementoWeb.Telemetry,
       # Start the PubSub system
-      {Phoenix.PubSub, name: Hq.PubSub},
+      {Phoenix.PubSub, name: Memento.PubSub},
       # Start the Endpoint (http/https)
       MementoWeb.Endpoint,
       # Start capture infra

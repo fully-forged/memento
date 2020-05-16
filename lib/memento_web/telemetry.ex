@@ -29,11 +29,11 @@ defmodule MementoWeb.Telemetry do
       ),
 
       # Database Metrics
-      summary("hq.repo.query.total_time", unit: {:native, :millisecond}),
-      summary("hq.repo.query.decode_time", unit: {:native, :millisecond}),
-      summary("hq.repo.query.query_time", unit: {:native, :millisecond}),
-      summary("hq.repo.query.queue_time", unit: {:native, :millisecond}),
-      summary("hq.repo.query.idle_time", unit: {:native, :millisecond}),
+      summary("memento.repo.query.total_time", unit: {:native, :millisecond}),
+      summary("memento.repo.query.decode_time", unit: {:native, :millisecond}),
+      summary("memento.repo.query.query_time", unit: {:native, :millisecond}),
+      summary("memento.repo.query.queue_time", unit: {:native, :millisecond}),
+      summary("memento.repo.query.idle_time", unit: {:native, :millisecond}),
 
       # VM Metrics
       summary("vm.memory.total", unit: {:byte, :kilobyte}),

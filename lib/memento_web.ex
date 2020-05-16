@@ -29,7 +29,7 @@ defmodule MementoWeb do
   def view do
     quote do
       use Phoenix.View,
-        root: "lib/hq_web/templates",
+        root: "lib/memento_web/templates",
         namespace: MementoWeb
 
       # Import convenience functions from controllers
