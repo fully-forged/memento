@@ -43,4 +43,16 @@ defmodule Memento.Schema.Entry do
       message: "references an already existing id for this type"
     )
   end
+
+  def title(%__MODULE__{type: :github_star, content: content}) do
+    Map.get(content, "name")
+  end
+
+  def description(%__MODULE__{type: :github_star, content: content}) do
+    Map.get(content, "description")
+  end
+
+  def url(%__MODULE__{type: :github_star, content: content}) do
+    Map.get(content, "url")
+  end
 end

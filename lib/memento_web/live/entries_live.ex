@@ -1,9 +1,37 @@
 defmodule MementoWeb.EntriesLive do
   use MementoWeb, :live_view
 
+  alias Memento.{API.QsParamsValidator, Entry.Query, Repo, Schema.Entry}
+
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, assign(socket, query: "", results: %{})}
+  def mount(params, _session, socket) do
+    {:ok, %{page: page, per_page: per_page, type: type, q: q}} =
+      QsParamsValidator.validate(params)
+
+    limit = per_page
+    offset = (page - 1) * per_page
+
+    query = Query.ordered_by_saved_at_desc(Entry, limit, offset)
+
+    with_filters_query =
+      case {q, type} do
+        {:not_provided, :all} ->
+          query
+
+        {q, type} when is_binary(q) ->
+          if String.length(q) >= 3 do
+            prefix_q = q <> ":*"
+            Query.search(query, prefix_q)
+          else
+            Query.by_type(query, type)
+          end
+
+        {_q, type} ->
+          Query.by_type(query, type)
+      end
+
+    entries = Repo.all(with_filters_query)
+    {:ok, assign(socket, params: params, entries: entries)}
   end
 
   @impl true

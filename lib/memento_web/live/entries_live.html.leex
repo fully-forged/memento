@@ -1,11 +1,17 @@
-<section class="phx-hero">
-  <form phx-change="suggest" phx-submit="search">
-    <input type="text" name="q" value="<%= @query %>" placeholder="Live dependency search" list="results" autocomplete="off"/>
-    <datalist id="results">
-      <%= for {app, _vsn} <- @results do %>
-        <option value="<%= app %>"><%= app %></option>
-      <% end %>
-    </datalist>
-    <button type="submit" phx-disable-with="Searching...">Go to Hexdocs</button>
-  </form>
-</section>
+<ul class="entries">
+  <%= for entry <- @entries do %>
+    <li class="entry">
+      <header>
+        <i class="icon-<%= entry.type %>"></i>
+        <span class="date"><%= entry.saved_at %></span>
+      </header>
+    <div class="content">
+      <h1><%= Memento.Schema.Entry.title(entry) %></h1>
+      <h2><%= Memento.Schema.Entry.description(entry) %></h2>
+      <p>
+      <a href="<%= Memento.Schema.Entry.url(entry) %>"><%= Memento.Schema.Entry.url(entry) %></a>
+      </p>
+    </div>
+  <% end %>
+  </li>
+</ul>
