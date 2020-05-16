@@ -48,20 +48,30 @@ defmodule Memento.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:jason, "~> 1.2"},
-      {:postgrex, ">= 0.0.0"},
-      {:ecto, "~> 3.4"},
+      # Runtime
       {:ecto_sql, "~> 3.0"},
-      {:plug, "~> 1.4"},
-      {:cowboy, "~> 2.1"},
-      {:saul, "~> 0.1.0"},
-      {:oauther, "~> 1.1"},
-      {:logster, "~> 1.0"},
       {:html_entities, "~> 0.5.0"},
-      {:ex_doc, "~> 0.22.0", only: :dev},
-      {:dialyzex, "~> 1.1", only: :dev},
+      {:jason, "~> 1.2"},
+      {:logster, "~> 1.0"},
+      {:oauther, "~> 1.1"},
+      {:phoenix, "~> 1.5.1"},
+      {:phoenix_ecto, "~> 4.1"},
+      {:phoenix_html, "~> 2.11"},
+      {:phoenix_live_dashboard, "~> 0.2.0"},
+      {:phoenix_live_view, "~> 0.12.0"},
+      {:plug_cowboy, "~> 2.0"},
+      {:postgrex, ">= 0.0.0"},
+      {:saul, "~> 0.1.0"},
+      {:telemetry_metrics, "~> 0.4"},
+      {:telemetry_poller, "~> 0.4"},
+      # Test
+      {:exvcr, "~> 0.8", only: :test},
+      {:floki, ">= 0.0.0", only: :test},
       {:stream_data, "~> 0.5.0", only: :test},
-      {:exvcr, "~> 0.8", only: :test}
+      # Tools
+      {:dialyzex, "~> 1.1", only: :dev},
+      {:ex_doc, "~> 0.22.0", only: :dev},
+      {:phoenix_live_reload, "~> 1.2", only: :dev}
     ]
   end
 
