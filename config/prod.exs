@@ -1,11 +1,7 @@
 use Mix.Config
 
-config :memento,
-  assets_namespace: "prod",
-  enabled_handlers: [
-    Memento.Capture.Twitter.Handler,
-    Memento.Capture.Github.Handler,
-    Memento.Capture.Instapaper.Handler
-  ]
+config :memento, Memento.Repo,
+  database: "memento_prod",
+  pool_size: 20
 
 config :logger, level: :info
