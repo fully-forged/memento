@@ -23,7 +23,7 @@ defmodule Memento.API.Router do
   plug :dispatch
 
   get "/" do
-    html_resp(conn, 200, Memento.Template.index())
+    html_resp(conn, 200, "Hello world")
   end
 
   get "/status" do
