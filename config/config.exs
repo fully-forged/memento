@@ -14,6 +14,7 @@ use Mix.Config
 
 config :memento,
   ecto_repos: [Memento.Repo],
+  generators: [binary_id: true],
   twitter_username: "cloud8421",
   github_username: "cloud8421",
   refresh_interval: 60_000 * 5,
@@ -25,8 +26,14 @@ config :memento,
     Memento.Capture.Instapaper.Handler
   ]
 
+config :phoenix, :json_library, Jason
+
 config :memento, Memento.RateLimiter,
   max_per_interval: 2,
   reset_interval_in_ms: 10000
+
+config :logger, :console,
+  format: "$time $metadata[$level] $message\n",
+  metadata: [:request_id]
 
 import_config "#{Mix.env()}.exs"
