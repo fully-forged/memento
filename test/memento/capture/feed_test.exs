@@ -22,13 +22,18 @@ defmodule Memento.Capture.FeedTest do
       # to get ownership of a db connection
       Process.sleep(5)
 
+      created_at =
+        ~N[2017-11-28 15:36:03]
+        |> DateTime.from_naive!("Etc/UTC")
+        |> DateTime.truncate(:second)
+
       twitter_fav = %{
         id: "935532750223880194",
         text:
           "dialyzex - A Mix task for type-checking your Elixir project with dialyzer https://t.co/CLgZiRapp9",
         screen_name: "oss_elixir",
         urls: ["https://github.com/comcast/dialyzex"],
-        created_at: ~N[2017-11-28 15:36:03]
+        created_at: created_at
       }
 
       {
