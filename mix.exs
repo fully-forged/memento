@@ -12,6 +12,7 @@ defmodule Memento.MixProject do
       deps: deps(),
       aliases: aliases(),
       docs: docs(),
+      compilers: [:phoenix] ++ Mix.compilers(),
       dialyzer_warnings: dialyzer_warnings(),
       dialyzer_ignored_warnings: dialyzer_ignored_warnings(),
       preferred_cli_env: [
@@ -28,8 +29,8 @@ defmodule Memento.MixProject do
 
   def application do
     [
-      extra_applications: [:logger, :inets, :ssl],
-      mod: {Memento.Application, Mix.env()},
+      extra_applications: [:logger, :inets, :runtime_tools, :os_mon, :ssl],
+      mod: {Memento.Application, []},
       start_phases: [
         create_status_table: [],
         create_rate_limiter_table: []
@@ -81,7 +82,8 @@ defmodule Memento.MixProject do
 
   defp aliases do
     [
-      "ecto.setup": ["ecto.create", "ecto.migrate"],
+      setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]

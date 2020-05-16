@@ -32,6 +32,18 @@ config :memento, Memento.RateLimiter,
   max_per_interval: 2,
   reset_interval_in_ms: 10000
 
+# Configures the endpoint
+config :memento, MementoWeb.Endpoint,
+  url: [host: "localhost"],
+  secret_key_base: "1GBZZQLVk7P+zyrEyvQj5Zu9+o/0EbSvbIdUrXHBylAf9nLl+dZUELi42/t/Cu3I",
+  render_errors: [
+    view: MementoWeb.ErrorView,
+    accepts: ~w(html json),
+    layout: false
+  ],
+  pubsub_server: Memento.PubSub,
+  live_view: [signing_salt: "z2Jzxrlf"]
+
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
