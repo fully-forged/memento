@@ -18,16 +18,20 @@
     <header>
       <section class="container">
         <nav role="navigation">
-          <ul>
-            <li><a href="https://hexdocs.pm/phoenix/overview.html">Get Started</a></li>
+
+          <div class="left-nav">
+            <span class="logo">M</span>
+            <div class="source"><i class="icon-twitter"></i><i class="icon-pushpin"></i><i class="icon-github"></i><i class="icon-instapaper"></i><i class="active">All</i></div>
+          </div>
+
+          <div class="filters">
+            <input type="search" id="q" name="q" placeholder="e.g. tutorial">
+
             <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-              <li><%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %></li>
+              <%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %>
             <% end %>
-          </ul>
+          </div>
         </nav>
-        <a href="https://phoenixframework.org/" class="phx-logo">
-          <img src="<%= Routes.static_path(@conn, "/images/phoenix.png") %>" alt="Phoenix Framework Logo"/>
-        </a>
       </section>
     </header>
     <%= @inner_content %>
