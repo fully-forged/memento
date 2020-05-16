@@ -33,3 +33,9 @@ memento-*.tar
 
 # Tooling
 .elixir_ls/
+
+# Node modules
+/assets/node_modules/
+
+# Generated static files
+/priv/static/
