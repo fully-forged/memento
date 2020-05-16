@@ -9,13 +9,14 @@ defmodule Memento.RateLimiter.Supervisor do
 
   @impl true
   def init(_init_arg) do
+    prune_config = %{
+      table_name: Memento.RateLimiter,
+      reset_interval_in_ms: RateLimiter.reset_interval_in_ms(),
+      prune_interval_in_ms: RateLimiter.prune_interval_in_ms()
+    }
+
     children = [
-      {Memento.RateLimiter.Prune,
-       [
-         RateLimiter,
-         RateLimiter.reset_interval_in_ms(),
-         RateLimiter.prune_interval_in_ms()
-       ]}
+      {Memento.RateLimiter.Prune, prune_config}
     ]
 
     Supervisor.init(children, strategy: :one_for_one)
