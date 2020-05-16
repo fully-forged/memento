@@ -3,10 +3,15 @@
   <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta name="description" content="Memento">
+    <meta name="author" content="Claudio Ortolina">
     <%= csrf_meta_tag() %>
-    <%= live_title_tag assigns[:page_title] || "Memento", suffix: " · Phoenix Framework" %>
+    <%= live_title_tag assigns[:page_title] || "Memento" %>
     <link rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
+    <link rel="apple-touch-icon" href="<%= Routes.static_path(@conn, "/images/apple-touch-icon.png") %>"/>
+    <link rel="shortcut icon" href="<%= Routes.static_path(@conn, "/favicon.ico") %>"/>
     <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
   <body>
