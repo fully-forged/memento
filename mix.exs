@@ -67,7 +67,7 @@ defmodule Memento.MixProject do
       # Test
       {:exvcr, "~> 0.8", only: :test},
       {:floki, ">= 0.0.0", only: :test},
-      {:stream_data, "~> 0.5.0", only: :test},
+      {:stream_data, "~> 0.5.0", only: [:dev, :test]},
       # Tools
       {:dialyzex, "~> 1.1", only: :dev},
       {:ex_doc, "~> 0.22.0", only: :dev},

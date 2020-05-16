@@ -2,8 +2,7 @@ defmodule Memento.Capture.Twitter.Fav do
   @moduledoc false
 
   def content_from_api_result(result) do
-    %{"id_str" => id_str, "text" => text, "created_at" => created_at_str} =
-      result
+    %{"id_str" => id_str, "text" => text, "created_at" => created_at_str} = result
 
     screen_name = get_in(result, ["user", "screen_name"])
 

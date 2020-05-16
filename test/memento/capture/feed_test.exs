@@ -94,13 +94,11 @@ defmodule Memento.Capture.FeedTest do
     end
 
     test "it automatically refreshes data", %{worker: worker} do
-      assert {:authorized, %{data: %{refresh_counter: 1}}} =
-               :sys.get_state(worker)
+      assert {:authorized, %{data: %{refresh_counter: 1}}} = :sys.get_state(worker)
 
       Process.sleep(10)
 
-      assert {:authorized, %{data: %{refresh_counter: 2}}} =
-               :sys.get_state(worker)
+      assert {:authorized, %{data: %{refresh_counter: 2}}} = :sys.get_state(worker)
     end
 
     test "it refreshes data on demand", %{worker: worker} do
@@ -108,8 +106,7 @@ defmodule Memento.Capture.FeedTest do
     end
 
     test "it saves data", %{worker: worker} do
-      assert {:authorized, %{data: %{refresh_counter: 1}}} =
-               :sys.get_state(worker)
+      assert {:authorized, %{data: %{refresh_counter: 1}}} = :sys.get_state(worker)
 
       assert 1 == Repo.aggregate(Entry, :count, :id)
     end

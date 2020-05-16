@@ -128,9 +128,7 @@ defmodule Memento.CLI do
 
     """
     (TW) #{saved_at}
-    #{IO.ANSI.blue() <> screen_name <> IO.ANSI.default_color()} - #{
-      HtmlEntities.decode(text)
-    }
+    #{IO.ANSI.blue() <> screen_name <> IO.ANSI.default_color()} - #{HtmlEntities.decode(text)}
     #{
       unless Enum.empty?(links) do
         IO.ANSI.green()

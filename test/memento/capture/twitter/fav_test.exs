@@ -116,15 +116,12 @@ defmodule Memento.Capture.Twitter.FavTest do
     media = [
       %{
         "display_url" => "pic.twitter.com/gw3oFiADKc",
-        "expanded_url" =>
-          "https://twitter.com/waneella_/status/949454537579991040/photo/1",
+        "expanded_url" => "https://twitter.com/waneella_/status/949454537579991040/photo/1",
         "id" => 949_454_503_555_796_993,
         "id_str" => "949454503555796993",
         "indices" => [0, 23],
-        "media_url" =>
-          "http://pbs.twimg.com/tweet_video_thumb/DS0j1y7WkAEccC_.jpg",
-        "media_url_https" =>
-          "https://pbs.twimg.com/tweet_video_thumb/DS0j1y7WkAEccC_.jpg",
+        "media_url" => "http://pbs.twimg.com/tweet_video_thumb/DS0j1y7WkAEccC_.jpg",
+        "media_url_https" => "https://pbs.twimg.com/tweet_video_thumb/DS0j1y7WkAEccC_.jpg",
         "sizes" => %{
           "large" => %{"h" => 810, "resize" => "fit", "w" => 540},
           "medium" => %{"h" => 810, "resize" => "fit", "w" => 540},

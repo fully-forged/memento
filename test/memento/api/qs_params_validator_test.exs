@@ -16,8 +16,7 @@ defmodule Memento.API.QsParamsValidatorTest do
                 per_page_string <- pagination_params_generator() do
         params = %{"page" => page_string, "per_page" => per_page_string}
 
-        assert {:ok, %{page: page, per_page: per_page}} =
-                 Validator.validate(params)
+        assert {:ok, %{page: page, per_page: per_page}} = Validator.validate(params)
 
         assert is_integer(page)
         assert is_integer(per_page)

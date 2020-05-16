@@ -7,8 +7,7 @@ defmodule Memento.Schema.Entry do
   use Ecto.Schema
   import Ecto.Changeset
 
-  @derive {Jason.Encoder,
-           only: [:id, :type, :content, :saved_at, :inserted_at, :updated_at]}
+  @derive {Jason.Encoder, only: [:id, :type, :content, :saved_at, :inserted_at, :updated_at]}
 
   @primary_key {:id, :binary_id, autogenerate: true}
 
