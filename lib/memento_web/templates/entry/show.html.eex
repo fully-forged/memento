@@ -1,0 +1,11 @@
+<li class="entry">
+  <header>
+    <i class="<%= icon(@entry) %>"></i>
+    <span class="date"><%= saved_at(@entry) %></span>
+  </header>
+  <div class="content">
+    <h1><%= title(@entry) %></h1>
+    <h2><%= description(@entry) %></h2>
+    <p><a href="<%= url(@entry) %>"><%= url(@entry) %></a></p>
+  </div>
+</li>
