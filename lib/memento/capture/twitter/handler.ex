@@ -7,7 +7,11 @@ defmodule Memento.Capture.Twitter.Handler do
 
   def entry_type, do: :twitter_fav
 
-  def get_saved_at(content), do: content.created_at
+  def get_saved_at(content) do
+    content.created_at
+    |> DateTime.from_naive!("Etc/UTC")
+    |> DateTime.truncate(:second)
+  end
 
   def initial_data do
     %{
