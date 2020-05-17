@@ -15,25 +15,9 @@
     <script defer type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
   <body>
-    <header>
-      <section class="container">
-        <nav role="navigation">
-
-          <div class="left-nav">
-            <span class="logo">M</span>
-            <div class="source"><i class="icon-twitter"></i><i class="icon-pushpin"></i><i class="icon-github"></i><i class="icon-instapaper"></i><i class="active">All</i></div>
-          </div>
-
-          <div class="filters">
-            <input type="search" id="q" name="q" placeholder="e.g. tutorial">
-
-            <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
-              <%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %>
-            <% end %>
-          </div>
-        </nav>
-      </section>
-    </header>
+    <%= if function_exported?(Routes, :live_dashboard_path, 2) do %>
+      <%= link "LiveDashboard", to: Routes.live_dashboard_path(@conn, :home) %>
+    <% end %>
     <%= @inner_content %>
   </body>
 </html>

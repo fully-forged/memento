@@ -1,3 +1,18 @@
+<header>
+  <section class="container">
+    <nav role="navigation">
+
+      <div class="left-nav">
+        <span class="logo">M</span>
+        <div class="source"><i class="icon-twitter"></i><i class="icon-pushpin"></i><i class="icon-github"></i><i class="icon-instapaper"></i><i class="active">All</i></div>
+      </div>
+
+      <form class="filters" phx-change="search">
+        <input type="search" id="q" name="q" placeholder="e.g. tutorial" autocomplete="off" />
+      </form>
+    </nav>
+  </section>
+</header>
 <ul class="entries">
   <%= render_many @entries, EntryView, "show.html" %>
 </ul>

@@ -2,9 +2,22 @@ defmodule MementoWeb.EntriesLive do
   use MementoWeb, :live_view
 
   alias Memento.{API.QsParamsValidator, Entry.Query, Repo, Schema.Entry}
+  alias MementoWeb.EntryView
 
   @impl true
   def mount(params, _session, socket) do
+    entries = search(params)
+    {:ok, assign(socket, params: params, entries: entries)}
+  end
+
+  @impl true
+  def handle_event("search", %{"q" => query}, socket) do
+    params = Map.put(socket.assigns.params, "q", query)
+    entries = search(params)
+    {:noreply, assign(socket, params: params, entries: entries)}
+  end
+
+  defp search(params) do
     {:ok, %{page: page, per_page: per_page, type: type, q: q}} =
       QsParamsValidator.validate(params)
 
@@ -30,38 +43,6 @@ defmodule MementoWeb.EntriesLive do
           Query.by_type(query, type)
       end
 
-    entries = Repo.all(with_filters_query)
-    {:ok, assign(socket, params: params, entries: entries)}
-  end
-
-  @impl true
-  def handle_event("suggest", %{"q" => query}, socket) do
-    {:noreply, assign(socket, results: search(query), query: query)}
-  end
-
-  @impl true
-  def handle_event("search", %{"q" => query}, socket) do
-    case search(query) do
-      %{^query => vsn} ->
-        {:noreply, redirect(socket, external: "https://hexdocs.pm/#{query}/#{vsn}")}
-
-      _ ->
-        {:noreply,
-         socket
-         |> put_flash(:error, "No dependencies found matching \"#{query}\"")
-         |> assign(results: %{}, query: query)}
-    end
-  end
-
-  defp search(query) do
-    if not MementoWeb.Endpoint.config(:code_reloader) do
-      raise "action disabled when not in development"
-    end
-
-    for {app, desc, vsn} <- Application.started_applications(),
-        app = to_string(app),
-        String.starts_with?(app, query) and not List.starts_with?(desc, ~c"ERTS"),
-        into: %{},
-        do: {app, vsn}
+    Repo.all(with_filters_query)
   end
 end
