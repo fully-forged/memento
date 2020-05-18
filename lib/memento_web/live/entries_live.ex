@@ -8,13 +8,15 @@ defmodule MementoWeb.EntriesLive do
   #
   # - [x] Filter by entry type
   # - [x] Full text search
-  # - [ ] Load an additional page of content (respecting current filtering)
+  # - [x] Load an additional page of content (respecting current filtering)
   #
   # Should be auto-updated when any new entry matching current filters
   # is created.
 
   @impl true
-  def mount(params, _session, socket) do
+  def mount(qs_params, _session, socket) do
+    {:ok, params} = QsParamsValidator.validate(qs_params)
+
     entries = search(params)
     {:ok, assign(socket, params: params, entries: entries)}
   end
@@ -23,56 +25,50 @@ defmodule MementoWeb.EntriesLive do
   def handle_event("search", %{"q" => query}, socket) do
     params =
       socket.assigns.params
-      |> Map.delete("type")
-      |> Map.put("q", query)
+      |> Map.put(:type, :all)
+      |> Map.put(:q, query)
 
     entries = search(params)
     {:noreply, assign(socket, params: params, entries: entries)}
   end
 
-  def handle_event("filter_by_type", %{"type" => "all"}, socket) do
+  def handle_event("filter_by_type", %{"type" => type_string}, socket) do
+    {:ok, type} = Entry.Type.load(type_string)
+
     params =
       socket.assigns.params
-      |> Map.delete("type")
-      |> Map.delete("q")
+      |> Map.put(:type, type)
+      |> Map.put(:q, "")
 
     entries = search(params)
     {:noreply, assign(socket, params: params, entries: entries)}
   end
 
-  def handle_event("filter_by_type", %{"type" => type}, socket) do
-    params =
-      socket.assigns.params
-      |> Map.put("type", type)
-      |> Map.delete("q")
+  def handle_event("load_more", %{}, socket) do
+    params = Map.update!(socket.assigns.params, :page, fn current -> current + 1 end)
 
-    entries = search(params)
-    {:noreply, assign(socket, params: params, entries: entries)}
+    new_entries = search(params)
+    {:noreply, assign(socket, params: params, entries: socket.assigns.entries ++ new_entries)}
   end
 
   def type_filter_class(type, params) do
     icon_class =
       case type do
-        "github_star" -> "icon-github"
-        "twitter_fav" -> "icon-twitter"
-        "pinboard_link" -> "icon-pushpin"
-        "instapaper_bookmark" -> "icon-instapaper"
-        "all" -> ""
+        :github_star -> "icon-github"
+        :twitter_fav -> "icon-twitter"
+        :pinboard_link -> "icon-pushpin"
+        :instapaper_bookmark -> "icon-instapaper"
+        :all -> ""
       end
 
-    selected_type = Map.get(params, "type", "all")
-
-    if type == selected_type do
+    if type == params.type do
       icon_class <> " " <> "active"
     else
       icon_class
     end
   end
 
-  defp search(params) do
-    {:ok, %{page: page, per_page: per_page, type: type, q: q}} =
-      QsParamsValidator.validate(params)
-
+  defp search(%{q: q, type: type, page: page, per_page: per_page}) do
     limit = per_page
     offset = (page - 1) * per_page
 

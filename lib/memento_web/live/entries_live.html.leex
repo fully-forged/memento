@@ -4,11 +4,11 @@
       <div class="left-nav">
         <span class="logo">M</span>
         <div class="source">
-          <%= content_tag :i, "", class: type_filter_class("twitter_fav", @params), phx_click: "filter_by_type", phx_value_type: "twitter_fav" %>
-          <%= content_tag :i, "", class: type_filter_class("pinboard_link", @params), phx_click: "filter_by_type", phx_value_type: "pinboard_link" %>
-          <%= content_tag :i, "", class: type_filter_class("github_star", @params), phx_click: "filter_by_type", phx_value_type: "github_star" %>
-          <%= content_tag :i, "", class: type_filter_class("instapaper_bookmark", @params), phx_click: "filter_by_type", phx_value_type: "instapaper_bookmark" %>
-          <%= content_tag :i, "All", class: type_filter_class("all", @params), phx_click: "filter_by_type", phx_value_type: "all" %>
+          <%= content_tag :i, "", class: type_filter_class(:twitter_fav, @params), phx_click: "filter_by_type", phx_value_type: :twitter_fav %>
+          <%= content_tag :i, "", class: type_filter_class(:pinboard_link, @params), phx_click: "filter_by_type", phx_value_type: :pinboard_link %>
+          <%= content_tag :i, "", class: type_filter_class(:github_star, @params), phx_click: "filter_by_type", phx_value_type: :github_star %>
+          <%= content_tag :i, "", class: type_filter_class(:instapaper_bookmark, @params), phx_click: "filter_by_type", phx_value_type: :instapaper_bookmark %>
+          <%= content_tag :i, "All", class: type_filter_class(:all, @params), phx_click: "filter_by_type", phx_value_type: :all %>
         </div>
       </div>
       <form class="filters" phx-change="search">
@@ -20,3 +20,6 @@
 <ul class="entries">
   <%= render_many @entries, EntryView, "show.html" %>
 </ul>
+<nav class="load-more">
+  <%= content_tag :button, "More", phx_click: "load_more" %>
+</nav>
