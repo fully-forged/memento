@@ -1,4 +1,4 @@
-defmodule Memento.API.QsParamsValidator do
+defmodule MementoWeb.QsParamsValidator do
   @default_page 1
   @default_per_page 25
   @default_type :all

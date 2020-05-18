@@ -1,8 +1,8 @@
 defmodule MementoWeb.EntriesLive do
   use MementoWeb, :live_view
 
-  alias Memento.{API.QsParamsValidator, Entry.Query, RateLimiter, Repo, Schema.Entry}
-  alias MementoWeb.EntryView
+  alias Memento.{Entry.Query, RateLimiter, Repo, Schema.Entry}
+  alias MementoWeb.{EntryView, QsParamsValidator}
 
   # Should expose functions to:
   #
