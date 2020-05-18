@@ -1,7 +1,7 @@
 defmodule MementoWeb.EntriesLive do
   use MementoWeb, :live_view
 
-  alias Memento.{API.QsParamsValidator, Entry.Query, Repo, Schema.Entry}
+  alias Memento.{API.QsParamsValidator, Entry.Query, RateLimiter, Repo, Schema.Entry}
   alias MementoWeb.EntryView
 
   # Should expose functions to:
@@ -49,6 +49,20 @@ defmodule MementoWeb.EntriesLive do
 
     new_entries = search(params)
     {:noreply, assign(socket, params: params, entries: socket.assigns.entries ++ new_entries)}
+  end
+
+  def handle_event("refresh", %{}, socket) do
+    if RateLimiter.can_access?(:capture_refresh) do
+      RateLimiter.inc(:capture_refresh)
+
+      Memento.Capture.refresh_feeds()
+      params = %{socket.assigns.params | type: :all, q: "", page: 1}
+
+      entries = search(socket.assigns.params)
+      {:noreply, assign(socket, params: params, entries: entries)}
+    else
+      {:noreply, socket}
+    end
   end
 
   def type_filter_class(type, params) do
