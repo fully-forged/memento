@@ -4,11 +4,11 @@
       <div class="left-nav">
         <span class="logo">M</span>
         <div class="source">
-          <i class="icon-twitter" phx-click="filter_by_type" phx-value-type="twitter_fav"></i>
-          <i class="icon-pushpin" phx-click="filter_by_type" phx-value-type="pinboard_link"></i>
-          <i class="icon-github" phx-click="filter_by_type" phx-value-type="github_star"></i>
-          <i class="icon-instapaper" phx-click="filter_by_type" phx-value-type="instapaper_bookmark"></i>
-          <i class="active" phx-click="filter_by_type" phx-value-type="all">All</i>
+          <%= content_tag :i, "", class: type_filter_class("twitter_fav", @params), phx_click: "filter_by_type", phx_value_type: "twitter_fav" %>
+          <%= content_tag :i, "", class: type_filter_class("pinboard_link", @params), phx_click: "filter_by_type", phx_value_type: "pinboard_link" %>
+          <%= content_tag :i, "", class: type_filter_class("github_star", @params), phx_click: "filter_by_type", phx_value_type: "github_star" %>
+          <%= content_tag :i, "", class: type_filter_class("instapaper_bookmark", @params), phx_click: "filter_by_type", phx_value_type: "instapaper_bookmark" %>
+          <%= content_tag :i, "All", class: type_filter_class("all", @params), phx_click: "filter_by_type", phx_value_type: "all" %>
         </div>
       </div>
       <form class="filters" phx-change="search">

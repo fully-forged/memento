@@ -50,6 +50,25 @@ defmodule MementoWeb.EntriesLive do
     {:noreply, assign(socket, params: params, entries: entries)}
   end
 
+  def type_filter_class(type, params) do
+    icon_class =
+      case type do
+        "github_star" -> "icon-github"
+        "twitter_fav" -> "icon-twitter"
+        "pinboard_link" -> "icon-pushpin"
+        "instapaper_bookmark" -> "icon-instapaper"
+        "all" -> ""
+      end
+
+    selected_type = Map.get(params, "type", "all")
+
+    if type == selected_type do
+      icon_class <> " " <> "active"
+    else
+      icon_class
+    end
+  end
+
   defp search(params) do
     {:ok, %{page: page, per_page: per_page, type: type, q: q}} =
       QsParamsValidator.validate(params)
