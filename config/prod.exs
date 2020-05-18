@@ -1,6 +1,7 @@
 use Mix.Config
 
 config :memento, Memento.Repo,
+  ssl: true,
   database: "memento_prod",
   pool_size: 5
 
