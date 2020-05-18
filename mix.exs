@@ -50,6 +50,7 @@ defmodule Memento.MixProject do
   defp deps do
     [
       # Runtime
+      {:calendar, "~> 1.0"},
       {:ecto_sql, "~> 3.0"},
       {:html_entities, "~> 0.5.0"},
       {:jason, "~> 1.2"},

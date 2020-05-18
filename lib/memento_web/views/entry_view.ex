@@ -38,6 +38,6 @@ defmodule MementoWeb.EntryView do
   end
 
   def saved_at(entry) do
-    DateTime.to_string(entry.saved_at)
+    Calendar.Strftime.strftime!(entry.saved_at, "%d-%m-%Y, %H:%M")
   end
 end
