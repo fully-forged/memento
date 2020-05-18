@@ -4,6 +4,15 @@ defmodule MementoWeb.EntriesLive do
   alias Memento.{API.QsParamsValidator, Entry.Query, Repo, Schema.Entry}
   alias MementoWeb.EntryView
 
+  # Should expose functions to:
+  #
+  # - [x] Filter by entry type
+  # - [x] Full text search
+  # - [ ] Load an additional page of content (respecting current filtering)
+  #
+  # Should be auto-updated when any new entry matching current filters
+  # is created.
+
   @impl true
   def mount(params, _session, socket) do
     entries = search(params)
@@ -12,7 +21,31 @@ defmodule MementoWeb.EntriesLive do
 
   @impl true
   def handle_event("search", %{"q" => query}, socket) do
-    params = Map.put(socket.assigns.params, "q", query)
+    params =
+      socket.assigns.params
+      |> Map.delete("type")
+      |> Map.put("q", query)
+
+    entries = search(params)
+    {:noreply, assign(socket, params: params, entries: entries)}
+  end
+
+  def handle_event("filter_by_type", %{"type" => "all"}, socket) do
+    params =
+      socket.assigns.params
+      |> Map.delete("type")
+      |> Map.delete("q")
+
+    entries = search(params)
+    {:noreply, assign(socket, params: params, entries: entries)}
+  end
+
+  def handle_event("filter_by_type", %{"type" => type}, socket) do
+    params =
+      socket.assigns.params
+      |> Map.put("type", type)
+      |> Map.delete("q")
+
     entries = search(params)
     {:noreply, assign(socket, params: params, entries: entries)}
   end
@@ -31,10 +64,21 @@ defmodule MementoWeb.EntriesLive do
         {:not_provided, :all} ->
           query
 
-        {q, type} when is_binary(q) ->
+        {q, :all} when is_binary(q) ->
           if String.length(q) >= 3 do
             prefix_q = q <> ":*"
             Query.search(query, prefix_q)
+          else
+            query
+          end
+
+        {q, type} when is_binary(q) ->
+          if String.length(q) >= 3 do
+            prefix_q = q <> ":*"
+
+            query
+            |> Query.by_type(type)
+            |> Query.search(prefix_q)
           else
             Query.by_type(query, type)
           end
