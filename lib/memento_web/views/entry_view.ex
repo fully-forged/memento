@@ -3,10 +3,27 @@ defmodule MementoWeb.EntryView do
 
   def title(entry) do
     case entry.type do
-      :github_star -> Map.get(entry.content, "name")
-      :twitter_fav -> Map.get(entry.content, "screen_name")
-      :pinboard_link -> Map.get(entry.content, "description")
-      :instapaper_bookmark -> Map.get(entry.content, "title")
+      :github_star ->
+        render("two_line_title.html",
+          title: entry.content["name"],
+          subtitle: entry.content["description"]
+        )
+
+      :twitter_fav ->
+        render("two_line_title.html",
+          title: entry.content["screen_name"],
+          subtitle: entry.content["text"]
+        )
+
+      :pinboard_link ->
+        render("one_line_title.html",
+          title: entry.content["description"]
+        )
+
+      :instapaper_bookmark ->
+        render("one_line_title.html",
+          title: entry.content["title"]
+        )
     end
   end
 
