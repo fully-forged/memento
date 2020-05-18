@@ -52,4 +52,21 @@ defmodule MementoWeb.Endpoint do
   plug Plug.Head
   plug Plug.Session, @session_options
   plug MementoWeb.Router
+
+  def init(_type, config) do
+    config =
+      case System.get_env("PORT") do
+        nil ->
+          config
+
+        port ->
+          new_config = [
+            http: [port: port]
+          ]
+
+          Keyword.merge(config, new_config)
+      end
+
+    {:ok, config}
+  end
 end
