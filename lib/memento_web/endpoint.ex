@@ -63,7 +63,8 @@ defmodule MementoWeb.Endpoint do
 
         port ->
           new_config = [
-            http: [port: port]
+            http: [port: port, transport_options: [socket_opts: [:inet6]]],
+            secret_key_base: System.get_env("SECRET_KEY_BASE")
           ]
 
           Keyword.merge(config, new_config)
