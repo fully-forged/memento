@@ -29,7 +29,7 @@ defmodule MementoWeb.QsParamsValidator do
   Validates a map with binary keys, returning either `{:ok, map_with_atom_keys}` or
   `{:error, reason}`, where the returned map has a predictable structure.
 
-      iex> alias Memento.API.QsParamsValidator, as: V
+      iex> alias MementoWeb.QsParamsValidator, as: V
       iex> V.validate(%{"page" => "10"})
       {:ok, %{page: 10, per_page: 25, q: :not_provided, type: :all}}
   """

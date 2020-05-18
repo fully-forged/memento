@@ -1,8 +1,8 @@
-defmodule Memento.API.QsParamsValidatorTest do
+defmodule MementoWeb.QsParamsValidatorTest do
   use ExUnit.Case, async: true
   use ExUnitProperties
 
-  alias Memento.API.QsParamsValidator, as: Validator
+  alias MementoWeb.QsParamsValidator, as: Validator
   doctest Validator
 
   test "it applies defaults" do
