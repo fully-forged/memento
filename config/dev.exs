@@ -21,4 +21,3 @@ config :memento, MementoWeb.Endpoint,
       cd: Path.expand("../assets", __DIR__)
     ]
   ]
-
