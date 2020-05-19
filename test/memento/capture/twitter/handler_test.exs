@@ -23,8 +23,7 @@ defmodule Memento.Capture.Twitter.HandlerTest do
 
       [twitter_content | _] = result
 
-      assert %{id: _, created_at: _, screen_name: _, text: _, urls: _} =
-               twitter_content
+      assert %{id: _, created_at: _, screen_name: _, text: _, urls: _} = twitter_content
     end
   end
 end

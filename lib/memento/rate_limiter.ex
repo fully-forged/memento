@@ -9,7 +9,7 @@ defmodule Memento.RateLimiter do
   @doc """
   The duration of the interval. Limits are reset after this expires.
   """
-  def reset_interval_in_ms, do: get_config(:reset_interval_in_ms, 5000)
+  def reset_interval_in_ms, do: get_config(:reset_interval_in_ms, 15000)
 
   @doc """
   The interval used to schedule pruning.

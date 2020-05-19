@@ -8,8 +8,8 @@ defmodule Memento.Capture.Supervisor do
   @retry_interval Application.get_env(:memento, :retry_interval, 30_000)
   @enabled_handlers Application.get_env(:memento, :enabled_handlers, [])
 
-  def start_link(env) do
-    Supervisor.start_link(__MODULE__, env, name: __MODULE__)
+  def start_link(opts) do
+    Supervisor.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
   def refresh_feeds do

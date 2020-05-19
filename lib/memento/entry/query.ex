@@ -29,11 +29,9 @@ defmodule Memento.Entry.Query do
 
   def search(initial, search_query) do
     from e in initial,
-      join: si in Entry.SearchIndex,
-      on: [id: e.id],
       where:
         fragment(
-          "to_tsvector('english', text) @@ to_tsquery(?)",
+          "to_tsvector('english', content) @@ to_tsquery(?)",
           ^search_query
         )
   end

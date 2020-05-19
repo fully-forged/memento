@@ -1,0 +1,14 @@
+<li class="entry">
+  <header>
+    <i class="<%= icon(@entry) %>"></i>
+    <span class="date"><%= saved_at(@entry) %></span>
+  </header>
+  <div class="content">
+    <%= title(@entry) %>
+    <ul>
+      <%= for url <- urls(@entry) do %>
+        <li><a href="<%= url %>"><%= url %></a></li>
+      <% end %>
+    </ul>
+  </div>
+</li>

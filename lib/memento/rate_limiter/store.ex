@@ -45,8 +45,7 @@ defmodule Memento.RateLimiter.Store do
     # by incrementing it by 1. If the counter exceeds the value of
     # `max_per_interval`, resets it to `max_per_interval` (this means that we won't
     # store bigger integers for nothing).
-    update_op =
-      {3, 1, RateLimiter.max_per_interval(), RateLimiter.max_per_interval()}
+    update_op = {3, 1, RateLimiter.max_per_interval(), RateLimiter.max_per_interval()}
 
     :ets.update_counter(table_name, key, update_op, {key, now(), 0})
   end

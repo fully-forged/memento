@@ -102,7 +102,7 @@ defmodule Memento.CLI do
       |> URI.to_string()
 
     with resp = %{status_code: 200} <- Memento.HTTPClient.get(entries_url),
-         {:ok, entries} <- Poison.decode(resp.body) do
+         {:ok, entries} <- Jason.decode(resp.body) do
       Enum.each(entries, fn e ->
         format_entry(e) |> IO.puts()
       end)
@@ -128,9 +128,7 @@ defmodule Memento.CLI do
 
     """
     (TW) #{saved_at}
-    #{IO.ANSI.blue() <> screen_name <> IO.ANSI.default_color()} - #{
-      HtmlEntities.decode(text)
-    }
+    #{IO.ANSI.blue() <> screen_name <> IO.ANSI.default_color()} - #{HtmlEntities.decode(text)}
     #{
       unless Enum.empty?(links) do
         IO.ANSI.green()

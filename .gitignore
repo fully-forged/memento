@@ -22,20 +22,20 @@ erl_crash.dump
 # Ignore package tarball (built via "mix hex.build").
 memento-*.tar
 
-# Frontend
-/frontend/elm-stuff
-/frontend/elm.js
-/frontend//build/*
-/frontend//bin/*
-
-/priv/static/
-
 # ENV
 .envrc
 
 # VCR cassettes
-
 /test/fixture
 
 # CLI artifact
 /bin/memento
+
+# Tooling
+.elixir_ls/
+
+# Node modules
+/assets/node_modules/
+
+# Generated static files
+/priv/static/

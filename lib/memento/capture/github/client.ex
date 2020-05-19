@@ -29,7 +29,7 @@ defmodule Memento.Capture.Github.Client do
            headers: resp_headers,
            body: body
          } <- HTTPClient.get(url, headers),
-         {:ok, data} <- Poison.decode(body),
+         {:ok, data} <- Jason.decode(body),
          links <- Github.Link.parse_headers(resp_headers) do
       {:ok, data, links}
     else

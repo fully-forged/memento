@@ -1,6 +1,6 @@
 defmodule Memento.Schema.Entry.Type do
   @moduledoc false
-  @behaviour Ecto.Type
+  use Ecto.Type
 
   @valid_types [
     :twitter_fav,

@@ -7,6 +7,8 @@ defmodule Memento.Schema.Entry do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder, only: [:id, :type, :content, :saved_at, :inserted_at, :updated_at]}
+
   @primary_key {:id, :binary_id, autogenerate: true}
 
   @type content :: %{optional(String.t()) => term}
@@ -28,15 +30,6 @@ defmodule Memento.Schema.Entry do
     timestamps(type: :utc_datetime)
   end
 
-  defimpl Poison.Encoder do
-    def encode(entry, opts) do
-      entry
-      |> Map.from_struct()
-      |> Map.delete(:__meta__)
-      |> Poison.encode!(opts)
-    end
-  end
-
   @doc """
   Returns a changeset from an initial entry struct
   and a params map.
@@ -49,5 +42,17 @@ defmodule Memento.Schema.Entry do
       name: :type_and_json_id_idx,
       message: "references an already existing id for this type"
     )
+  end
+
+  def title(%__MODULE__{type: :github_star, content: content}) do
+    Map.get(content, "name")
+  end
+
+  def description(%__MODULE__{type: :github_star, content: content}) do
+    Map.get(content, "description")
+  end
+
+  def url(%__MODULE__{type: :github_star, content: content}) do
+    Map.get(content, "url")
   end
 end

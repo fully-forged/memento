@@ -3,15 +3,19 @@ defmodule Memento.Application do
 
   use Application
 
-  alias Memento.API.Router
-
-  def start(_type, env) do
+  def start(_type, _args) do
     children = [
-      {Memento.Repo, []},
-      {Memento.Capture.Supervisor, env},
-      Memento.RateLimiter.Supervisor,
-      {Plug.Adapters.Cowboy2,
-       scheme: :http, plug: Router, options: [port: 8080]}
+      # Start the Ecto repository
+      Memento.Repo,
+      # Start the Telemetry supervisor
+      MementoWeb.Telemetry,
+      # Start the PubSub system
+      {Phoenix.PubSub, name: Memento.PubSub},
+      # Start the Endpoint (http/https)
+      MementoWeb.Endpoint,
+      # Start capture infra
+      Memento.Capture.Supervisor,
+      Memento.RateLimiter.Supervisor
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -27,6 +31,11 @@ defmodule Memento.Application do
 
   def start_phase(:create_rate_limiter_table, _type, _args) do
     Memento.RateLimiter.create_table()
+    :ok
+  end
+
+  def config_change(changed, _new, removed) do
+    MementoWeb.Endpoint.config_change(changed, removed)
     :ok
   end
 end

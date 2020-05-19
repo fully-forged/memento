@@ -1,8 +1,7 @@
 defmodule Memento.Capture.Instapaper.Bookmark do
   @moduledoc false
   def content_from_api_result(result) do
-    %{"bookmark_id" => id, "title" => title, "url" => url, "time" => unix_time} =
-      result
+    %{"bookmark_id" => id, "title" => title, "url" => url, "time" => unix_time} = result
 
     {:ok, time} = DateTime.from_unix(unix_time)
 

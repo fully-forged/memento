@@ -8,7 +8,7 @@ defmodule Memento.Capture.Pinboard.Client do
 
     case HTTPClient.get(url, [], params) do
       %{status_code: 200, body: resp_body} ->
-        Poison.decode(resp_body)
+        Jason.decode(resp_body)
 
       error_response = %HTTPClient.ErrorResponse{} ->
         {:error, error_response}

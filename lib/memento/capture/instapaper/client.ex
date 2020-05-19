@@ -21,7 +21,7 @@ defmodule Memento.Capture.Instapaper.Client do
   def get_bookmarks(consumer_key, consumer_secret, token, token_secret) do
     case do_get_bookmarks(consumer_key, consumer_secret, token, token_secret) do
       %{status_code: 200, body: body} ->
-        Poison.decode(body)
+        Jason.decode(body)
 
       %{body: body} ->
         {:error, body}

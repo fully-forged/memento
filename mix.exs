@@ -12,6 +12,7 @@ defmodule Memento.MixProject do
       deps: deps(),
       aliases: aliases(),
       docs: docs(),
+      compilers: [:phoenix] ++ Mix.compilers(),
       dialyzer_warnings: dialyzer_warnings(),
       dialyzer_ignored_warnings: dialyzer_ignored_warnings(),
       preferred_cli_env: [
@@ -28,8 +29,8 @@ defmodule Memento.MixProject do
 
   def application do
     [
-      extra_applications: [:logger, :inets, :ssl],
-      mod: {Memento.Application, Mix.env()},
+      extra_applications: [:logger, :inets, :runtime_tools, :os_mon, :ssl],
+      mod: {Memento.Application, []},
       start_phases: [
         create_status_table: [],
         create_rate_limiter_table: []
@@ -48,18 +49,31 @@ defmodule Memento.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:postgrex, ">= 0.0.0"},
-      {:ecto, "~> 2.2"},
-      {:plug, "~> 1.4"},
-      {:cowboy, "~> 2.1"},
-      {:saul, "~> 0.1.0"},
+      # Runtime
+      {:calendar, "~> 1.0"},
+      {:ecto_sql, "~> 3.0"},
+      {:html_entities, "~> 0.5.0"},
+      {:jason, "~> 1.2"},
+      {:logster, "~> 1.0"},
       {:oauther, "~> 1.1"},
-      {:logster, "~> 0.4"},
-      {:html_entities, "~> 0.4.0"},
-      {:ex_doc, "~> 0.18.1", only: :dev},
+      {:phoenix, "~> 1.5.1"},
+      {:phoenix_ecto, "~> 4.1"},
+      {:phoenix_html, "~> 2.11"},
+      {:phoenix_live_dashboard, "~> 0.2.0"},
+      {:phoenix_live_view, "~> 0.12.0"},
+      {:plug_cowboy, "~> 2.0"},
+      {:postgrex, ">= 0.0.0"},
+      {:saul, "~> 0.1.0"},
+      {:telemetry_metrics, "~> 0.4"},
+      {:telemetry_poller, "~> 0.4"},
+      # Test
+      {:exvcr, "~> 0.8", only: :test},
+      {:floki, ">= 0.0.0", only: :test},
+      {:stream_data, "~> 0.5.0", only: [:dev, :test]},
+      # Tools
       {:dialyzex, "~> 1.1", only: :dev},
-      {:stream_data, "~> 0.4.0", only: :test},
-      {:exvcr, "~> 0.8", only: :test}
+      {:ex_doc, "~> 0.22.0", only: :dev},
+      {:phoenix_live_reload, "~> 1.2", only: :dev}
     ]
   end
 
@@ -69,7 +83,8 @@ defmodule Memento.MixProject do
 
   defp aliases do
     [
-      "ecto.setup": ["ecto.create", "ecto.migrate"],
+      setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
+      "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]

@@ -2,8 +2,7 @@ defmodule Memento.Capture.Twitter.Fav do
   @moduledoc false
 
   def content_from_api_result(result) do
-    %{"id_str" => id_str, "text" => text, "created_at" => created_at_str} =
-      result
+    %{"id_str" => id_str, "text" => text, "created_at" => created_at_str} = result
 
     screen_name = get_in(result, ["user", "screen_name"])
 
@@ -15,7 +14,7 @@ defmodule Memento.Capture.Twitter.Fav do
         media -> get_in(media, [Access.all(), "expanded_url"])
       end
 
-    {:ok, created_at} = parse_created_at(created_at_str)
+    created_at = parse_created_at(created_at_str)
 
     %{
       id: id_str,
@@ -30,6 +29,8 @@ defmodule Memento.Capture.Twitter.Fav do
     created_at
     |> String.to_charlist()
     |> :ec_date.parse()
-    |> NaiveDateTime.from_erl()
+    |> NaiveDateTime.from_erl!()
+    |> DateTime.from_naive!("Etc/UTC")
+    |> DateTime.truncate(:second)
   end
 end

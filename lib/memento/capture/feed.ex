@@ -186,7 +186,9 @@ defmodule Memento.Capture.Feed do
   end
 
   defp insert_all(new_entries_data, handler) do
-    now = DateTime.utc_now()
+    now =
+      DateTime.utc_now()
+      |> DateTime.truncate(:second)
 
     inserts =
       Enum.map(new_entries_data, fn new_entry_data ->

@@ -10,7 +10,7 @@ defmodule Memento.Capture.Twitter.Client do
 
     case HTTPClient.post(url, headers, body, content_type) do
       %{status_code: 200, body: resp_body} ->
-        Poison.decode(resp_body)
+        Jason.decode(resp_body)
 
       error_response = %HTTPClient.ErrorResponse{} ->
         {:error, error_response}
@@ -27,7 +27,7 @@ defmodule Memento.Capture.Twitter.Client do
 
     case HTTPClient.get(url, headers, params) do
       %{status_code: 200, body: resp_body} ->
-        Poison.decode(resp_body)
+        Jason.decode(resp_body)
 
       error_response = %HTTPClient.ErrorResponse{} ->
         {:error, error_response}
