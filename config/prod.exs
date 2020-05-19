@@ -7,7 +7,7 @@ config :memento, Memento.Repo,
 
 config :memento, MementoWeb.Endpoint,
   cache_static_manifest: "priv/static/cache_manifest.json",
-  url: [scheme: "https", host: "ff-memento.herokuapp.com", port: 443],
+  url: [scheme: "https", host: "memento.fullyforged.com", port: 443],
   force_ssl: [rewrite_on: [:x_forwarded_proto]]
 
 config :logger, level: :info
