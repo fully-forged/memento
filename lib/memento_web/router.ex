@@ -20,10 +20,11 @@ defmodule MementoWeb.Router do
     live "/", EntriesLive, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", MementoWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", MementoWeb do
+    pipe_through :api
+
+    get "/entries", EntriesController, :index
+  end
 
   # Enables LiveDashboard only for development
   #

@@ -97,7 +97,7 @@ defmodule Memento.CLI do
     entries_url =
       base_url
       |> URI.parse()
-      |> Map.put(:path, "/entries")
+      |> Map.put(:path, "/api/entries")
       |> Map.put(:query, URI.encode_query(qs))
       |> URI.to_string()
 
