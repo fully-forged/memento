@@ -7,7 +7,20 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  test:
+    services:
+      db:
+        image: postgres:11
+        ports: ['5432:5432']
+        env:
+          POSTGRES_USER: memento
+          POSTGRES_PASSWORD: password
+          POSTGRES_HOSTNAME: localhost
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     runs-on: ubuntu-latest
 
@@ -22,3 +35,7 @@ jobs:
       run: mix deps.get
     - name: Run Tests
       run: mix test
+      env:
+        POSTGRES_USER: memento
+        POSTGRES_PASSWORD: password
+        POSTGRES_HOSTNAME: localhost
