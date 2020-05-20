@@ -3,6 +3,8 @@ defmodule Memento.Capture.Status do
   Tracks last updates per Capture handler.
   """
 
+  alias Phoenix.PubSub
+
   @type status :: :success | :auth_failure | :refresh_failure
   @type entry :: %{handler: module, last_update: DateTime.t(), status: status}
 
@@ -11,10 +13,19 @@ defmodule Memento.Capture.Status do
     :ets.new(__MODULE__, [:set, :public, :named_table])
   end
 
-  @spec track(module, status) :: true
-  def track(handler, status) do
-    now = DateTime.utc_now()
-    :ets.insert(__MODULE__, {handler.entry_type(), now, status})
+  @spec track(module(), status(), pos_integer()) :: :ok | {:error, term()}
+  def track(handler, status, new_count \\ 0) do
+    current_time = DateTime.utc_now()
+    :ets.insert(__MODULE__, {handler.entry_type(), current_time, status})
+
+    event_params = %{
+      type: handler.entry_type(),
+      last_update: current_time,
+      status: status,
+      new_count: new_count
+    }
+
+    PubSub.broadcast(Memento.PubSub, "capture", event_params)
   end
 
   @spec all :: [entry]

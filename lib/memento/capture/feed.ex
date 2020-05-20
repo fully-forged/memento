@@ -119,7 +119,7 @@ defmodule Memento.Capture.Feed do
       when event_type in [:internal, :timeout] do
     case refresh_and_save(state.handler, state.data) do
       {:ok, new_count, new_data} ->
-        state.status.track(state.handler, :success)
+        state.status.track(state.handler, :success, new_count)
 
         Logger.info(fn ->
           """
@@ -151,7 +151,7 @@ defmodule Memento.Capture.Feed do
   def authorized({:call, from}, :refresh, state) do
     case refresh_and_save(state.handler, state.data) do
       {:ok, new_count, new_data} ->
-        state.status.track(state.handler, :success)
+        state.status.track(state.handler, :success, new_count)
 
         actions = [
           {:reply, from, {:ok, new_count}},

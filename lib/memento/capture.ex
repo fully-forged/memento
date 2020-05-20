@@ -4,6 +4,7 @@ defmodule Memento.Capture do
   """
 
   alias Memento.Capture
+  alias Phoenix.PubSub
 
   @doc """
   Refreshes all sources with running feed.
@@ -24,4 +25,11 @@ defmodule Memento.Capture do
   Returns the status of the last refresh attempt.
   """
   def status, do: Capture.Status.all()
+
+  @doc """
+  Subscribes the current process to capture events
+  """
+  def subscribe do
+    PubSub.subscribe(Memento.PubSub, "capture")
+  end
 end

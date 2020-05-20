@@ -1,11 +1,15 @@
 defmodule MementoWeb.EntriesLive do
   use MementoWeb, :live_view
 
-  alias Memento.{Entry, RateLimiter, Schema}
+  alias Memento.{Capture, Entry, RateLimiter, Schema}
   alias MementoWeb.{EntryView, QsParamsValidator}
 
   @impl true
   def mount(qs_params, _session, socket) do
+    if connected?(socket) do
+      Capture.subscribe()
+    end
+
     {:ok, params} = QsParamsValidator.validate(qs_params)
 
     entries = Entry.search(params)
@@ -54,6 +58,17 @@ defmodule MementoWeb.EntriesLive do
     else
       {:noreply, socket}
     end
+  end
+
+  @impl true
+  def handle_info(%{status: :success, new_count: new_count}, socket)
+      when new_count > 0 do
+    entries = Entry.search(socket.assigns.params)
+    {:noreply, assign(socket, entries: entries)}
+  end
+
+  def handle_info(_capture_event, socket) do
+    {:noreply, socket}
   end
 
   def type_filter_class(type, params) do
