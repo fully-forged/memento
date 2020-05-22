@@ -39,3 +39,7 @@ memento-*.tar
 
 # Generated static files
 /priv/static/
+
+# PLTs
+/priv/plts/*.plt
+/priv/plts/*.plt.hash
