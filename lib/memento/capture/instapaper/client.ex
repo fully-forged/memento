@@ -8,7 +8,7 @@ defmodule Memento.Capture.Instapaper.Client do
   def get_access_token(consumer_key, consumer_secret, username, password) do
     case do_get_access_token(consumer_key, consumer_secret, username, password) do
       %{status_code: 200, body: body} ->
-        {:ok, body |> List.to_string() |> URI.decode_query()}
+        {:ok, URI.decode_query(body)}
 
       %{body: body} ->
         {:error, body}

@@ -18,7 +18,7 @@ defmodule Memento.Capture.Github.Handler do
 
   def refresh(data) do
     case Client.get_stars_by_username(data.username) do
-      {:ok, resp, _} ->
+      {:ok, resp} ->
         {:ok, Enum.map(resp, &StarredRepo.content_from_api_result/1), data}
 
       error ->

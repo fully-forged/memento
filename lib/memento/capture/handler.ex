@@ -16,7 +16,7 @@ defmodule Memento.Capture.Handler do
   the handler at different stages of its lifecycle.
   """
   @type data :: map()
-  @type content_list :: [Entry.content()]
+  @type content_list :: [map()]
 
   @doc """
   Returns the initial data needed by the handler to authenticate against the
@@ -56,5 +56,5 @@ defmodule Memento.Capture.Handler do
   `refresh/1`, how to extract a `DateTime.t` that represents the point
   in time when that very piece of content was saved.
   """
-  @callback get_saved_at(Entry.content()) :: DateTime.t()
+  @callback get_saved_at(map()) :: DateTime.t()
 end

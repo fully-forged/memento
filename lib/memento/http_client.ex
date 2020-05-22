@@ -19,7 +19,7 @@ defmodule Memento.HTTPClient do
   iex> Memento.HTTPClient.get("http://example.com")
   iex> Memento.HTTPClient.get("http://example.com", [{"User-Agent", "My App 2.1"}])
   """
-  @spec get(url, headers) :: {:ok, Response.t()} | {:error, ErrorResponse.t()}
+  @spec get(url, headers) :: Response.t() | ErrorResponse.t()
   def get(url, headers \\ []) do
     headers =
       Enum.map(headers, fn {k, v} ->
@@ -39,8 +39,7 @@ defmodule Memento.HTTPClient do
                             [{"User-Agent", "My App 2.1"}],
                             %{"page" => 1})
   """
-  @spec get(url, headers, qs_params) ::
-          {:ok, Response.t()} | {:error, ErrorResponse.t()}
+  @spec get(url, headers, qs_params) :: Response.t() | ErrorResponse.t()
   def get(url, headers, qs_params) do
     headers =
       Enum.map(headers, fn {k, v} ->
@@ -58,8 +57,7 @@ defmodule Memento.HTTPClient do
     |> process_response
   end
 
-  @spec post(url, headers, binary, content_type) ::
-          {:ok, Response.t()} | {:error, ErrorResponse.t()}
+  @spec post(url, headers, binary, content_type) :: Response.t() | ErrorResponse.t()
   def post(url, headers, body, content_type \\ "application/json") do
     headers =
       Enum.map(headers, fn {k, v} ->
@@ -83,7 +81,14 @@ defmodule Memento.HTTPClient do
         {List.to_string(k), List.to_string(v)}
       end)
 
-    %Response{status_code: status, headers: headers, body: body}
+    binary_body =
+      if is_binary(body) do
+        body
+      else
+        List.to_string(body)
+      end
+
+    %Response{status_code: status, headers: headers, body: binary_body}
   end
 
   defp process_response({:error, reason}) do

@@ -1,6 +1,6 @@
 defmodule Memento.Capture.Github.Client do
   @moduledoc false
-  alias Memento.{HTTPClient, Capture.Github}
+  alias Memento.HTTPClient
 
   @type username :: String.t()
   @type url :: String.t()
@@ -17,22 +17,17 @@ defmodule Memento.Capture.Github.Client do
     |> get_stars_by_url
   end
 
-  @spec get_stars_by_url(url) :: {:ok, [map]} | {:error, term}
+  @spec get_stars_by_url(url) :: {:ok, [map()]} | {:error, term}
   def get_stars_by_url(url) do
-    headers = %{
-      "Accept" => "application/vnd.github.v3.star+json",
-      "User-Agent" => "Username: fullyforged"
-    }
+    headers = [
+      {"Accept", "application/vnd.github.v3.star+json"},
+      {"User-Agent", "Username: fullyforged"}
+    ]
 
-    with %HTTPClient.Response{
-           status_code: 200,
-           headers: resp_headers,
-           body: body
-         } <- HTTPClient.get(url, headers),
-         {:ok, data} <- Jason.decode(body),
-         links <- Github.Link.parse_headers(resp_headers) do
-      {:ok, data, links}
-    else
+    case HTTPClient.get(url, headers) do
+      %HTTPClient.Response{status_code: 200, body: body} ->
+        Jason.decode(body)
+
       %HTTPClient.Response{status_code: status_code, body: body} ->
         {:error, {status_code, body}}
 
