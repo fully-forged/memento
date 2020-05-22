@@ -35,6 +35,9 @@ defmodule MementoWeb.Telemetry do
       summary("memento.repo.query.queue_time", unit: {:native, :millisecond}),
       summary("memento.repo.query.idle_time", unit: {:native, :millisecond}),
 
+      # Capture Metrics
+      summary("memento.capture.entries_count"),
+
       # VM Metrics
       summary("vm.memory.total", unit: {:byte, :kilobyte}),
       summary("vm.total_run_queue_lengths.total"),

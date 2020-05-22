@@ -24,11 +24,6 @@ defmodule Memento.Application do
     Supervisor.start_link(children, opts)
   end
 
-  def start_phase(:create_status_table, _type, _env) do
-    Memento.Capture.Status.create_table()
-    :ok
-  end
-
   def start_phase(:create_rate_limiter_table, _type, _args) do
     Memento.RateLimiter.create_table()
     :ok

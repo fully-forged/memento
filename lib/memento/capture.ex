@@ -22,11 +22,6 @@ defmodule Memento.Capture do
   def stop_feed(handler), do: Capture.Supervisor.stop_feed(handler)
 
   @doc """
-  Returns the status of the last refresh attempt.
-  """
-  def status, do: Capture.Status.all()
-
-  @doc """
   Subscribes the current process to capture events
   """
   def subscribe do

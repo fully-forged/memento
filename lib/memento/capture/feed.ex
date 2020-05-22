@@ -23,6 +23,7 @@ defmodule Memento.Capture.Feed do
   @behaviour :gen_statem
 
   alias Memento.{Capture.Handler, Repo, Schema.Entry}
+  alias Phoenix.PubSub
 
   require Logger
 
@@ -35,7 +36,6 @@ defmodule Memento.Capture.Feed do
     inside a supervision tree.
   - **data**: the starting data necessary for the worker to function. More often than not its value
     is the handler's return value of `c:Memento.Capture.Handler.initial_data/0`.
-  - **status**: a module which can be used to track the status of this worker (most likely `Memento.Capture.Status`).
   - **refresh_interval**: the interval, in milliseconds, between data refreshes.
   - **retry_interval**: the interval, in milliseconds, between subsequent attempts to refresh the data in case of failure.
   """
@@ -43,7 +43,6 @@ defmodule Memento.Capture.Feed do
           handler: module(),
           name: atom(),
           data: Handler.data(),
-          status: module(),
           refresh_interval: pos_integer(),
           retry_interval: pos_integer()
         }
@@ -100,7 +99,7 @@ defmodule Memento.Capture.Feed do
         {:next_state, :authorized, new_state, action}
 
       {:error, reason} ->
-        state.status.track(state.handler, :auth_failure)
+        track(state.handler, :auth_failure)
 
         Logger.error(fn ->
           """
@@ -119,7 +118,7 @@ defmodule Memento.Capture.Feed do
       when event_type in [:internal, :timeout] do
     case refresh_and_save(state.handler, state.data) do
       {:ok, new_count, new_data} ->
-        state.status.track(state.handler, :success, new_count)
+        track(state.handler, :success, new_count)
 
         Logger.info(fn ->
           """
@@ -132,7 +131,7 @@ defmodule Memento.Capture.Feed do
         {:keep_state, new_state, action}
 
       {:error, reason} ->
-        state.status.track(state.handler, :refresh_failure)
+        track(state.handler, :refresh_failure)
 
         Logger.error(fn ->
           """
@@ -151,7 +150,7 @@ defmodule Memento.Capture.Feed do
   def authorized({:call, from}, :refresh, state) do
     case refresh_and_save(state.handler, state.data) do
       {:ok, new_count, new_data} ->
-        state.status.track(state.handler, :success, new_count)
+        track(state.handler, :success, new_count)
 
         actions = [
           {:reply, from, {:ok, new_count}},
@@ -163,7 +162,7 @@ defmodule Memento.Capture.Feed do
         {:keep_state, new_state, actions}
 
       {:error, reason} ->
-        state.status.track(state.handler, :refresh_failure)
+        track(state.handler, :refresh_failure)
 
         actions = [
           {:reply, from, {:error, reason}},
@@ -202,5 +201,24 @@ defmodule Memento.Capture.Feed do
       end)
 
     Repo.insert_all(Entry, inserts, on_conflict: :nothing)
+  end
+
+  defp track(handler, status, entries_count \\ 0) do
+    current_time = DateTime.utc_now()
+
+    event_params = %{
+      type: handler.entry_type(),
+      last_update: current_time,
+      status: status,
+      entries_count: entries_count
+    }
+
+    PubSub.broadcast(Memento.PubSub, "capture", event_params)
+
+    :telemetry.execute(
+      [:memento, :capture],
+      %{entries_count: entries_count},
+      %{type: handler.entry_type(), recorded_at: current_time, status: status}
+    )
   end
 end
