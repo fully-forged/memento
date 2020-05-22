@@ -31,8 +31,20 @@ jobs:
       with:
         elixir-version: 1.10.3 # Define the elixir version [required]
         otp-version: 22.3.4 # Define the OTP version [required]
+    - name: Retrieve Mix Dependencies Cache
+      uses: actions/cache@v1
+      id: mix-cache
+      with:
+        path: deps
+        key: ${{ runner.os }}-${{ matrix.otp }}-${{ matrix.elixir }}-mix-${{ hashFiles(format('{0}{1}', github.workspace, '/mix.lock')) }}
     - name: Install Dependencies
-      run: mix deps.get
+      if: steps.mix-cache.outputs.cache-hit != 'true'
+      run: |
+        mix local.rebar --force
+        mix local.hex --force
+        mix deps.get
+    - name: Check Formatting
+      run: mix format --check-formatted
     - name: Run Tests
       run: mix test
       env:
