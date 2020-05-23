@@ -27,4 +27,11 @@ defmodule Memento.Capture do
   def subscribe do
     PubSub.subscribe(Memento.PubSub, "capture")
   end
+
+  @doc """
+  Returns all enabled handlers entry types.
+  """
+  def enabled_entry_types do
+    Enum.map(Capture.Supervisor.enabled_handlers(), fn h -> h.entry_type() end)
+  end
 end

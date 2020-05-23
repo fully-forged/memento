@@ -42,6 +42,10 @@ li {
   list-style-type: none;
 }
 
+a, a:visited, a:hover {
+  text-decoration: none;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -73,6 +77,10 @@ nav {
       font-weight: 700;
       color: $accent-color;
       @include stroke(1, lighten($fg-light-color, 10%));
+    }
+
+    a {
+      color: $text-primary-color;
     }
   }
 

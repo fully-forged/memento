@@ -12,6 +12,8 @@ defmodule Memento.Capture.Supervisor do
     Supervisor.start_link(__MODULE__, opts, name: __MODULE__)
   end
 
+  def enabled_handlers, do: @enabled_handlers
+
   def refresh_feeds do
     __MODULE__
     |> Supervisor.which_children()

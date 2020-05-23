@@ -17,7 +17,7 @@ defmodule MementoWeb.Router do
   scope "/", MementoWeb do
     pipe_through :browser
 
-    live "/", EntriesLive, :index
+    live "/", EntriesLive
   end
 
   scope "/api", MementoWeb do
