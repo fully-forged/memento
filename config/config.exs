@@ -28,10 +28,6 @@ config :memento,
 
 config :phoenix, :json_library, Jason
 
-config :memento, Memento.RateLimiter,
-  max_per_interval: 2,
-  reset_interval_in_ms: 10000
-
 # Configures the endpoint
 config :memento, MementoWeb.Endpoint,
   url: [host: "localhost"],

@@ -1,7 +1,7 @@
 defmodule MementoWeb.EntriesLive do
   use MementoWeb, :live_view
 
-  alias Memento.{Capture, Entry, RateLimiter}
+  alias Memento.{Capture, Entry}
   alias MementoWeb.{EntriesLive, EntryView, QsParamsValidator}
 
   @impl true
@@ -46,20 +46,6 @@ defmodule MementoWeb.EntriesLive do
 
     new_entries = Entry.search(params)
     {:noreply, assign(socket, params: params, entries: socket.assigns.entries ++ new_entries)}
-  end
-
-  def handle_event("refresh", %{}, socket) do
-    if RateLimiter.can_access?(:capture_refresh) do
-      RateLimiter.inc(:capture_refresh)
-
-      Memento.Capture.refresh_feeds()
-      params = %{socket.assigns.params | type: :all, q: "", page: 1}
-
-      entries = Entry.search(socket.assigns.params)
-      {:noreply, assign(socket, params: params, entries: entries)}
-    else
-      {:noreply, socket}
-    end
   end
 
   @impl true

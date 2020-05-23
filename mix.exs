@@ -29,10 +29,7 @@ defmodule Memento.MixProject do
   def application do
     [
       extra_applications: [:logger, :inets, :runtime_tools, :os_mon, :ssl],
-      mod: {Memento.Application, []},
-      start_phases: [
-        create_rate_limiter_table: []
-      ]
+      mod: {Memento.Application, []}
     ]
   end
 
