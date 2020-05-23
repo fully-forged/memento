@@ -4,11 +4,14 @@
       <div class="left-nav">
         <span class="logo">M</span>
         <div class="source">
-          <%= content_tag :i, "", class: type_filter_class(:twitter_fav, @params), phx_click: "filter_by_type", phx_value_type: :twitter_fav %>
-          <%= content_tag :i, "", class: type_filter_class(:pinboard_link, @params), phx_click: "filter_by_type", phx_value_type: :pinboard_link %>
-          <%= content_tag :i, "", class: type_filter_class(:github_star, @params), phx_click: "filter_by_type", phx_value_type: :github_star %>
-          <%= content_tag :i, "", class: type_filter_class(:instapaper_bookmark, @params), phx_click: "filter_by_type", phx_value_type: :instapaper_bookmark %>
-          <%= content_tag :i, "All", class: type_filter_class(:all, @params), phx_click: "filter_by_type", phx_value_type: :all %>
+          <%= for entry_type <- Memento.Capture.enabled_entry_types() do %>
+            <%= live_patch to: Routes.live_path(@socket, EntriesLive, type: entry_type), replace: false do %>
+              <%= content_tag :i, "", class: type_filter_class(entry_type, @params) %>
+            <% end %>
+          <% end %>
+          <%= live_patch to: Routes.live_path(@socket, EntriesLive), replace: false do %>
+            <%= content_tag :i, "All", class: type_filter_class(:all, @params) %>
+          <% end %>
         </div>
       </div>
       <form class="filters" phx-change="search">

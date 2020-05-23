@@ -71,6 +71,10 @@ defmodule MementoWeb.QsParamsValidator do
     end
   end
 
+  defp type_validator("all") do
+    {:ok, :all}
+  end
+
   defp type_validator(type_string) do
     if type_string in Entry.Type.type_strings() do
       Entry.Type.load(type_string)

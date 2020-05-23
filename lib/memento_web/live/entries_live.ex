@@ -2,7 +2,7 @@ defmodule MementoWeb.EntriesLive do
   use MementoWeb, :live_view
 
   alias Memento.{Capture, Entry, RateLimiter, Schema}
-  alias MementoWeb.{EntryView, QsParamsValidator}
+  alias MementoWeb.{EntriesLive, EntryView, QsParamsValidator}
 
   @impl true
   def mount(qs_params, _session, socket) do
@@ -13,7 +13,23 @@ defmodule MementoWeb.EntriesLive do
     {:ok, params} = QsParamsValidator.validate(qs_params)
 
     entries = Entry.search(params)
+
     {:ok, assign(socket, params: params, entries: entries)}
+  end
+
+  @impl true
+  def handle_params(qs_params, _url, socket) do
+    {:ok, url_params} = QsParamsValidator.validate(qs_params)
+    params = Map.merge(socket.assigns.params, url_params)
+
+    if url_params !== socket.assigns.params do
+      entries = Entry.search(params)
+
+      {:noreply, assign(socket, params: params, entries: entries)}
+    else
+      IO.puts("there")
+      {:noreply, socket}
+    end
   end
 
   @impl true
