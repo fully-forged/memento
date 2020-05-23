@@ -13,8 +13,7 @@ defmodule Memento.MixProject do
       aliases: aliases(),
       docs: docs(),
       compilers: [:phoenix] ++ Mix.compilers(),
-      dialyzer_warnings: dialyzer_warnings(),
-      dialyzer_ignored_warnings: dialyzer_ignored_warnings(),
+      dialyzer: dialyzer(),
       preferred_cli_env: [
         vcr: :test,
         "vcr.delete": :test,
@@ -70,7 +69,7 @@ defmodule Memento.MixProject do
       {:floki, ">= 0.0.0", only: :test},
       {:stream_data, "~> 0.5.0", only: [:dev, :test]},
       # Tools
-      {:dialyzex, "~> 1.1", only: :dev},
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
       {:ex_doc, "~> 0.22.0", only: :dev},
       {:phoenix_live_reload, "~> 1.2", only: :dev}
     ]
@@ -89,17 +88,10 @@ defmodule Memento.MixProject do
     ]
   end
 
-  defp dialyzer_warnings do
-    [:unmatched_returns, :error_handling, :race_conditions, :unknown]
-  end
-
-  defp dialyzer_ignored_warnings do
+  defp dialyzer do
     [
-      {
-        :warn_contract_supertype,
-        :_,
-        {:extra_range, [:_, :__protocol__, 1, :_, :_]}
-      }
+      plt_core_path: "priv/plts",
+      plt_file: {:no_warn, "priv/plts/dialyzer.plt"}
     ]
   end
 end
