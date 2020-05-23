@@ -1,7 +1,7 @@
 defmodule MementoWeb.EntriesLive do
   use MementoWeb, :live_view
 
-  alias Memento.{Capture, Entry, RateLimiter, Schema}
+  alias Memento.{Capture, Entry, RateLimiter}
   alias MementoWeb.{EntriesLive, EntryView, QsParamsValidator}
 
   @impl true
@@ -27,7 +27,6 @@ defmodule MementoWeb.EntriesLive do
 
       {:noreply, assign(socket, params: params, entries: entries)}
     else
-      IO.puts("there")
       {:noreply, socket}
     end
   end
@@ -36,23 +35,10 @@ defmodule MementoWeb.EntriesLive do
   def handle_event("search", %{"q" => query}, socket) do
     params =
       socket.assigns.params
-      |> Map.put(:type, :all)
+      |> Map.drop([:page, :per_page, :type])
       |> Map.put(:q, query)
 
-    entries = Entry.search(params)
-    {:noreply, assign(socket, params: params, entries: entries)}
-  end
-
-  def handle_event("filter_by_type", %{"type" => type_string}, socket) do
-    {:ok, type} = Schema.Entry.Type.load(type_string)
-
-    params =
-      socket.assigns.params
-      |> Map.put(:type, type)
-      |> Map.put(:q, "")
-
-    entries = Entry.search(params)
-    {:noreply, assign(socket, params: params, entries: entries)}
+    {:noreply, push_patch(socket, to: Routes.live_path(socket, __MODULE__, params))}
   end
 
   def handle_event("load_more", %{}, socket) do
