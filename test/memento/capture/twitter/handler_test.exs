@@ -1,6 +1,5 @@
 defmodule Memento.Capture.Twitter.HandlerTest do
-  use ExUnit.Case, async: false
-  use Memento.DbTestCase
+  use Memento.DataCase, async: false
   use ExVCR.Mock, adapter: ExVCR.Adapter.Httpc
 
   alias Memento.Capture.Twitter.Handler

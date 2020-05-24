@@ -1,6 +1,6 @@
 defmodule Memento.Capture.FeedTest do
   use ExUnit.Case, async: true
-  use Memento.DbTestCase
+  use Memento.DataCase, async: true
 
   alias Memento.{Capture, Repo, Schema.Entry}
 
