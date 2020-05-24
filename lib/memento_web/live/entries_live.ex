@@ -13,8 +13,9 @@ defmodule MementoWeb.EntriesLive do
     {:ok, params} = QsParamsValidator.validate(qs_params)
 
     entries = Entry.search(params)
+    entries_count = Entry.count(params)
 
-    {:ok, assign(socket, params: params, entries: entries)}
+    {:ok, assign(socket, params: params, entries: entries, entries_count: entries_count)}
   end
 
   @impl true
@@ -24,8 +25,9 @@ defmodule MementoWeb.EntriesLive do
 
     if url_params !== socket.assigns.params do
       entries = Entry.search(params)
+      entries_count = Entry.count(params)
 
-      {:noreply, assign(socket, params: params, entries: entries)}
+      {:noreply, assign(socket, params: params, entries: entries, entries_count: entries_count)}
     else
       {:noreply, socket}
     end
@@ -41,18 +43,12 @@ defmodule MementoWeb.EntriesLive do
     {:noreply, push_patch(socket, to: Routes.live_path(socket, __MODULE__, params))}
   end
 
-  def handle_event("load_more", %{}, socket) do
-    params = Map.update!(socket.assigns.params, :page, fn current -> current + 1 end)
-
-    new_entries = Entry.search(params)
-    {:noreply, assign(socket, params: params, entries: socket.assigns.entries ++ new_entries)}
-  end
-
   @impl true
   def handle_info(%{status: :success, new_count: new_count}, socket)
       when new_count > 0 do
     entries = Entry.search(socket.assigns.params)
-    {:noreply, assign(socket, entries: entries)}
+    entries_count = Entry.count(socket.assigns.params)
+    {:noreply, assign(socket, entries: entries, entries_count: entries_count)}
   end
 
   def handle_info(_capture_event, socket) do
@@ -73,6 +69,40 @@ defmodule MementoWeb.EntriesLive do
       icon_class <> " " <> "active"
     else
       icon_class
+    end
+  end
+
+  def pagination(%{page: page, per_page: per_page} = params, entries_count, socket) do
+    total_pages = div(entries_count, per_page)
+    next_page = page + 1
+    previous_page = page - 1
+
+    case {previous_page, next_page} do
+      {0, next_page} ->
+        [
+          content_tag(:a, "<", class: "disabled"),
+          live_patch(">",
+            to: Routes.live_path(socket, __MODULE__, Map.put(params, :page, next_page))
+          )
+        ]
+
+      {previous_page, next_page} when next_page == total_pages + 1 ->
+        [
+          live_patch("<",
+            to: Routes.live_path(socket, __MODULE__, Map.put(params, :page, previous_page))
+          ),
+          content_tag(:a, ">", class: "disabled")
+        ]
+
+      {previous_page, next_page} ->
+        [
+          live_patch("<",
+            to: Routes.live_path(socket, __MODULE__, Map.put(params, :page, previous_page))
+          ),
+          live_patch(">",
+            to: Routes.live_path(socket, __MODULE__, Map.put(params, :page, next_page))
+          )
+        ]
     end
   end
 end

@@ -23,6 +23,6 @@
 <ul class="entries">
   <%= render_many @entries, EntryView, "show.html" %>
 </ul>
-<nav class="load-more">
-  <%= content_tag :button, "More", phx_click: "load_more" %>
+<nav class="pagination">
+  <%= pagination(@params, @entries_count, @socket) %>
 </nav>
