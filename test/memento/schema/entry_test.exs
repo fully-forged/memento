@@ -1,5 +1,5 @@
 defmodule Memento.Schema.EntryTest do
-  use Memento.DbTestCase, async: true
+  use Memento.DataCase, async: true
 
   alias Memento.{Repo, Schema.Entry}
 
