@@ -77,6 +77,12 @@ defmodule MementoWeb.EntriesLive do
     next_page = page + 1
     previous_page = page - 1
 
+    params =
+      case params.q do
+        :not_provided -> Map.delete(params, :q)
+        _other -> params
+      end
+
     case {previous_page, next_page} do
       {0, next_page} ->
         [
