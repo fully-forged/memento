@@ -31,7 +31,7 @@ defmodule Memento.Entry.Query do
     from e in initial,
       where:
         fragment(
-          "to_tsvector('english', content) @@ to_tsquery(?)",
+          "to_tsvector('english', content) @@ plainto_tsquery(?)",
           ^search_query
         )
   end
