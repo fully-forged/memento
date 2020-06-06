@@ -70,7 +70,7 @@ main {
   margin: 0 auto;
 }
 
-nav {
+#top-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -194,6 +194,7 @@ nav {
 }
 
 .pagination {
+  display: flex;
   justify-content: center;
 
   a {
@@ -208,7 +209,7 @@ nav {
     font-size: 14px;
   }
 
-  nav {
+  #top-nav {
     flex-direction: column;
 
     .filters {
@@ -220,13 +221,6 @@ nav {
         margin-bottom: 0.5em;
       }
 
-      a {
-        margin-right: 1em;
-
-        &:last-child {
-          margin-right: 0;
-        }
-      }
     }
 
     .left-nav {
@@ -239,6 +233,14 @@ nav {
 
     .source {
       margin-bottom: 1em;
+
+      a {
+        margin-right: 1em;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
 
       i:first-child {
         margin-left: 0;
