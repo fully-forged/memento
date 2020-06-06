@@ -63,24 +63,30 @@ defmodule MementoWeb.EntriesLiveTest do
     test "is paginated", %{conn: conn, entries: entries, entries_count: entries_count} do
       per_page = div(entries_count, 2)
 
-      {page_one_entries, page_two_entries} =
+      {page_one_entries, remaining_entries} =
         entries
         |> Enum.sort_by(fn e -> e.saved_at end, {:desc, DateTime})
         |> Enum.split(per_page)
 
-      {:ok, entry_live, page_one_html} = live(conn, "/?per_page=#{per_page}")
+      {page_two_entries, page_three_entries} = Enum.split(remaining_entries, per_page)
+
+      {:ok, entry_live, page_one_html} = live(conn, "/?page=1&per_page=#{per_page}")
 
       for entry <- page_one_entries, do: assert_rendered_entry(entry, entry_live, page_one_html)
       for entry <- page_two_entries, do: refute_rendered_entry(entry, entry_live, page_one_html)
 
-      {:ok, entry_live, page_two_html} =
-        live(conn, "/?page=2&per_page=#{per_page + rem(entries_count, 2)}")
+      page_two_html =
+        entry_live
+        |> render_patch("/?page=2&per_page=#{per_page}")
 
       for entry <- page_one_entries,
           do: refute_rendered_entry(entry, entry_live, page_two_html)
 
       for entry <- page_two_entries,
           do: assert_rendered_entry(entry, entry_live, page_two_html)
+
+      for entry <- page_three_entries,
+          do: refute_rendered_entry(entry, entry_live, page_two_html)
     end
 
     test "receives automatic updates", %{conn: conn} do
