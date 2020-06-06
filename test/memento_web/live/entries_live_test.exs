@@ -82,6 +82,21 @@ defmodule MementoWeb.EntriesLiveTest do
       for entry <- page_two_entries,
           do: assert_rendered_entry(entry, entry_live, page_two_html)
     end
+
+    test "receives automatic updates", %{conn: conn} do
+      {:ok, entry_live, html} = live(conn, "/")
+
+      [entry] = Enum.take(Generators.entry(), 1)
+
+      {:ok, entry} = Repo.insert(entry)
+
+      send(entry_live.pid, %{status: :success, new_count: 1})
+
+      new_html = render(entry_live)
+
+      assert new_html !== html
+      assert_rendered_entry(entry, entry_live, new_html)
+    end
   end
 
   defp generate_entries(_context) do
