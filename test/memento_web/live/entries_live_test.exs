@@ -3,101 +3,162 @@ defmodule MementoWeb.EntriesLiveTest do
 
   import Phoenix.LiveViewTest
 
-  alias Memento.{Repo, Schema.Entry}
+  alias Memento.{Generators, Repo, Schema.Entry}
+  alias MementoWeb.EntryView
 
-  setup do
-    created_at =
-      ~N[2017-11-28 15:36:03]
-      |> DateTime.from_naive!("Etc/UTC")
-      |> DateTime.truncate(:second)
+  setup :generate_entries
 
-    content = %{
-      id: "935532750223880194",
-      text:
-        "dialyzex - A Mix task for type-checking your Elixir project with dialyzer https://t.co/CLgZiRapp9",
-      screen_name: "oss_elixir",
-      urls: ["https://github.com/comcast/dialyzex"],
-      created_at: created_at
-    }
+  describe "the entries list" do
+    test "shows the entry data", %{conn: conn, entries: entries, entries_count: entries_count} do
+      {:ok, entry_live, html} = live(conn, "/?per_page=#{entries_count}")
 
-    now = DateTime.utc_now()
+      for entry <- entries, do: assert_rendered_entry(entry, entry_live, html)
+    end
 
-    %Entry{}
-    |> Entry.changeset(%{
-      type: :twitter_fav,
-      content: content,
-      saved_at: created_at,
-      inserted_at: now,
-      updated_at: now
-    })
-    |> Repo.insert!()
+    test "can be filtered by type", %{conn: conn, entries: entries} do
+      grouped_entries = Enum.group_by(entries, fn e -> e.type end)
+      available_types = Map.keys(grouped_entries)
 
-    [content: content]
+      {:ok, entry_live, _html} = live(conn, "/")
+
+      Enum.each(available_types, fn type ->
+        {entries_for_type, other_types} = Map.pop(grouped_entries, type)
+
+        entries_for_other_types =
+          other_types
+          |> Map.values()
+          |> List.flatten()
+
+        html =
+          entry_live
+          |> render_patch("?type=#{type}")
+
+        for entry <- entries_for_type, do: assert_rendered_entry(entry, entry_live, html)
+        for entry <- entries_for_other_types, do: refute_rendered_entry(entry, entry_live, html)
+      end)
+    end
+
+    test "can be searched", %{conn: conn, entries: entries} do
+      {:ok, entry_live, html} = live(conn, "/")
+
+      for entry <- entries do
+        description = EntryView.description(entry)
+
+        q =
+          description
+          |> String.split(" ")
+          |> Enum.take_random(2)
+          |> Enum.join(" ")
+
+        results_html =
+          entry_live
+          |> element(".filters")
+          |> render_change(%{q: q})
+
+        assert results_html !== html
+        assert_rendered_entry(entry, entry_live, results_html)
+      end
+    end
   end
 
-  describe "disconnected and connected render" do
-    test "it shows the entry data", %{conn: conn, content: content} do
-      {:ok, page_live, disconnected_html} = live(conn, "/")
+  defp generate_entries(_context) do
+    entries_count = :rand.uniform(20)
+    attributes = Enum.take(Generators.entry_attributes(), entries_count)
 
-      assert has_element?(page_live, ".entry .content h1", content.screen_name)
-      assert has_element?(page_live, ".entry .content h2", content.text)
+    {^entries_count, entries} = Repo.insert_all(Entry, attributes, returning: true)
 
-      assert disconnected_html =~ content.text
-      assert render(page_live) =~ content.text
+    [entries: entries, entries_count: entries_count]
+  end
+
+  defp assert_rendered_entry(entry, entry_live, html) do
+    case entry.type do
+      :github_star ->
+        assert html =~ Map.get(entry.content, "name")
+        assert html =~ Map.get(entry.content, "description")
+
+        assert has_element?(entry_live, ".entry .content h1", Map.get(entry.content, "name"))
+
+        assert has_element?(
+                 entry_live,
+                 ".entry .content h2",
+                 Map.get(entry.content, "description")
+               )
+
+      :twitter_fav ->
+        assert html =~ Map.get(entry.content, "screen_name")
+        assert html =~ Map.get(entry.content, "text")
+
+        assert has_element?(
+                 entry_live,
+                 ".entry .content h1",
+                 Map.get(entry.content, "screen_name")
+               )
+
+        assert has_element?(entry_live, ".entry .content h2", Map.get(entry.content, "text"))
+
+      :pinboard_link ->
+        assert html =~ Map.get(entry.content, "description")
+
+        assert has_element?(
+                 entry_live,
+                 ".entry .content h1",
+                 Map.get(entry.content, "description")
+               )
+
+      :instapaper_bookmark ->
+        assert html =~ Map.get(entry.content, "title")
+
+        assert has_element?(
+                 entry_live,
+                 ".entry .content h1",
+                 Map.get(entry.content, "title")
+               )
     end
+  end
 
-    test "it can filter by type", %{conn: conn, content: content} do
-      {:ok, page_live, disconnected_html} = live(conn, "/?type=github_star")
+  defp refute_rendered_entry(entry, entry_live, html) do
+    case entry.type do
+      :github_star ->
+        refute html =~ Map.get(entry.content, "name")
+        refute html =~ Map.get(entry.content, "description")
 
-      refute has_element?(page_live, ".entry .content h1", content.screen_name)
-      refute has_element?(page_live, ".entry .content h2", content.text)
+        refute has_element?(entry_live, ".entry .content h1", Map.get(entry.content, "name"))
 
-      refute disconnected_html =~ content.text
-      refute render(page_live) =~ content.text
+        refute has_element?(
+                 entry_live,
+                 ".entry .content h2",
+                 Map.get(entry.content, "description")
+               )
 
-      rendered_html =
-        page_live
-        |> render_patch("?type=twitter_fav")
+      :twitter_fav ->
+        refute html =~ Map.get(entry.content, "screen_name")
+        refute html =~ Map.get(entry.content, "text")
 
-      assert has_element?(page_live, ".entry .content h1", content.screen_name)
-      assert has_element?(page_live, ".entry .content h2", content.text)
+        refute has_element?(
+                 entry_live,
+                 ".entry .content h1",
+                 Map.get(entry.content, "screen_name")
+               )
 
-      assert rendered_html =~ content.text
-      assert render(page_live) =~ content.text
-    end
+        refute has_element?(entry_live, ".entry .content h2", Map.get(entry.content, "text"))
 
-    test "search resets filters", %{conn: conn, content: content} do
-      {:ok, page_live, disconnected_html} = live(conn, "/?type=github_star")
+      :pinboard_link ->
+        refute html =~ Map.get(entry.content, "description")
 
-      refute has_element?(page_live, ".entry .content h1", content.screen_name)
-      refute has_element?(page_live, ".entry .content h2", content.text)
+        refute has_element?(
+                 entry_live,
+                 ".entry .content h1",
+                 Map.get(entry.content, "description")
+               )
 
-      refute disconnected_html =~ content.text
-      refute render(page_live) =~ content.text
+      :instapaper_bookmark ->
+        refute html =~ Map.get(entry.content, "title")
 
-      page_live
-      |> element(".filters")
-      |> render_change(%{q: "dialyzex"})
-
-      assert has_element?(page_live, ".entry .content h1", content.screen_name)
-      assert has_element?(page_live, ".entry .content h2", content.text)
-    end
-
-    test "search supports queries with spaces", %{conn: conn, content: content} do
-      {:ok, page_live, disconnected_html} = live(conn, "/?type=github_star")
-
-      refute has_element?(page_live, ".entry .content h1", content.screen_name)
-      refute has_element?(page_live, ".entry .content h2", content.text)
-
-      refute disconnected_html =~ content.text
-      refute render(page_live) =~ content.text
-
-      page_live
-      |> element(".filters")
-      |> render_change(%{q: "mix task"})
-
-      assert has_element?(page_live, ".entry .content h1", content.screen_name)
-      assert has_element?(page_live, ".entry .content h2", content.text)
+        refute has_element?(
+                 entry_live,
+                 ".entry .content h1",
+                 Map.get(entry.content, "title")
+               )
     end
   end
 end
