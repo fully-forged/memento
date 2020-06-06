@@ -219,6 +219,14 @@ nav {
       input {
         margin-bottom: 0.5em;
       }
+
+      a {
+        margin-right: 1em;
+
+        &:last-child {
+          margin-right: 0;
+        }
+      }
     }
 
     .left-nav {
