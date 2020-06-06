@@ -72,5 +72,22 @@ defmodule MementoWeb.EntriesLiveTest do
       assert has_element?(page_live, ".entry .content h1", content.screen_name)
       assert has_element?(page_live, ".entry .content h2", content.text)
     end
+
+    test "search supports queries with spaces", %{conn: conn, content: content} do
+      {:ok, page_live, disconnected_html} = live(conn, "/?type=github_star")
+
+      refute has_element?(page_live, ".entry .content h1", content.screen_name)
+      refute has_element?(page_live, ".entry .content h2", content.text)
+
+      refute disconnected_html =~ content.text
+      refute render(page_live) =~ content.text
+
+      page_live
+      |> element(".filters")
+      |> render_change(%{q: "mix task"})
+
+      assert has_element?(page_live, ".entry .content h1", content.screen_name)
+      assert has_element?(page_live, ".entry .content h2", content.text)
+    end
   end
 end
