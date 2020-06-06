@@ -54,6 +54,16 @@ defmodule MementoWeb.EntriesLiveTest do
 
       refute disconnected_html =~ content.text
       refute render(page_live) =~ content.text
+
+      rendered_html =
+        page_live
+        |> render_patch("?type=twitter_fav")
+
+      assert has_element?(page_live, ".entry .content h1", content.screen_name)
+      assert has_element?(page_live, ".entry .content h2", content.text)
+
+      assert rendered_html =~ content.text
+      assert render(page_live) =~ content.text
     end
 
     test "search resets filters", %{conn: conn, content: content} do
