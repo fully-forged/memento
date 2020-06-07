@@ -107,7 +107,7 @@ defmodule Memento.Generators do
   end
 
   def sentence do
-    map(list_of(string(:alphanumeric, min_length: 3), min_length: 1), fn words ->
+    map(list_of(string(:alphanumeric, min_length: 8), min_length: 1), fn words ->
       Enum.join(words, " ")
     end)
   end
