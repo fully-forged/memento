@@ -42,13 +42,7 @@ defmodule MementoWeb.EntriesLiveTest do
       {:ok, entry_live, html} = live(conn, "/")
 
       for entry <- entries do
-        description = EntryView.description(entry)
-
-        q =
-          description
-          |> String.split(" ")
-          |> Enum.take_random(2)
-          |> Enum.join(" ")
+        q = extract_random_query(entry)
 
         results_html =
           entry_live
@@ -107,6 +101,15 @@ defmodule MementoWeb.EntriesLiveTest do
 
   defp detect_ci(_context) do
     [ci: System.get_env("CI") == "true"]
+  end
+
+  defp extract_random_query(entry) do
+    description = EntryView.description(entry)
+
+    description
+    |> String.split(" ")
+    |> Enum.take_random(2)
+    |> Enum.join(" ")
   end
 
   defp generate_entries(context) do
