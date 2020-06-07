@@ -31,7 +31,7 @@ defmodule MementoWeb.EntriesLiveTest do
 
         html =
           entry_live
-          |> render_patch("?type=#{type}")
+          |> render_patch("?type=#{type}&per_page=#{entries_count}")
 
         for entry <- entries_for_type, do: assert_rendered_entry(entry, entry_live, html)
         for entry <- entries_for_other_types, do: refute_rendered_entry(entry, entry_live, html)
