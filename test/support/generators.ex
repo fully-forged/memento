@@ -3,27 +3,27 @@ defmodule Memento.Generators do
 
   alias Memento.Schema.Entry
 
-  def entry do
-    bind(entry_type(), fn entry_type ->
-      bind(datetime(), fn saved_at ->
-        saved_at = DateTime.truncate(saved_at, :second)
+  def entry, do: bind(entry_type(), &entry_by_type/1)
 
-        bind(content(entry_type, saved_at), fn content ->
-          current_time =
-            DateTime.utc_now()
-            |> DateTime.truncate(:second)
+  def entry_by_type(entry_type) do
+    bind(datetime(), fn saved_at ->
+      saved_at = DateTime.truncate(saved_at, :second)
 
-          entry = %Entry{
-            id: Ecto.UUID.generate(),
-            type: entry_type,
-            content: content,
-            saved_at: saved_at,
-            inserted_at: current_time,
-            updated_at: current_time
-          }
+      bind(content(entry_type, saved_at), fn content ->
+        current_time =
+          DateTime.utc_now()
+          |> DateTime.truncate(:second)
 
-          constant(entry)
-        end)
+        entry = %Entry{
+          id: Ecto.UUID.generate(),
+          type: entry_type,
+          content: content,
+          saved_at: saved_at,
+          inserted_at: current_time,
+          updated_at: current_time
+        }
+
+        constant(entry)
       end)
     end)
   end
