@@ -83,12 +83,13 @@ defmodule MementoWeb.EntriesLiveTest do
           do: refute_rendered_entry(entry, entry_live, page_two_html)
     end
 
-    test "receives automatic updates", %{conn: conn, entries_count: entries_count} do
-      {:ok, entry_live, html} = live(conn, "/?per_page=#{entries_count}")
+    test "receives automatic updates", %{conn: conn, entries: entries} do
+      {:ok, entry_live, html} = live(conn, "/")
 
-      [entry] = Enum.take(Generators.entry(), 1)
+      [most_recent_entry | _rest] =
+        Enum.sort_by(entries, fn e -> e.saved_at end, {:desc, DateTime})
 
-      {:ok, entry} = Repo.insert(entry)
+      {:ok, entry} = insert_latest_entry(most_recent_entry)
 
       send(entry_live.pid, %{status: :success, new_count: 1})
 
@@ -101,6 +102,12 @@ defmodule MementoWeb.EntriesLiveTest do
 
   defp detect_ci(_context) do
     [ci: System.get_env("CI") == "true"]
+  end
+
+  defp insert_latest_entry(previous_latest_entry) do
+    [entry] = Enum.take(Generators.entry(), 1)
+
+    Repo.insert(%{entry | saved_at: DateTime.add(previous_latest_entry.saved_at, 3600, :second)})
   end
 
   defp extract_random_query(entry) do
