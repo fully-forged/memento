@@ -6,7 +6,7 @@ defmodule MementoWeb.EntriesLiveTest do
   alias Memento.{Generators, Repo, Schema.Entry}
   alias MementoWeb.EntryView
 
-  setup :generate_entries
+  setup [:detect_ci, :generate_entries]
 
   describe "the entries list" do
     test "shows the entry data", %{conn: conn, entries: entries, entries_count: entries_count} do
@@ -15,11 +15,11 @@ defmodule MementoWeb.EntriesLiveTest do
       for entry <- entries, do: assert_rendered_entry(entry, entry_live, html)
     end
 
-    test "can be filtered by type", %{conn: conn, entries: entries} do
+    test "can be filtered by type", %{conn: conn, entries: entries, entries_count: entries_count} do
       grouped_entries = Enum.group_by(entries, fn e -> e.type end)
       available_types = Map.keys(grouped_entries)
 
-      {:ok, entry_live, _html} = live(conn, "/")
+      {:ok, entry_live, _html} = live(conn, "/?per_page=#{entries_count}")
 
       Enum.each(available_types, fn type ->
         {entries_for_type, other_types} = Map.pop(grouped_entries, type)
@@ -89,8 +89,8 @@ defmodule MementoWeb.EntriesLiveTest do
           do: refute_rendered_entry(entry, entry_live, page_two_html)
     end
 
-    test "receives automatic updates", %{conn: conn} do
-      {:ok, entry_live, html} = live(conn, "/")
+    test "receives automatic updates", %{conn: conn, entries_count: entries_count} do
+      {:ok, entry_live, html} = live(conn, "/?per_page=#{entries_count}")
 
       [entry] = Enum.take(Generators.entry(), 1)
 
@@ -105,8 +105,13 @@ defmodule MementoWeb.EntriesLiveTest do
     end
   end
 
-  defp generate_entries(_context) do
-    entries_count = :rand.uniform(20)
+  defp detect_ci(_context) do
+    [ci: System.get_env("CI") == "true"]
+  end
+
+  defp generate_entries(context) do
+    upper_limit = if context.ci, do: 100, else: 20
+    entries_count = :rand.uniform(upper_limit)
     attributes = Enum.take(Generators.entry_attributes(), entries_count)
 
     {^entries_count, entries} = Repo.insert_all(Entry, attributes, returning: true)

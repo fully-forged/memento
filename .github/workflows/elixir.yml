@@ -58,6 +58,7 @@ jobs:
     - name: Run Tests
       run: mix test
       env:
+        CI: "true"
         POSTGRES_USER: memento
         POSTGRES_PASSWORD: password
         POSTGRES_HOSTNAME: localhost
