@@ -156,12 +156,24 @@ defmodule MementoWeb.EntriesLiveTest do
         assert has_element?(entry_live, ".entry .content h2", Map.get(entry.content, "text"))
 
       :pinboard_link ->
+        tags_text =
+          entry.content
+          |> Map.get("tags")
+          |> Enum.join(", ")
+
         assert html =~ Map.get(entry.content, "description")
+        assert html =~ tags_text
 
         assert has_element?(
                  entry_live,
                  ".entry .content h1",
                  Map.get(entry.content, "description")
+               )
+
+        assert has_element?(
+                 entry_live,
+                 ".entry .content h2",
+                 tags_text
                )
 
       :instapaper_bookmark ->

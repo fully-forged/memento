@@ -16,8 +16,9 @@ defmodule MementoWeb.EntryView do
         )
 
       :pinboard_link ->
-        render("one_line_title.html",
-          title: entry.content["description"]
+        render("two_line_title.html",
+          title: entry.content["description"],
+          subtitle: Enum.join(entry.content["tags"], ", ")
         )
 
       :instapaper_bookmark ->
