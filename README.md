@@ -4,7 +4,7 @@
 
 Memento is a single-tenant, personal aggregator for information you “save” on different platforms, making that content searchable and partially backed up. Aggregation is automatic every 5 minutes.
 
-![Memento Screenshot](https://raw.githubusercontent.com/fully-forged/memento/master/screenshot.png)
+![Memento Screenshot](https://raw.githubusercontent.com/fully-forged/memento/main/screenshot.png)
 
 It currently supports:
 
