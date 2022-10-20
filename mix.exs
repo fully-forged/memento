@@ -67,7 +67,7 @@ defmodule Memento.MixProject do
       {:stream_data, "~> 0.5.0", only: [:dev, :test]},
       # Tools
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
-      {:ex_doc, "~> 0.25.0", only: :dev},
+      {:ex_doc, "~> 0.29.0", only: :dev},
       {:phoenix_live_reload, "~> 1.2", only: :dev}
     ]
   end
